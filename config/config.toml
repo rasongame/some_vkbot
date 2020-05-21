@@ -1,0 +1,20 @@
+
+[bot]
+token = "58c63fd6c523d7b5658274c28240be8c9a554c525a57b373b1732a0725ebc059e39530e33b93bb1ed5dd4"
+group_id = 184995795
+admins = [205479228] # 205479228 - Igor Tarasov
+plugins = [
+    "Bot.Plugins.CorePlug",
+    "Bot.Plugins.PluginController",
+    "Bot.Plugins.KillerPlug",
+    "Bot.Plugins.KonachanPlug",
+    "Bot.Plugins.PidorPlug",
+    "Bot.Plugins.DbTestPlug"
+]
+[database]
+# Бот использует PostgresSQL в плагине
+server = "ssh.vielfrass.tk"
+db_name = "rsngm_db"
+port = 5432
+user = "postgres"
+password = "mylittlessh"
