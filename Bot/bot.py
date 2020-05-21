@@ -1,12 +1,14 @@
+import logging
+
 import vk_api
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
-import logging
 
 
 class Bot:
-    def __init__(self, group_id, token) -> None:
+    def __init__(self, group_id: int, token: str, config: dict):
         self.group_id = group_id
         self.token = token
+        self.config = config
         self.version = "Rolling Version"
         self.vk: vk_api.VkApi = vk_api.VkApi(token=self.token)
         self.longpoll: VkBotLongPoll = VkBotLongPoll(self.vk, self.group_id)
@@ -18,11 +20,11 @@ class Bot:
     def run(self) -> None:
         for event in self.longpoll.listen():
             if event.type == VkBotEventType.MESSAGE_NEW:
-                logging.info(f"{event.message.from_id} in {event.message.peer_id} send: {event.message.text}")
+                logging.info(f"{event.obj.from_id} in {event.obj.peer_id} sent: {event.obj.text}")
                 for plug in self.plugins:
                     try:
-                        if event.message.text.split()[0] in plug.keywords:
+                        if event.obj.text.split()[0] in plug.keywords:
                             logging.info("successfull work plugins")
-                            plug.work(event.message.peer_id, event.message.text, event)
+                            plug.work(event.obj.peer_id, event.obj.text, event)
                     except IndexError:
                         pass
