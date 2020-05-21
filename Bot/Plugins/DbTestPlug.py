@@ -18,7 +18,7 @@ class DbTestPlug(BasePlug):
         self.arguments = ('add', 'адд',
                           'delete', 'делете',
                           'list', 'лист')
-        self.whoCan = ''
+        self.whoCan = self.bot.admins
         self.db_name = self.bot.config["database"]["db_name"]
         self.db_server = self.bot.config["database"]["server"]
         self.db_user = self.bot.config["database"]["user"]
@@ -30,6 +30,10 @@ class DbTestPlug(BasePlug):
     def writeToTable(self, author_id: int, message):
         pass
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent) -> None:
+        if event.obj["from_id"] not in self.whoCan:
+            logging.warning("Permission denied")
+            return
+
         splitted = msg.split(" ")
         argument = splitted[1]
         toIns = splitted[2]
