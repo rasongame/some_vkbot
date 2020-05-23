@@ -1,5 +1,6 @@
 import logging
 
+import vk_api
 from vk_api.utils import get_random_id
 
 
@@ -13,10 +14,13 @@ class BasePlug:
         self.whoCan = ''
         self.onStart()
 
+    def hasKeyword(self, keyword: str) -> bool:
+        return keyword in self.keywords
+
     def __sendMessage(self, peer_id, msg):
         self.bot.vk.method("messages.send", {"peer_id": peer_id, "message": msg, "random_id": get_random_id()})
 
-    def work(self) -> None:
+    def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent) -> None:
         pass
 
     def onStart(self) -> None:

@@ -26,7 +26,7 @@ class CorePlug(BasePlug):
         self.name = "Core Plug"
         self.version = "rolling"
         self.description = "Core plugin of bot.."
-        self.keywords = ('хелп', 'help', 'инфо', 'info', 'raw', 'максбот')
+        self.keywords = ('хелп', 'help', 'инфо', 'info', 'raw', 'lmao')
         self.onStart()
 
     def __sendMessage(self, peer_id, msg):
@@ -60,9 +60,7 @@ class CorePlug(BasePlug):
             plug_slice_cmds += f"\n{plug.name}: {plug.keywords}"
 
         prepared_msg = f"Список команд:" \
-                       f"{plug_slice_cmds}" \
-                       f"\nКоманды 2.1, 2.2 требуют наличия привилегий." \
-                       f"\nДля disable и enable необходим номер плагина из info"
+                       f"{plug_slice_cmds}"
         self.__sendMessage(peer_id=peer_id, msg=prepared_msg)
         del prepared_msg
         return
@@ -81,6 +79,7 @@ class CorePlug(BasePlug):
             return
         elif cmd in self.keywords[5]:
             self.__sendMessage(peer_id, "максбот круто")
+            self.bot.db["wrapper"].insert((100,'b'))
         else:
             pass
 

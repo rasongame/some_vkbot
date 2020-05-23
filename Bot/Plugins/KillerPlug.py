@@ -3,16 +3,17 @@ from time import sleep
 from vk_api import bot_longpoll
 from vk_api.utils import get_random_id
 
+from .BasePlug import BasePlug
 from ..bot import Bot
 
 
-class KillerPlug:
+class KillerPlug(BasePlug):
     def __init__(self, bot):
         self.bot: Bot = bot
         self.name = "Killer"
         self.description = "Just killer"
         self.version = "rolling"
-        self.keywords = ['destroy']
+        self.keywords = ('destroy')
         self.whoCan = ''
         self.onStart()
 

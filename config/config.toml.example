@@ -10,6 +10,7 @@ plugins = [
     "Bot.Plugins.KonachanPlug",
     "Bot.Plugins.PidorPlug",
     "Bot.Plugins.DbTestPlug"
+    "Bot.Plugins.RoulettePlug"
 ]
 [database]
 # Бот использует PostgresSQL в плагине

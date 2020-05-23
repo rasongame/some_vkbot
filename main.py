@@ -4,6 +4,7 @@ from Bot.Utils.utils import load_class
 from Bot.bot import Bot
 import toml
 
+
 def main():
     config = toml.load(open("config/config.toml"))
     plugins = []

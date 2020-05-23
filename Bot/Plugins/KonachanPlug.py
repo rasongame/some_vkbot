@@ -18,8 +18,10 @@ class KonachanPlug:
         self.whoCan = ''
         self.onStart()
 
-    def __sendMessage(self, peer_id: int, msg: str) -> None:
-        self.bot.vk.method("messages.send", {"peer_id": peer_id, "message": msg, "random_id": get_random_id()})
+    def __sendMessage(self, peer_id: int, msg: str, attachment) -> None:
+        self.bot.vk.method("wall.post",
+                           {"owner_id": None, "message": msg, "random_id": get_random_id(),
+                            'attachment': attachment})
 
     def onStart(self):
         pass
@@ -34,7 +36,7 @@ class KonachanPlug:
         img.save("/tmp/foo.shit", "PNG")
         with open("/tmp/foo.shit") as file:
             upload = VkUpload(self.bot.vk)
-            photo = upload.photo_messages(photos="/tmp/foo.shit")
+            photo = upload.photo_wall(photos="/tmp/foo.shit")
             owner_id = photo[0]['owner_id']
             photo_id = photo[0]['id']
             access_key = photo[0]['access_key']
