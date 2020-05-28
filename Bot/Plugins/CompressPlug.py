@@ -48,7 +48,7 @@ class CompressPlug:
         img_r = requests.get(url, stream=True)
         img_r.raw.decode_content = True
         img: Image = Image.open(img_r.raw)
-        img.save(f"/tmp/жмых.png", "PNG")
+        img.save(f"жмых.png", "PNG")
         # Скачали фоточку...
         #------------------------
         #
@@ -63,12 +63,12 @@ class CompressPlug:
 
         if x > 100 or y > 100:
             self.sendmsg(helps)
-        os.system(f"convert /tmp/жмых.png -liquid-rescale {y}x{x}%\! /tmp/жмых_бахнутый.png")
+        os.system(f"convert жмых.png -liquid-rescale {y}x{x}%\! жмых_бахнутый.png")
         os.remove("/tmp/жмых.png")
         #
         # Загружаем фоточку в вк...
         #------------------------
         upload = VkUpload(self.bot.vk)
-        photo = upload.photo_messages(f"/tmp/жмых_бахнутый.png")[0]
+        photo = upload.photo_messages(f"жмых_бахнутый.png")[0]
         self.__sendMessage(peer_id, "Ема жмыхнуло", f"photo{photo['owner_id']}_{photo['id']}")
         logging.info(url)
