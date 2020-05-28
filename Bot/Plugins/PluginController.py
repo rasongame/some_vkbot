@@ -6,8 +6,8 @@ from .BasePlug import BasePlug
 
 
 class PluginController(BasePlug):
-    def __init__(self, bot):
-        self.bot: Bot = bot
+    def __init__(self, bot: object) -> object:
+        self.bot: object = bot
         self.name = "Plugin Controller"
         self.version = "rolling"
         self.description = "Plugin controller"
@@ -26,7 +26,7 @@ class PluginController(BasePlug):
                     self.__sendMessage(peer_id=peer_id, msg="Plugin disabled!")
                     self.__sendMessage(peer_id=peer_id, msg=self.bot.disabledPlugins)
                 except IndexError:
-                    self.__sendMessage(peer_id, IndexError("You tryed to disable of NULL plugin? You baka"))
+                    self.__sendMessage(peer_id, "You tried to disable of NULL plugin? You baka")
             elif msg.split()[0] == self.keywords[1]:
                 try:
                     self.bot.plugins.append(self.bot.disabledPlugins.pop(int(msg.split()[1])))
@@ -34,7 +34,7 @@ class PluginController(BasePlug):
                     # {self.bot.plugins}
                     # prepared_msg = self.bot.plugins
                 except IndexError:
-                    self.__sendMessage(peer_id, IndexError("You tryed to enable of NULL plugin? You baka"))
+                    self.__sendMessage(peer_id, "You tryed to enable of NULL plugin? You baka")
                     self.__sendMessage(peer_id=peer_id, msg=self.bot.plugins)
         else:
             self.__sendMessage(peer_id, "Твою мать ебут в канаве, чертов хакер. Fuck you!")

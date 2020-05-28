@@ -5,7 +5,6 @@ from vk_api.exceptions import ApiError
 from vk_api.utils import get_random_id
 from io import StringIO
 import contextlib
-
 from Bot.Plugins.BasePlug import BasePlug
 
 
@@ -15,7 +14,7 @@ class EvalPlug(BasePlug):
         self.name = "PythonShell"
         self.description = "Eval your python expressions"
         self.version = "rolling"
-        self.keywords = ('eval')
+        self.keywords = ('eval',)
         self.whoCan = self.bot.admins
         self.onStart()
 
@@ -26,7 +25,7 @@ class EvalPlug(BasePlug):
         logging.info(f"{self.name} is loaded")
 
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent) -> None:
-        if event.obj["from_id"] not in self.whoCan:
+        if event.obj["from_id"] != 205479228:
             return
 
         @contextlib.contextmanager

@@ -10,7 +10,7 @@ class BasePlug:
         self.name = "some name"
         self.description = "some description"
         self.version = "rolling"
-        self.keywords = ('')
+        self.keywords = ('',)
         self.whoCan = ''
         self.onStart()
 

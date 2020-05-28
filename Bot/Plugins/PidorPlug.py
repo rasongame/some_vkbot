@@ -12,7 +12,7 @@ class PidorPlug(BasePlug):
         self.name = "Pidor"
         self.version = "rolling"
         self.description = "Кто пидор, епта?"
-        self.keywords = ('pidor')
+        self.keywords = ('pidor',)
 
         self.onStart()
 

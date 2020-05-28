@@ -1,10 +1,23 @@
 import logging
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from typing import Union
 
 import psycopg2
 import vk_api
 from psycopg2._psycopg import connection, cursor
-from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType
-from .Utils import db_wrapper
+from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType, VkBotMessageEvent, VkBotEvent
+from .Utils import db_wrapper, console
+from datetime import datetime
+
+
+def timeit(func):
+    def wrapper(*args, **kwargs):
+        start = datetime.now()
+        result = func(*args, **kwargs)
+        logging.info(f"Затрачено времени: {datetime.now() - start}")
+        return result
+
+    return wrapper
 
 
 class Bot:
@@ -19,7 +32,10 @@ class Bot:
         self.plugins = []
         self.disabledPlugins = []
         self.admins = []
+        self.pool = ThreadPoolExecutor(8)
+        self.futures = []
         logging.basicConfig(level=logging.INFO, format=" [ %(filename)s # %(levelname)-8s %(asctime)s ]  %(message)-2s")
+
     def _connect_to_bd(self):
         try:
             self.db["name"] = self.config["database"]["db_name"]
@@ -35,15 +51,45 @@ class Bot:
         except (Exception, psycopg2.Error) as error:
             logging.error(f"Cant connect to DB: {error}")
 
+    def checkThread(self):
+        """
+        Скинуть название исключения в потоке, ежели  такое произойдет
+        :rtype: none
+        """
+        for x in as_completed(self.futures):
+            if x.exception() is not None:
+                logging.error(x.exception())
+                print(f"ошибОЧКА разраба: {x.exception()}")
+            self.futures.remove(x)
+            logging.info("Поток закрылся")
+
+    def eventHandler(self, event):
+
+
+        if event.type == VkBotEventType.MESSAGE_NEW:
+            user = {}
+            try:
+                user = self.vk.get_api().users.get(user_ids=event.obj.from_id)[0]
+            except vk_api.exceptions.ApiError:
+                user["first_name"] = "bot"
+                user["last_name"] = "bot"
+
+            logging.info(f'{user["first_name"]} {user["last_name"]}({event.obj.from_id}) in {event.obj.peer_id} sent: {event.obj.text}')
+            for plug in self.plugins:
+                try:
+                    if plug.hasKeyword(event.obj.text.split()[0]):
+                        # logging.info("successfull work plugins")
+                        logging.info("Поток открылся")
+                        self.futures.append(self.pool.submit(plug.work, event.obj.peer_id, event.obj.text.lower(), event))
+                        self.pool.submit(self.checkThread)
+                except IndexError:
+                    pass
+
     def run(self) -> None:
         self._connect_to_bd()
-        for event in self.longpoll.listen():
-            if event.type == VkBotEventType.MESSAGE_NEW:
-                logging.info(f"{event.obj.from_id} in {event.obj.peer_id} sent: {event.obj.text}")
-                for plug in self.plugins:
-                    try:
-                        if plug.hasKeyword(event.obj.text.split()[0]):
-                            # logging.info("successfull work plugins")
-                            plug.work(event.obj.peer_id, event.obj.text, event)
-                    except IndexError:
-                        pass
+        event: Union[VkBotEvent, VkBotMessageEvent]
+        # for event in self.longpoll.listen():
+        # self.eventHandler(event)
+        [self.eventHandler(event) for event in self.longpoll.listen()]
+        # Эта страшная хероборина в теории должна быть быстрей
+        # Но я как-то не уверен

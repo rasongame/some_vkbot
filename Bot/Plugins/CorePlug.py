@@ -57,7 +57,7 @@ class CorePlug(BasePlug):
     def __help(self, peer_id: int):
         plug_slice_cmds = ""
         for plug in self.bot.plugins:
-            plug_slice_cmds += f"\n{plug.name}: {plug.keywords}"
+            plug_slice_cmds += f"\n{plug.name}: \t{plug.keywords} \t{plug.description}"
 
         prepared_msg = f"Список команд:" \
                        f"{plug_slice_cmds}"
@@ -79,7 +79,7 @@ class CorePlug(BasePlug):
             return
         elif cmd in self.keywords[5]:
             self.__sendMessage(peer_id, "максбот круто")
-            self.bot.db["wrapper"].insert((100,'b'))
+            self.bot.db["wrapper"].insert(table="example", toIns=(2555,'123'))
         else:
             pass
 

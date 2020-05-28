@@ -13,7 +13,7 @@ class KillerPlug(BasePlug):
         self.name = "Killer"
         self.description = "Just killer"
         self.version = "rolling"
-        self.keywords = ('destroy')
+        self.keywords = ('destroy',)
         self.whoCan = ''
         self.onStart()
 

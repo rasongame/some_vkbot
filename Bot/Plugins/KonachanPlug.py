@@ -4,42 +4,57 @@ import requests
 from PIL import Image
 from vk_api import bot_longpoll, VkUpload
 from vk_api.utils import get_random_id
-
+from .BasePlug import BasePlug
 from ..bot import Bot
+import logging
 
 
-class KonachanPlug:
+class KonachanPlug(BasePlug):
     def __init__(self, bot):
         self.bot: Bot = bot
         self.name = "Konachan"
         self.description = "Send arts from Konachan"
         self.version = "rolling"
-        self.keywords = ('konachan')
+        self.keywords = ('konachan',)
         self.whoCan = ''
         self.onStart()
 
-    def __sendMessage(self, peer_id: int, msg: str, attachment) -> None:
-        self.bot.vk.method("wall.post",
-                           {"owner_id": None, "message": msg, "random_id": get_random_id(),
-                            'attachment': attachment})
+    def __sendMessage(self, peer_id: int, msg: str):
+        return self.bot.vk.method("messages.send",
+                                  {"peer_id": peer_id, "message": msg, "random_id": get_random_id()})
+
+    def __sendMessage_with_img(self, peer_id: int, msg: str, attachment) -> None:
+        return self.bot.vk.method("messages.send",
+                                  {"peer_id": peer_id, "message": msg, "random_id": get_random_id(),
+                                   'attachment': attachment})
 
     def onStart(self):
         pass
 
-    def work(self, peer_id: int, msg: str, event: bot_longpoll.VkBotEvent) -> None:
-        r = requests.get("http://konachan.net/post.json?limit=1")
+    def work(self, peer_id: int, msg: str, event: bot_longpoll.VkBotEvent):
+        limit = msg.split(maxsplit=1)[1]
+        if limit is None or int(limit) <= 1:
+            limit = 1
+
+        if event.object["from_id"] not in self.bot.admins and int(limit) >= 3:
+            limit = 3
+
+        r = requests.get(f"https://konachan.net/post.json?limit={limit}&tags=order%3Arandom")
         json_parsed = json.loads(r.text)
-        self.__sendMessage(peer_id=peer_id, msg=json_parsed[0]["file_url"])
-        img_r = requests.get(json_parsed[0]["file_url"], stream=True)
-        img_r.raw.decode_content = True
-        img: Image = Image.open(img_r.raw)
-        img.save("/tmp/foo.shit", "PNG")
-        with open("/tmp/foo.shit") as file:
+        attachments = []
+        self.__sendMessage(peer_id, "Начинаю выкачку...")
+        for i, jsonx in enumerate(json_parsed):
+            img_r = requests.get(jsonx["file_url"], stream=True)
+            img_r.raw.decode_content = True
+            img: Image = Image.open(img_r.raw)
+            img.save(f"/tmp/foo{i}.png", "PNG")
+            # logging.info(msg)
             upload = VkUpload(self.bot.vk)
-            photo = upload.photo_wall(photos="/tmp/foo.shit")
-            owner_id = photo[0]['owner_id']
-            photo_id = photo[0]['id']
-            access_key = photo[0]['access_key']
-            attachment = f'photo{owner_id}_{photo_id}_{access_key}'
-            self.__sendMessage(peer_id=peer_id, attachment=attachment)
+            photo = upload.photo_messages(f"/tmp/foo{i}.png")[0]
+            attachments.append(f"photo{photo['owner_id']}_{photo['id']},")
+
+        attachment_str = ""
+        for attachment in attachments:
+            attachment_str += attachment
+        self.__sendMessage_with_img(peer_id=peer_id, msg=None, attachment=attachment_str)
         return
