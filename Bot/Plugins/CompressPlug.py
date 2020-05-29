@@ -64,7 +64,7 @@ class CompressPlug:
         if x > 100 or y > 100:
             self.sendmsg(helps)
         os.system(f"convert жмых.png -liquid-rescale {y}x{x}%\! жмых_бахнутый.png")
-        os.remove("/tmp/жмых.png")
+        os.remove("жмых.png")
         #
         # Загружаем фоточку в вк...
         #------------------------
