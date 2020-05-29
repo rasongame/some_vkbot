@@ -28,6 +28,7 @@ class Bot:
         self.config = config
         self.version = "Rolling Version"
         self.vk: vk_api.VkApi = vk_api.VkApi(token=self.token)
+        self.vk_client = vk_api.VkApi(token=config["bot"]["client_token"]).get_api()
         self.longpoll: VkBotLongPoll = VkBotLongPoll(self.vk, self.group_id)
         self.plugins = []
         self.disabledPlugins = []
