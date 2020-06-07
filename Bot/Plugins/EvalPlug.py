@@ -18,7 +18,7 @@ class EvalPlug(BasePlug):
         self.whoCan = self.bot.admins
         self.onStart()
 
-    def __sendMessage(self, peer_id, msg):
+    def __sendmessage(self, peer_id, msg):
         self.bot.vk.method("messages.send", {"peer_id": peer_id, "message": msg, "random_id": get_random_id()})
 
     def onStart(self) -> None:
@@ -41,10 +41,10 @@ class EvalPlug(BasePlug):
         with stdoutIO() as s:
             try:
                 exec(code)
-            except:
-                print("Something wrong with the code")
+            except Exception as e:
+                print(f"Something wrong with the code: {e}")
         try:
-            self.__sendMessage(peer_id, s.getvalue())
+            self.__sendmessage(peer_id, s.getvalue())
         except ApiError:
             pass
         return
