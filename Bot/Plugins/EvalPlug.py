@@ -25,7 +25,7 @@ class EvalPlug(BasePlug):
         logging.info(f"{self.name} is loaded")
 
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent) -> None:
-        if event.obj["from_id"] != 205479228:
+        if event.obj["from_id"] not in self.whoCan:
             return
 
         @contextlib.contextmanager

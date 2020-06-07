@@ -15,7 +15,8 @@ class QuoteGen(BasePlug):
     def __init__(self, bot: object):
         self.bot: object = bot
         self.name = "QuoteGen"
-        self.description = "Цитаты великих людей"
+        self.description = "Делает цитаты. Отвечаете на сообщение словом командой," \
+                           " или пересылаете множество сообщений и опять также отвечаете\n"
         self.version = "rolling"
         self.keywords = ('cit',"цитген", 'цит')
         self.whoCan = ''

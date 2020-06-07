@@ -26,7 +26,7 @@ class CorePlug(BasePlug):
         self.name = "Core Plug"
         self.version = "rolling"
         self.description = "Корневой плагин бота"
-        self.keywords = ('хелп', 'help', 'инфо', 'info', 'raw', 'lmao')
+        self.keywords = ('хелп', 'help', 'инфо', 'info', 'raw', 'lmao', 'report', 'репорт')
         self.onStart()
 
     def __sendMessage(self, peer_id, msg):
@@ -64,7 +64,6 @@ class CorePlug(BasePlug):
         self.__sendMessage(peer_id=peer_id, msg=prepared_msg)
         del prepared_msg
         return
-
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent):
 
         cmd = msg.split()[0]
@@ -80,6 +79,14 @@ class CorePlug(BasePlug):
         elif cmd in self.keywords[5]:
             self.__sendMessage(peer_id, "максбот круто")
             self.bot.db["wrapper"].insert(table="example", toIns=(2555,'123'))
+
+        elif cmd in self.keywords[6]:
+            text = f"Репорт из чата {peer_id}: {event.obj.from_id} репортнул: {msg}"
+            for admin_id in self.bot.admins:
+                try:
+                    self.__sendMessage(admin_id, text)
+                except:
+                    pass
         else:
             pass
 
