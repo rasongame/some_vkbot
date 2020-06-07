@@ -81,8 +81,11 @@ class Bot:
                     if plug.hasKeyword(event.obj.text.split()[0]):
                         # logging.info("successfull work plugins")
                         logging.info("Поток открылся")
-                        self.futures.append(self.pool.submit(plug.work, event.obj.peer_id, event.obj.text.lower(), event))
-                        self.pool.submit(self.checkThread)
+                        if self.config['bot']["debug_mode"] == True:
+                            plug.work(event.obj.peer_id, event.obj.text.lower(), event)
+                        else:
+                            self.futures.append(self.pool.submit(plug.work, event.obj.peer_id, event.obj.text.lower(), event))
+                            self.pool.submit(self.checkThread)
                 except IndexError:
                     pass
 

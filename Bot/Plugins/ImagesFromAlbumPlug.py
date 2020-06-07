@@ -12,7 +12,7 @@ class ImagesFromAlbumPlug:
     def __init__(self, bot: Bot):
         self.bot: Bot = bot
         self.name = "ImagesFromAlbum"
-        self.description = "Send arts from some albums "
+        self.description = "Присылает пикчи из разных альбомов"
         self.version = "rolling"
         self.keywords = ('каты', "юри", "яой", 'трапы', 'лоли','ноги', 'ножки')
         self.whoCan = ''

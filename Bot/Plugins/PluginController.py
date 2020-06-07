@@ -23,6 +23,8 @@ class PluginController(BasePlug):
             if msg.split()[0] == self.keywords[0]:
                 try:
                     self.bot.disabledPlugins.append(self.bot.plugins.pop(int(msg.split()[1])))
+                    plugin = self.bot.plugins[(int(msg.split()[1]))]
+                    plugin.onStop()
                     self.__sendMessage(peer_id=peer_id, msg="Plugin disabled!")
                     self.__sendMessage(peer_id=peer_id, msg=self.bot.disabledPlugins)
                 except IndexError:
@@ -30,6 +32,8 @@ class PluginController(BasePlug):
             elif msg.split()[0] == self.keywords[1]:
                 try:
                     self.bot.plugins.append(self.bot.disabledPlugins.pop(int(msg.split()[1])))
+                    plugin = self.bot.plugins[(int(msg.split()[1]))]
+                    plugin.onStart()
                     self.__sendMessage(peer_id, f"Plugin enabled")
                     # {self.bot.plugins}
                     # prepared_msg = self.bot.plugins

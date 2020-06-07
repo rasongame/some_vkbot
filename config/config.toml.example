@@ -2,6 +2,8 @@
 [bot]
 token = ""
 group_id =
+client_token = "" # Необходимо для плагина ImagesFromAlbumPlug
+debug_mode = false
 admins = [] # 000000000
 plugins = [
     "Bot.Plugins.CorePlug",

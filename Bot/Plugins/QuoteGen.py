@@ -15,9 +15,9 @@ class QuoteGen(BasePlug):
     def __init__(self, bot: object):
         self.bot: object = bot
         self.name = "QuoteGen"
-        self.description = "some description"
+        self.description = "Цитаты великих людей"
         self.version = "rolling"
-        self.keywords = ('cit',)
+        self.keywords = ('cit',"цитген", 'цит')
         self.whoCan = ''
         self.onStart()
 
@@ -51,12 +51,6 @@ class QuoteGen(BasePlug):
         avatar = Image.open(downloadImg(avatar_url), 'r')
         h = 400 + font.size
         lines = w.wrap(text)
-#       s = 400+font.getsize(max(lines))[0]
-#        if s > font.getsize(f"{author} сказал: ")[0]:
-        #draw.rectangle((400-5, 400-2, 400+15+font.getsize(max(lines))[0], h+(font.size*len(lines))+30), outline=(255,255,255,255))
-        # else:
-        #     draw.rectangle((400, 400, 400 + font.getsize(f"{author} сказал: ")[0], h + (font.size * len(lines)) + 25),
-        #                    outline=(255, 255, 255, 255))
         for line in lines:
             width, height = font.getsize(line)
             draw.text((400, h), line, fill=theme[1], font=font)

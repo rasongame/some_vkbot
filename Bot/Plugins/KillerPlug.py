@@ -11,7 +11,7 @@ class KillerPlug(BasePlug):
     def __init__(self, bot):
         self.bot: Bot = bot
         self.name = "Killer"
-        self.description = "Just killer"
+        self.description = "Just killer. Not working btw"
         self.version = "rolling"
         self.keywords = ('destroy',)
         self.whoCan = ''

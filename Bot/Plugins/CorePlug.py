@@ -25,7 +25,7 @@ class CorePlug(BasePlug):
         self.bot: object = bot
         self.name = "Core Plug"
         self.version = "rolling"
-        self.description = "Core plugin of bot.."
+        self.description = "Корневой плагин бота"
         self.keywords = ('хелп', 'help', 'инфо', 'info', 'raw', 'lmao')
         self.onStart()
 

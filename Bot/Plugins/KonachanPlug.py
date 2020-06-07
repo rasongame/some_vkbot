@@ -13,9 +13,9 @@ class KonachanPlug(BasePlug):
     def __init__(self, bot):
         self.bot: Bot = bot
         self.name = "Konachan"
-        self.description = "Send arts from Konachan"
+        self.description = "Присылает арты с konachan.net"
         self.version = "rolling"
-        self.keywords = ('konachan',)
+        self.keywords = ('konachan','коначан')
         self.whoCan = ''
         self.onStart()
 
@@ -37,7 +37,7 @@ class KonachanPlug(BasePlug):
             limit = 1
 
         if event.object["from_id"] not in self.bot.admins and int(limit) >= 3:
-            limit = 3
+            limit = 5
 
         r = requests.get(f"https://konachan.net/post.json?limit={limit}&tags=order%3Arandom")
         json_parsed = json.loads(r.text)
