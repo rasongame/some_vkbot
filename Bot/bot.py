@@ -2,9 +2,8 @@ import logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Union
 
-import psycopg2
 import vk_api
-from psycopg2._psycopg import connection, cursor
+import peewee
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType, VkBotMessageEvent, VkBotEvent
 from .Utils import db_wrapper, console
 from datetime import datetime
@@ -43,14 +42,20 @@ class Bot:
             self.db["server"] = self.config["database"]["server"]
             self.db["user"] = self.config["database"]["user"]
             self.db["password"] = self.config["database"]["password"]
-            self.db["conn"]: connection = psycopg2.connect(dbname=self.db["name"], user=self.db["user"],
-                                                           password=self.db["password"], host=self.db["server"])
-            self.db["cursor"]: cursor = self.db["conn"].cursor()
-            self.db["conn"].autocommit = True
-            self.db["wrapper"]: db_wrapper.wrapper = db_wrapper.wrapper(self)
+            self.db["wrapper"] = peewee.PostgresqlDatabase(
+                self.db["name"],
+                user=self.db["user"],
+                password=self.db["password"],
+                host=self.db["server"])
+
+
+
+            self.db["wrapper"].connect()
+            self.Users = db_wrapper.User(self.db["wrapper"])
+
             logging.info(f"Successfully connected to DB")
-        except (Exception, psycopg2.Error) as error:
-            logging.error(f"Cant connect to DB: {error}")
+        except Exception as e:
+            logging.error(e)
 
     def checkThread(self):
         """
@@ -78,13 +83,13 @@ class Bot:
             logging.info(f'{user["first_name"]} {user["last_name"]}({event.obj.from_id}) in {event.obj.peer_id} sent: {event.obj.text}')
             for plug in self.plugins:
                 try:
-                    if plug.hasKeyword(event.obj.text.split()[0]):
+                    if plug.hasKeyword(event.obj.text.lower().split()[0]):
                         # logging.info("successfull work plugins")
                         logging.info("Поток открылся")
                         if self.config['bot']["debug_mode"] == True:
-                            plug.work(event.obj.peer_id, event.obj.text.lower(), event)
+                            plug.work(event.obj.peer_id, event.obj.text, event)
                         else:
-                            self.futures.append(self.pool.submit(plug.work, event.obj.peer_id, event.obj.text.lower(), event))
+                            self.futures.append(self.pool.submit(plug.work, event.obj.peer_id, event.obj.text, event))
                             self.pool.submit(self.checkThread)
                 except IndexError:
                     pass

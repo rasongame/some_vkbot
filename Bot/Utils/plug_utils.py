@@ -4,14 +4,16 @@ import random
 import requests
 
 
-def photo_getWallPhoto(self, group_id, albid="wall"):
+def photo_getWallPhoto(self, group_id, albid="wall", count=1):
     max_num = self.vk_client.photos.get(
         owner_id=group_id, album_id=albid, count=0)['count']
     num = random.randint(0, max_num)
     photos = []
-    photo = self.vk_client.photos.get(owner_id=group_id, album_id=albid,
-                                               count=1, offset=num)['items'][0]['id']
-    photos.append(f"photo{group_id}_{photo}")
+    for _ in range(count):
+        num = random.randint(0, max_num)
+        photo = self.vk_client.photos.get(owner_id=group_id, album_id=albid,
+                                                   count=1, offset=num)['items'][0]['id']
+        photos.append(f"photo{group_id}_{photo}")
     photos = ",".join(photos)
     return photos
 

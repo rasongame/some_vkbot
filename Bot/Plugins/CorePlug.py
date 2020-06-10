@@ -66,7 +66,7 @@ class CorePlug(BasePlug):
         return
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent):
 
-        cmd = msg.split()[0]
+        cmd = msg.split()[0].lower()
         if cmd in self.keywords[:2]:  # говно ебучее, ищет команду в 1 и 2 элементе тупла
             self.__help(peer_id)
             return
@@ -78,7 +78,6 @@ class CorePlug(BasePlug):
             return
         elif cmd in self.keywords[5]:
             self.__sendMessage(peer_id, "максбот круто")
-            self.bot.db["wrapper"].insert(table="example", toIns=(2555,'123'))
 
         elif cmd in self.keywords[6]:
             text = f"Репорт из чата {peer_id}: {event.obj.from_id} репортнул: {msg}"

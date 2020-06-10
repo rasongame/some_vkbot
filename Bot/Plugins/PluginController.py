@@ -20,7 +20,7 @@ class PluginController(BasePlug):
 
     def work(self, peer_id: int, msg: str, event: bot_longpoll.VkBotEvent):
         if event.obj.from_id in self.bot.admins:
-            if msg.split()[0] == self.keywords[0]:
+            if msg.lower().split()[0] == self.keywords[0]:
                 try:
                     self.bot.disabledPlugins.append(self.bot.plugins.pop(int(msg.split()[1])))
                     plugin = self.bot.plugins[(int(msg.split()[1]))]
@@ -29,7 +29,7 @@ class PluginController(BasePlug):
                     self.__sendMessage(peer_id=peer_id, msg=self.bot.disabledPlugins)
                 except IndexError:
                     self.__sendMessage(peer_id, "You tried to disable of NULL plugin? You baka")
-            elif msg.split()[0] == self.keywords[1]:
+            elif msg.lower().split()[0] == self.keywords[1]:
                 try:
                     self.bot.plugins.append(self.bot.disabledPlugins.pop(int(msg.split()[1])))
                     plugin = self.bot.plugins[(int(msg.split()[1]))]
