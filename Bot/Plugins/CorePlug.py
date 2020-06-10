@@ -57,9 +57,9 @@ class CorePlug(BasePlug):
     def __help(self, peer_id: int):
         plug_slice_cmds = ""
         for plug in self.bot.plugins:
-            plug_slice_cmds += f"\n{plug.name}: \t{plug.keywords} \t{plug.description}"
+            plug_slice_cmds += f"{plug.name} -> {', '.join(plug.keywords)} \n{plug.description}\n"
 
-        prepared_msg = f"Список команд:" \
+        prepared_msg = f"Список команд:\n" \
                        f"{plug_slice_cmds}"
         self.__sendMessage(peer_id=peer_id, msg=prepared_msg)
         del prepared_msg
