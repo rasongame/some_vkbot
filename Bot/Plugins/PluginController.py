@@ -6,12 +6,13 @@ from .BasePlug import BasePlug
 
 
 class PluginController(BasePlug):
+    name = "Plugin Controller"
+    version = "rolling"
+    description = "Plugin controller"
+    keywords = ('disable', 'enable')
+    event_type = ""
     def __init__(self, bot: object) -> object:
         self.bot: object = bot
-        self.name = "Plugin Controller"
-        self.version = "rolling"
-        self.description = "Plugin controller"
-        self.keywords = ('disable', 'enable')
 
         self.onStart()
 

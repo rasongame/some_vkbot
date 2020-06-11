@@ -7,12 +7,13 @@ from .BasePlug import BasePlug
 import random
 
 class PidorPlug(BasePlug):
+    name = "Pidor"
+    version = "rolling"
+    description = "Кто пидор, епта?"
+    keywords = ('pidor', 'пидор')
+    event_type = ""
     def __init__(self, bot):
         self.bot: Bot = bot
-        self.name = "Pidor"
-        self.version = "rolling"
-        self.description = "Кто пидор, епта?"
-        self.keywords = ('pidor','пидор')
 
         self.onStart()
 

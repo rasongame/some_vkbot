@@ -21,12 +21,14 @@ def convert_size(size_bytes):
 
 
 class CorePlug(BasePlug):
+    name = "Core Plug"
+    version = "rolling"
+    description = "Корневой плагин бота"
+    keywords = ('хелп', 'help', 'инфо', 'info', 'raw', 'lmao', 'report', 'репорт')
+    event_type = ""
     def __init__(self, bot):
         self.bot: object = bot
-        self.name = "Core Plug"
-        self.version = "rolling"
-        self.description = "Корневой плагин бота"
-        self.keywords = ('хелп', 'help', 'инфо', 'info', 'raw', 'lmao', 'report', 'репорт')
+
         self.onStart()
 
     def __sendMessage(self, peer_id, msg):

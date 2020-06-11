@@ -6,6 +6,7 @@ from .BasePlug import BasePlug
 from ..Utils.db_wrapper import User
 
 class PrefixPlug(BasePlug):
+    event_type = ""
     def __init__(self, bot: object):
         self.bot: object = bot
         self.name = "PrefixPlug"

@@ -3,14 +3,17 @@ import logging
 import vk_api
 from vk_api.utils import get_random_id
 from vk_api.bot_longpoll import VkBotEventType
+from .BasePlug import BasePlug
 
-class BasePlug:
-    name = "some name"
-    description = "some description"
+
+class JoinPlug(BasePlug):
+    name = "GroupJoinPlug"
+    description = "Приветствие при входе в группу"
     version = "rolling"
     keywords = ('',)
     whoCan = ''
-    event_type = ""
+    event_type = ("chat_kick_user",)
+
     def __init__(self, bot: object):
         self.bot: object = bot
         self.onStart()
@@ -21,8 +24,9 @@ class BasePlug:
     def __sendMessage(self, peer_id, msg):
         self.bot.vk.method("messages.send", {"peer_id": peer_id, "message": msg, "random_id": get_random_id()})
 
-    def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent) -> None:
-        pass
+    def work(self, event) -> None:
+        if event.obj.action['type'] == self.event_type[0]:
+            self.__sendMessage(peer_id=event.obj.peer_id, msg=f"он был великим человеком, земля ему кирпичной кладкой")
 
     def onStart(self) -> None:
         logging.info(f"{self.name} is loaded")

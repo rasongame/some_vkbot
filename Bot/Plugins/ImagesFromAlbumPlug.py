@@ -5,13 +5,15 @@ from ..Utils.plug_utils import photo_getWallPhoto
 
 
 class ImagesFromAlbumPlug:
+    name = "ImagesFromAlbum"
+    description = "Присылает пикчи из разных альбомов"
+    version = "rolling"
+    keywords = ('каты', "юри", "яой", 'трапы', 'лоли', 'ноги', 'ножки')
+    whoCan = ''
+    event_type = ""
     def __init__(self, bot: Bot):
         self.bot: Bot = bot
-        self.name = "ImagesFromAlbum"
-        self.description = "Присылает пикчи из разных альбомов"
-        self.version = "rolling"
-        self.keywords = ('каты', "юри", "яой", 'трапы', 'лоли', 'ноги', 'ножки')
-        self.whoCan = ''
+
         self.onStart()
 
     def Cats_cmd(self, text, peer_id: int, count=1):

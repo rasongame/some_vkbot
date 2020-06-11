@@ -10,13 +10,14 @@ import logging
 
 
 class KonachanPlug(BasePlug):
+    name = "Konachan"
+    description = "Присылает арты с konachan.net"
+    version = "rolling"
+    keywords = ('konachan', 'коначан')
+    whoCan = ''
+    event_type = ""
     def __init__(self, bot):
         self.bot: Bot = bot
-        self.name = "Konachan"
-        self.description = "Присылает арты с konachan.net"
-        self.version = "rolling"
-        self.keywords = ('konachan','коначан')
-        self.whoCan = ''
         self.onStart()
 
     def __sendMessage(self, peer_id: int, msg: str):

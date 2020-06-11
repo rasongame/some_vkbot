@@ -8,13 +8,14 @@ from ..bot import Bot
 
 
 class KillerPlug(BasePlug):
+    name = "Killer"
+    description = "Just killer. Not working btw"
+    version = "rolling"
+    keywords = ('destroy',)
+    whoCan = ''
+    event_type = ""
     def __init__(self, bot):
         self.bot: Bot = bot
-        self.name = "Killer"
-        self.description = "Just killer. Not working btw"
-        self.version = "rolling"
-        self.keywords = ('destroy',)
-        self.whoCan = ''
         self.onStart()
 
     def _sendMessage(self, peer_id: int, msg: str) -> None:

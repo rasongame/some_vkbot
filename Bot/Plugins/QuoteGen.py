@@ -12,14 +12,16 @@ from Bot.Plugins.BasePlug import BasePlug
 
 
 class QuoteGen(BasePlug):
+    name = "QuoteGen"
+    description = "Делает цитаты. Отвечаете на сообщение словом командой," \
+                       " или пересылаете множество сообщений и опять также отвечаете"
+    version = "rolling"
+    keywords = ('cit', "цитген", 'цит')
+    whoCan = ''
+    event_type = ""
     def __init__(self, bot: object):
         self.bot: object = bot
-        self.name = "QuoteGen"
-        self.description = "Делает цитаты. Отвечаете на сообщение словом командой," \
-                           " или пересылаете множество сообщений и опять также отвечаете\n"
-        self.version = "rolling"
-        self.keywords = ('cit',"цитген", 'цит')
-        self.whoCan = ''
+
         self.onStart()
 
     def drawImage(self, author: str, text: str, avatar_url: str) -> str:

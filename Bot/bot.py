@@ -7,7 +7,7 @@ import peewee
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType, VkBotMessageEvent, VkBotEvent
 from .Utils import db_wrapper, console
 from datetime import datetime
-
+from .bot_utils import eventHandler as eHandler
 
 def timeit(func):
     def wrapper(*args, **kwargs):
@@ -20,20 +20,22 @@ def timeit(func):
 
 
 class Bot:
+    plugins = []
+    disabledPlugins = []
+    admins = []
+    pool = ThreadPoolExecutor(8)
+    futures = []
+    version = "Rolling Version"
+    eventHandler = eHandler
     def __init__(self, group_id: int, token: str, config: dict):
         self.db: dict = {}
         self.group_id = group_id
         self.token = token
         self.config = config
-        self.version = "Rolling Version"
         self.vk: vk_api.VkApi = vk_api.VkApi(token=self.token)
         self.vk_client = vk_api.VkApi(token=config["bot"]["client_token"]).get_api()
         self.longpoll: VkBotLongPoll = VkBotLongPoll(self.vk, self.group_id)
-        self.plugins = []
-        self.disabledPlugins = []
-        self.admins = []
-        self.pool = ThreadPoolExecutor(8)
-        self.futures = []
+
         logging.basicConfig(level=logging.INFO, format=" [ %(filename)s # %(levelname)-8s %(asctime)s ]  %(message)-2s")
 
     def _connect_to_bd(self):
@@ -69,30 +71,7 @@ class Bot:
             self.futures.remove(x)
             logging.info("Поток закрылся")
 
-    def eventHandler(self, event):
 
-
-        if event.type == VkBotEventType.MESSAGE_NEW:
-            user = {}
-            try:
-                user = self.vk.get_api().users.get(user_ids=event.obj.from_id)[0]
-            except vk_api.exceptions.ApiError:
-                user["first_name"] = "bot"
-                user["last_name"] = "bot"
-
-            logging.info(f'{user["first_name"]} {user["last_name"]}({event.obj.from_id}) in {event.obj.peer_id} sent: {event.obj.text}')
-            for plug in self.plugins:
-                try:
-                    if plug.hasKeyword(event.obj.text.lower().split()[0]):
-                        # logging.info("successfull work plugins")
-                        logging.info("Поток открылся")
-                        if self.config['bot']["debug_mode"] == True:
-                            plug.work(event.obj.peer_id, event.obj.text, event)
-                        else:
-                            self.futures.append(self.pool.submit(plug.work, event.obj.peer_id, event.obj.text, event))
-                            self.pool.submit(self.checkThread)
-                except IndexError:
-                    pass
 
     def run(self) -> None:
         self._connect_to_bd()
