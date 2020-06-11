@@ -40,16 +40,16 @@ class CorePlug(BasePlug):
     def __info(self, peer_id: int):
         stats = gc.get_stats()
         prepared_msg = f"""
-                Untitled bot version :: {self.bot.version}
+                Mettaton version :: {self.bot.version}
                 Memory eated: {convert_size(psutil.Process(os.getpid()).memory_info().rss)}
                 GC Info: 
-                    Enabled: {gc.isenabled()}
-                    Stats: Collected: {stats[0]["collected"]}
+                ....Enabled: {gc.isenabled()}
+                ....Stats: Collected: {stats[0]["collected"]}
                 loaded plugins ::
                 """
         plug: BasePlug
         for i, plug in enumerate(self.bot.plugins):
-            prepared_msg += f"{i}: {plug.name} {plug.version}\n"
+            prepared_msg += f"....{i}: {plug.name} {plug.version}\n"
 
         # {self.bot.plugins}
         self.__sendMessage(peer_id=peer_id, msg=prepared_msg)
