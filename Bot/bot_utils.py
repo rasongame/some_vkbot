@@ -4,7 +4,6 @@ import vk_api
 
 
 def eventHandler(self, event: VkBotMessageEvent):
-
     if event.type == VkBotEventType.MESSAGE_NEW:
         user = {}
         try:
@@ -24,5 +23,5 @@ def eventHandler(self, event: VkBotMessageEvent):
                         self.pool.submit(self.checkThread)
             except IndexError:
                 pass
-
-    logging.info(f'{user["first_name"]} {user["last_name"]}({event.obj.from_id}) in {event.obj.peer_id} sent: {event.obj.text}')
+        
+        logging.info(f'{user["first_name"]} {user["last_name"]}({event.obj.from_id}) in {event.obj.peer_id} sent: {event.obj.text}')
