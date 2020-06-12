@@ -1,13 +1,11 @@
 import logging
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor
 from typing import Union
 
 import vk_api
-import peewee
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType, VkBotMessageEvent, VkBotEvent
-from .Utils import db_wrapper, console
 from datetime import datetime
-from .bot_utils import eventHandler as eHandler
+from .bot_utils import _connect_to_bd, checkThread, eventHandler
 
 def timeit(func):
     def wrapper(*args, **kwargs):
@@ -26,50 +24,20 @@ class Bot:
     pool = ThreadPoolExecutor(8)
     futures = []
     version = "Rolling Version"
-    eventHandler = eHandler
+    eventHandler = eventHandler
+    _connect_to_bd = _connect_to_bd
+    checkThread = checkThread
     def __init__(self, group_id: int, token: str, config: dict):
         self.db: dict = {}
         self.group_id = group_id
         self.token = token
         self.config = config
-        self.vk: vk_api.VkApi = vk_api.VkApi(token=self.token)
+        self.vk: vk_api.VkApi = vk_api.VkApi(token=self.token, api_version="5.110")
         self.vk_client = vk_api.VkApi(token=config["bot"]["client_token"]).get_api()
         self.longpoll: VkBotLongPoll = VkBotLongPoll(self.vk, self.group_id)
 
         logging.basicConfig(level=logging.INFO, format=" [ %(filename)s # %(levelname)-2s %(asctime)s ]  %(message)-2s")
 
-    def _connect_to_bd(self):
-        try:
-            self.db["name"] = self.config["database"]["db_name"]
-            self.db["server"] = self.config["database"]["server"]
-            self.db["user"] = self.config["database"]["user"]
-            self.db["password"] = self.config["database"]["password"]
-            self.db["wrapper"] = peewee.PostgresqlDatabase(
-                self.db["name"],
-                user=self.db["user"],
-                password=self.db["password"],
-                host=self.db["server"])
-
-
-
-            self.db["wrapper"].connect()
-            self.Users = db_wrapper.User(self.db["wrapper"])
-
-            logging.info(f"Successfully connected to DB")
-        except Exception as e:
-            logging.error(e)
-
-    def checkThread(self):
-        """
-        Скинуть название исключения в потоке, ежели  такое произойдет
-        :rtype: none
-        """
-        for x in as_completed(self.futures):
-            if x.exception() is not None:
-                logging.error(x.exception())
-                print(f"ошибОЧКА разраба: {x.exception()}")
-            self.futures.remove(x)
-            logging.info("Поток закрылся")
 
 
 

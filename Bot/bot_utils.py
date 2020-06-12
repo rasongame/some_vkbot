@@ -1,6 +1,42 @@
+from concurrent.futures._base import as_completed
+
 from vk_api.bot_longpoll import VkBotEventType, VkBotMessageEvent
 import logging
 import vk_api
+import peewee
+from .Utils import db_wrapper
+from concurrent.futures import as_completed
+def checkThread(self):
+    """
+    Скинуть название исключения в потоке, ежели  такое произойдет
+    :rtype: none
+    """
+    for x in as_completed(self.futures):
+        if x.exception() is not None:
+            logging.error(x.exception())
+            print(f"ошибОЧКА разраба: {x.exception()}")
+        self.futures.remove(x)
+        logging.info("Поток закрылся")
+
+
+def _connect_to_bd(self):
+    try:
+        self.db["name"] = self.config["database"]["db_name"]
+        self.db["server"] = self.config["database"]["server"]
+        self.db["user"] = self.config["database"]["user"]
+        self.db["password"] = self.config["database"]["password"]
+        self.db["wrapper"] = peewee.PostgresqlDatabase(
+            self.db["name"],
+            user=self.db["user"],
+            password=self.db["password"],
+            host=self.db["server"])
+
+        self.db["wrapper"].connect()
+        self.Users = db_wrapper.User(self.db["wrapper"])
+
+        logging.info(f"Successfully connected to DB")
+    except Exception as e:
+        logging.error(e)
 
 
 def eventHandler(self, event: VkBotMessageEvent):

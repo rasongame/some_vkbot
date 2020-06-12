@@ -24,14 +24,14 @@ class CorePlug(BasePlug):
     name = "Core Plug"
     version = "rolling"
     description = "Корневой плагин бота"
-    keywords = ('хелп', 'help', 'инфо', 'info', 'raw', 'lmao', 'report', 'репорт')
+    keywords = ('хелп', 'help', 'инфо', 'info', 'raw', 'lmao', 'report', 'репорт', "жив?")
     event_type = ""
     def __init__(self, bot):
         self.bot: object = bot
 
         self.onStart()
 
-    def __sendMessage(self, peer_id, msg):
+    def __sendMessage(self, peer_id: int, msg: object) -> object:
         self.bot.vk.method("messages.send", {"peer_id": peer_id, "message": msg, "random_id": get_random_id()})
 
     def __raw(self, peer_id: int, e: vk_api.bot_longpoll.VkBotEvent):
@@ -41,15 +41,15 @@ class CorePlug(BasePlug):
         stats = gc.get_stats()
         prepared_msg = f"""
                 Mettaton version :: {self.bot.version}
-                Memory eated: {convert_size(psutil.Process(os.getpid()).memory_info().rss)}
-                GC Info: 
-                ....Enabled: {gc.isenabled()}
-                ....Stats: Collected: {stats[0]["collected"]}
-                loaded plugins ::
+                Памяти сожрано: {convert_size(psutil.Process(os.getpid()).memory_info().rss)}
+                Сборщик мусора: 
+                ....Включен: {gc.isenabled()}
+                ....Стат: Собрано: {stats[0]["collected"]}
+                Загруженные плагины ::
                 """
         plug: BasePlug
         for i, plug in enumerate(self.bot.plugins):
-            prepared_msg += f"....{i}: {plug.name} {plug.version}\n"
+            prepared_msg += f"....{i}: {plug.name}\n"
 
         # {self.bot.plugins}
         self.__sendMessage(peer_id=peer_id, msg=prepared_msg)
@@ -58,7 +58,9 @@ class CorePlug(BasePlug):
 
     def __help(self, peer_id: int):
         plug_slice_cmds = ""
-        [plug_slice_cmds.join(f"{plug.name} -> {', '.join(plug.keywords)} \n {plug.description} \n") for plug in self.bot.plugins]
+        for plug in self.bot.plugins:
+            plug_slice_cmds += (f"{plug.name} -> {', '.join(plug.keywords)} \n {plug.description} \n")
+        # [ for plug in self.bot.plugins]
         prepared_msg = f"Список команд:\n" \
                        f"{plug_slice_cmds}"
         self.__sendMessage(peer_id=peer_id, msg=prepared_msg)
@@ -79,14 +81,15 @@ class CorePlug(BasePlug):
         elif cmd in self.keywords[5]:
             self.__sendMessage(peer_id, "максбот круто")
 
-        elif cmd in self.keywords[6]:
+        elif cmd in self.keywords[6:8]:
             text = f"Репорт из чата {peer_id}: {event.obj.from_id} репортнул: {msg}"
             for admin_id in self.bot.admins:
                 try:
                     self.__sendMessage(admin_id, text)
                 except:
                     pass
+        elif cmd in self.keywords[8]:
+            self.__sendMessage(peer_id, "жив, цел, орёл!")
         else:
             pass
-
         return
