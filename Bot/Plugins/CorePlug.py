@@ -24,7 +24,7 @@ class CorePlug(BasePlug):
     name = "Core Plug"
     version = "rolling"
     description = "Корневой плагин бота"
-    keywords = ('хелп', 'help', 'инфо', 'info', 'raw', 'lmao', 'report', 'репорт', "жив?")
+    keywords = ('хелп', 'help', 'инфо', 'info', 'raw', 'lmao', 'report', 'репорт', "жив?", "пинг", "ping")
     event_type = ""
     def __init__(self, bot):
         self.bot: object = bot
@@ -88,7 +88,7 @@ class CorePlug(BasePlug):
                     self.__sendMessage(admin_id, text)
                 except:
                     pass
-        elif cmd in self.keywords[8]:
+        elif cmd in self.keywords[8:11]:
             self.__sendMessage(peer_id, "жив, цел, орёл!")
         else:
             pass

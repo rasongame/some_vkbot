@@ -9,8 +9,8 @@ import random
 class PidorPlug(BasePlug):
     name = "Pidor"
     version = "rolling"
-    description = "Кто пидор, епта?"
-    keywords = ('pidor', 'пидор')
+    description = "Выбирает рандомного участника беседы под вашим предлогом"
+    keywords = ('who', 'кто')
     event_type = ""
     def __init__(self, bot):
         self.bot: Bot = bot
@@ -21,6 +21,13 @@ class PidorPlug(BasePlug):
         self.bot.vk.method("messages.send", {"disable_mentions": 1,"peer_id": peer_id, "message": msg, "random_id": get_random_id()})
 
     def work(self, peer_id: int, msg: str, event: bot_longpoll.VkBotEvent):
+        if len(msg.split()) >= 2:
+
+            who = msg.split(maxsplit=1)[1]
+        else:
+            self.__sendMessage(peer_id, "Ты что-то упустил...")
+            return
+
         try:
             s = self.bot.vk.method("messages.getConversationMembers",
                                    {"peer_id": peer_id, "group_id": self.bot.group_id})
@@ -37,7 +44,7 @@ class PidorPlug(BasePlug):
 
                 first_name = user["first_name"]
                 last_name = user["last_name"]
-                self.__sendMessage(peer_id, f'Пидор - [id{user["id"]}|{first_name} {last_name}]')
+                self.__sendMessage(peer_id, f'Кто - {who}? Я думаю это [id{user["id"]}|{first_name} {last_name}]')
 
         except exceptions.ApiError as e:
             self.__sendMessage(peer_id,

@@ -42,7 +42,7 @@ class Bot:
 
 
     def run(self) -> None:
-        self._connect_to_bd()
+        # self._connect_to_bd()
         event: Union[VkBotEvent, VkBotMessageEvent]
         # for event in self.longpoll.listen():
         # self.eventHandler(event)
