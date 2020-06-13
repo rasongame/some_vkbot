@@ -5,3 +5,4 @@ Pillow~=7.1.2
 toml
 psycopg2
 peewee
+gTTS

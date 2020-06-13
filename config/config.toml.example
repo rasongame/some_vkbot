@@ -18,7 +18,8 @@ plugins = [
     "Bot.Plugins.CompressPlug",
     "Bot.Plugins.ImagesFromAlbumPlug",
     "Bot.Plugins.ValutePlug",
-    "Bot.Plugins.AnimePlug"
+    "Bot.Plugins.AnimePlug",
+    "Bot.Plugins.GoogleBabaPlug"
 ]
 [database]
 # Бот использует PostgresSQL в плагине
