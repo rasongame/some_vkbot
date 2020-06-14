@@ -1,8 +1,8 @@
 import contextlib
+import logging
 import sys
 from io import StringIO
 
-import logging
 import vk_api
 from vk_api.exceptions import ApiError
 from vk_api.utils import get_random_id

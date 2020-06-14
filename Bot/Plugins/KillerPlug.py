@@ -4,7 +4,6 @@ from vk_api import bot_longpoll
 from vk_api.utils import get_random_id
 
 from .BasePlug import BasePlug
-from ..bot import Bot
 
 
 class KillerPlug(BasePlug):

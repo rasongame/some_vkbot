@@ -1,6 +1,6 @@
+import logging
 from datetime import datetime
 
-import logging
 import toml
 
 from Bot.Utils.utils import load_class

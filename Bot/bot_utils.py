@@ -40,7 +40,9 @@ def _connect_to_bd(self):
     except Exception as e:
         logging.error(e)
 
+
 prefix = "!"
+
 
 def event_handler(self, event: VkBotMessageEvent):
     if event.type == VkBotEventType.MESSAGE_NEW:
