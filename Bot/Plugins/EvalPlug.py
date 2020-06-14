@@ -1,10 +1,12 @@
+import contextlib
 import sys
+from io import StringIO
 
-import vk_api, logging
+import logging
+import vk_api
 from vk_api.exceptions import ApiError
 from vk_api.utils import get_random_id
-from io import StringIO
-import contextlib
+
 from Bot.Plugins.BasePlug import BasePlug
 
 
@@ -14,6 +16,7 @@ class EvalPlug(BasePlug):
     version = "rolling"
     keywords = ('eval',)
     event_type = ""
+
     def __init__(self, bot: object):
         self.bot: object = bot
         self.whoCan = self.bot.admins

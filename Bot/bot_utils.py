@@ -1,11 +1,13 @@
-from concurrent.futures._base import as_completed
-
-from vk_api.bot_longpoll import VkBotEventType, VkBotMessageEvent
 import logging
-import vk_api
-import peewee
-from .Utils import db_wrapper
 from concurrent.futures import as_completed
+
+import peewee
+import vk_api
+from vk_api.bot_longpoll import VkBotEventType, VkBotMessageEvent
+
+from .Utils import db_wrapper
+
+
 def checkThread(self):
     """
     Скинуть название исключения в потоке, ежели  такое произойдет
@@ -38,8 +40,9 @@ def _connect_to_bd(self):
     except Exception as e:
         logging.error(e)
 
+prefix = "!"
 
-def eventHandler(self, event: VkBotMessageEvent):
+def event_handler(self, event: VkBotMessageEvent):
     if event.type == VkBotEventType.MESSAGE_NEW:
         user = {}
         try:
@@ -47,20 +50,22 @@ def eventHandler(self, event: VkBotMessageEvent):
         except vk_api.exceptions.ApiError:
             user["first_name"] = "bot"
             user["last_name"] = "bot"
-        if event.obj.text.startswith("/"):
+        if event.obj.text.startswith(prefix) or event.obj.text.startswith("/"):
             for plug in self.plugins:
                 try:
                     cmd = event.obj.text.lower()
-                    cmd_without_slash = str(cmd[1:]).split()[0]
+                    cmd_without_slash = str(cmd[len(prefix):]).split()[0]
                     if plug.hasKeyword(cmd_without_slash):
                         # logging.info("successfull work plugins")
                         logging.info("Поток открылся")
-                        if self.config['bot']["debug_mode"] == True:
+                        if self.config['bot']["debug_mode"]:
                             plug.work(event.obj.peer_id, str(event.obj.text[1:]), event)
                         else:
-                            self.futures.append(self.pool.submit(plug.work, event.obj.peer_id, str(event.obj.text[1:]), event))
+                            self.futures.append(
+                                self.pool.submit(plug.work, event.obj.peer_id, str(event.obj.text[1:]), event))
                             self.pool.submit(self.checkThread)
                 except IndexError:
                     pass
-        
-        logging.info(f'{user["first_name"]} {user["last_name"]}({event.obj.from_id}) in {event.obj.peer_id} sent: {event.obj.text}')
+
+        logging.info(
+            f'{user["first_name"]} {user["last_name"]}({event.obj.from_id}) in {event.obj.peer_id} sent: {event.obj.text}')

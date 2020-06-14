@@ -1,11 +1,14 @@
 import logging
 from concurrent.futures import ThreadPoolExecutor
-from typing import Union
+from typing import Union, List, Any
 
 import vk_api
 from vk_api.bot_longpoll import VkBotLongPoll, VkBotEventType, VkBotMessageEvent, VkBotEvent
 from datetime import datetime
-from .bot_utils import _connect_to_bd, checkThread, eventHandler
+
+from .Plugins.BasePlug import BasePlug
+from .bot_utils import _connect_to_bd, checkThread, event_handler
+
 
 def timeit(func):
     def wrapper(*args, **kwargs):
@@ -18,16 +21,16 @@ def timeit(func):
 
 
 class Bot:
-    plugins = []
-    disabledPlugins = []
-    admins = []
-    pool = ThreadPoolExecutor(8)
-    futures = []
-    version = "Rolling Version"
-    eventHandler = eventHandler
-    _connect_to_bd = _connect_to_bd
-    checkThread = checkThread
     def __init__(self, group_id: int, token: str, config: dict):
+        self.plugins: List[BasePlug] = []
+        self.disabledPlugins: List[BasePlug] = []
+        self.admins: List[int] = []
+        self.pool = ThreadPoolExecutor(8)
+        self.futures = []
+        self.version = "Rolling Version"
+        self.event_handler = event_handler
+        self._connect_to_bd = _connect_to_bd
+        self.checkThread = checkThread
         self.db: dict = {}
         self.group_id = group_id
         self.token = token
@@ -38,14 +41,11 @@ class Bot:
 
         logging.basicConfig(level=logging.INFO, format=" [ %(filename)s # %(levelname)-2s %(asctime)s ]  %(message)-2s")
 
-
-
-
     def run(self) -> None:
         # self._connect_to_bd()
-        event: Union[VkBotEvent, VkBotMessageEvent]
         # for event in self.longpoll.listen():
-        # self.eventHandler(event)
-        [self.eventHandler(event) for event in self.longpoll.listen()]
+        # self.event_handler(event)
+        [self.event_handler(self, event) for event in self.longpoll.listen()]
+
         # Эта страшная хероборина в теории должна быть быстрей
         # Но я как-то не уверен

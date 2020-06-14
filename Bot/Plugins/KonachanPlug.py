@@ -4,9 +4,9 @@ import requests
 from PIL import Image
 from vk_api import bot_longpoll, VkUpload
 from vk_api.utils import get_random_id
+
 from .BasePlug import BasePlug
 from ..bot import Bot
-import logging
 
 
 class KonachanPlug(BasePlug):
@@ -16,6 +16,7 @@ class KonachanPlug(BasePlug):
     keywords = ('konachan', 'коначан')
     whoCan = ''
     event_type = ""
+
     def __init__(self, bot):
         self.bot: Bot = bot
         self.onStart()

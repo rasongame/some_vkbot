@@ -10,12 +10,13 @@ from Bot.Plugins.BasePlug import BasePlug
 
 
 class AnimePlug(BasePlug):
-    name = "some name"
-    description = "some description"
+    name = "AnimeFinder"
+    description = "Находит аниме по фото"
     version = "rolling"
     keywords = ('анименафото',)
     whoCan = ''
     event_type = ""
+
     def __init__(self, bot: object):
         self.bot: object = bot
         self.onStart()
@@ -48,9 +49,9 @@ class AnimePlug(BasePlug):
             self.__sendMessage(peer_id, "Я хочу фото!")
 
 
-
 def onStart(self) -> None:
-        logging.info(f"{self.name} is loaded")
+    logging.info(f"{self.name} is loaded")
+
 
 def onStop(self) -> None:
-        logging.info(f"{self.name} is disabling")
+    logging.info(f"{self.name} is disabling")

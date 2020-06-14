@@ -1,9 +1,9 @@
 import logging
 
-import vk_api
-from vk_api.utils import get_random_id
-from vk_api.bot_longpoll import VkBotEventType
 import requests
+import vk_api
+from vk_api.bot_longpoll import VkBotEventType
+from vk_api.utils import get_random_id
 
 from Bot.Plugins.BasePlug import BasePlug
 
@@ -15,6 +15,7 @@ class ValutePlug(BasePlug):
     keywords = ('курс',)
     whoCan = ''
     event_type = ""
+
     def __init__(self, bot: object):
         self.bot: object = bot
         self.onStart()

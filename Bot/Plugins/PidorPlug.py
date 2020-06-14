@@ -1,10 +1,12 @@
+import random
+
 from vk_api import bot_longpoll
 from vk_api import exceptions
 from vk_api.utils import get_random_id
 
 from Bot.bot import Bot
 from .BasePlug import BasePlug
-import random
+
 
 class PidorPlug(BasePlug):
     name = "Pidor"
@@ -12,13 +14,15 @@ class PidorPlug(BasePlug):
     description = "Выбирает рандомного участника беседы под вашим предлогом"
     keywords = ('who', 'кто')
     event_type = ""
+
     def __init__(self, bot):
         self.bot: Bot = bot
 
         self.onStart()
 
     def __sendMessage(self, peer_id: int, msg: str) -> None:
-        self.bot.vk.method("messages.send", {"disable_mentions": 1,"peer_id": peer_id, "message": msg, "random_id": get_random_id()})
+        self.bot.vk.method("messages.send",
+                           {"disable_mentions": 1, "peer_id": peer_id, "message": msg, "random_id": get_random_id()})
 
     def work(self, peer_id: int, msg: str, event: bot_longpoll.VkBotEvent):
         if len(msg.split()) >= 2:

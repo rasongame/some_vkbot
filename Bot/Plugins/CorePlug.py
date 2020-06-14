@@ -26,6 +26,7 @@ class CorePlug(BasePlug):
     description = "Корневой плагин бота"
     keywords = ('хелп', 'help', 'инфо', 'info', 'raw', 'lmao', 'report', 'репорт', "жив?", "пинг", "ping")
     event_type = ""
+
     def __init__(self, bot):
         self.bot: object = bot
 
@@ -66,6 +67,7 @@ class CorePlug(BasePlug):
         self.__sendMessage(peer_id=peer_id, msg=prepared_msg)
         del prepared_msg
         return
+
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent):
 
         cmd = msg.split()[0].lower()

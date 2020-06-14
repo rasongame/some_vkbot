@@ -1,7 +1,6 @@
 from vk_api import bot_longpoll
 from vk_api.utils import get_random_id
 
-from Bot.bot import Bot
 from .BasePlug import BasePlug
 
 
@@ -11,6 +10,7 @@ class PluginController(BasePlug):
     description = "Plugin controller"
     keywords = ('disable', 'enable')
     event_type = ""
+
     def __init__(self, bot: object) -> object:
         self.bot: object = bot
 

@@ -14,8 +14,9 @@ class KillerPlug(BasePlug):
     keywords = ('destroy',)
     whoCan = ''
     event_type = ""
+
     def __init__(self, bot):
-        self.bot: Bot = bot
+        self.bot: object = bot
         self.onStart()
 
     def _sendMessage(self, peer_id: int, msg: str) -> None:

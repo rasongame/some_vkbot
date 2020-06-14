@@ -1,24 +1,26 @@
 import datetime
 import logging
+import textwrap
 
 import vk_api
-from vk_api.utils import get_random_id
 from PIL import Image
-from PIL import ImageFont
 from PIL import ImageDraw
-from ..Utils.utils import uploadImg, downloadImg
-import textwrap
+from PIL import ImageFont
+from vk_api.utils import get_random_id
+
 from Bot.Plugins.BasePlug import BasePlug
+from ..Utils.utils import uploadImg, downloadImg
 
 
 class QuoteGen(BasePlug):
     name = "QuoteGen"
     description = "Делает цитаты. Отвечаете на сообщение словом командой," \
-                       " или пересылаете множество сообщений и опять также отвечаете"
+                  " или пересылаете множество сообщений и опять также отвечаете"
     version = "rolling"
     keywords = ('cit', "цитген", 'цит')
     whoCan = ''
     event_type = ""
+
     def __init__(self, bot: object):
         self.bot: object = bot
 
@@ -35,13 +37,13 @@ class QuoteGen(BasePlug):
             (0, 0, 0, 0), 'rgb(255,255,255)'
         )
         light_scheme = (
-            (255,255,255,255), 'rgb(128,128,128)'
+            (255, 255, 255, 255), 'rgb(128,128,128)'
         )
         img = Image.new("RGBA", (1920, 1080), dark_scheme[0])
         draw = ImageDraw.Draw(img)
         theme = dark_scheme
         if theme is not light_scheme:
-            draw.rectangle((0,0, img.size), fill='rgb(0,0,0)')
+            draw.rectangle((0, 0, img.size), fill='rgb(0,0,0)')
         font = ImageFont.truetype("font.ttf", size=45)
         watermark = Image.new("RGBA", img.size)
         waterdraw = ImageDraw.ImageDraw(watermark, "RGBA")
@@ -61,7 +63,7 @@ class QuoteGen(BasePlug):
 
         draw.text((img.size[0] / 10, img.size[1] - font.size * 2), date, fill=theme[1], font=font)
         draw.text((img.size[0] / 10, img.size[1] - font.size * 3), time, fill=theme[1], font=font)
-        waterdraw.text((img.size[0]/ 10, img.size[1] / round(7)), "https://vk.com/club184995795", font=watermark_font)
+        waterdraw.text((img.size[0] / 10, img.size[1] / round(7)), "https://vk.com/club184995795", font=watermark_font)
         watermask = watermark.convert("L").point(lambda x: min(x, 4))
         watermark.putalpha(watermask)
         img.paste(avatar, (int(img.size[0] / 13), int(img.size[1] / 2) - 150))
@@ -94,12 +96,10 @@ class QuoteGen(BasePlug):
             author_id = event.obj["reply_message"]["from_id"]
             text = event.object.reply_message["text"]
 
-
         author_info = self.bot.vk.get_api().users.get(user_ids=author_id,
                                                       fields='photo_max')
         first_name, last_name = author_info[0]["first_name"], author_info[0]["last_name"]
         avatar_url = author_info[0]["photo_max"]
-
 
         # logging.info(author_name)
         self.__sendMessage_with_img(peer_id, None, uploadImg(self,

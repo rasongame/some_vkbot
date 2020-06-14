@@ -1,8 +1,9 @@
 import logging
 
 import vk_api
-from vk_api.utils import get_random_id
 from vk_api.bot_longpoll import VkBotEventType
+from vk_api.utils import get_random_id
+
 
 class BasePlug:
     name = "some name"
@@ -11,6 +12,7 @@ class BasePlug:
     keywords = ('',)
     whoCan = ''
     event_type = ""
+
     def __init__(self, bot: object):
         self.bot: object = bot
         self.onStart()

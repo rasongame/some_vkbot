@@ -5,8 +5,8 @@ from datetime import datetime
 import vk_api
 from gtts import gTTS
 from vk_api import VkUpload
-from vk_api.utils import get_random_id
 from vk_api.bot_longpoll import VkBotEventType
+from vk_api.utils import get_random_id
 
 from Bot.Plugins.BasePlug import BasePlug
 
@@ -15,9 +15,10 @@ class GoogleBabaPlug(BasePlug):
     name = "Google Baba"
     description = "some description"
     version = "rolling"
-    keywords = ('озвучь','скажи', 'say')
+    keywords = ('озвучь', 'скажи', 'say')
     whoCan = ''
     event_type = ""
+
     def __init__(self, bot: object):
         self.bot: object = bot
         self.onStart()

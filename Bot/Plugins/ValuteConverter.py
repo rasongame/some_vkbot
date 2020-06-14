@@ -2,8 +2,8 @@ import logging
 
 import requests
 import vk_api
-from vk_api.utils import get_random_id
 from vk_api.bot_longpoll import VkBotEventType
+from vk_api.utils import get_random_id
 
 from Bot.Plugins.BasePlug import BasePlug
 
@@ -15,6 +15,7 @@ class ValuteConverter(BasePlug):
     keywords = ('конвертер', 'converter')
     whoCan = ''
     event_type = ""
+
     def __init__(self, bot: object):
         self.bot: object = bot
         self.onStart()
@@ -39,9 +40,11 @@ class ValuteConverter(BasePlug):
         if val <= 0:
             self.__sendMessage(peer_id, "Число должно быть больше 0!")
         elif text[2] == "usd":
-            self.__sendMessage(peer_id, f"💰{'%g' % val}$:\nВ рублях: {round(val * usd, 3)}₽\nВ евро: {round(val * usd / eur, 3)}€")
+            self.__sendMessage(peer_id,
+                               f"💰{'%g' % val}$:\nВ рублях: {round(val * usd, 3)}₽\nВ евро: {round(val * usd / eur, 3)}€")
         elif text[2] == "eur":
-            self.__sendMessage(peer_id, f"💰{'%g' % val}€:\nВ рублях: {round(val * eur, 3)}₽\nВ долларах:{round(val * eur / usd, 3)}$")
+            self.__sendMessage(peer_id,
+                               f"💰{'%g' % val}€:\nВ рублях: {round(val * eur, 3)}₽\nВ долларах:{round(val * eur / usd, 3)}$")
         else:
             self.__sendMessage(peer_id, "Выбери: usd или eur!\nНапример: /конвертер 5 usd")
 

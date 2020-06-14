@@ -16,9 +16,9 @@ class CompressPlug:
     version = "rolling"
     keywords = ("/жмых",)
     event_type = ""
+
     def __init__(self, bot: object):
         self.bot: object = bot
-
 
     def hasKeyword(self, keyword: str) -> bool:
         return keyword in self.keywords
@@ -52,9 +52,9 @@ class CompressPlug:
         img: Image = Image.open(img_r.raw)
         img.save(f"tmp/жмых.png", "PNG")
         # Скачали фоточку...
-        #------------------------
+        # ------------------------
         #
-        x, y = 50,50
+        x, y = 50, 50
         args = msg.split(" ")
         if len(args) >= 2:
             try:
@@ -69,7 +69,7 @@ class CompressPlug:
         os.remove("tmp/жмых.png")
         #
         # Загружаем фоточку в вк...
-        #------------------------
+        # ------------------------
         upload = VkUpload(self.bot.vk)
         photo = upload.photo_messages(f"tmp/жмых_бахнутый.png")[0]
         self.__sendMessage(peer_id, " Ж М Ы Х ", f"photo{photo['owner_id']}_{photo['id']}")

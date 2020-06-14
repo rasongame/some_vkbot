@@ -1,7 +1,8 @@
-from vk_api import bot_longpoll, VkUpload
+from vk_api import bot_longpoll
 from vk_api.utils import get_random_id
-from ..bot import Bot
+
 from ..Utils.plug_utils import photo_getWallPhoto
+from ..bot import Bot
 
 
 class ImagesFromAlbumPlug:
@@ -11,6 +12,7 @@ class ImagesFromAlbumPlug:
     keywords = ('каты', "юри", "яой", 'трапы', 'лоли', 'ноги', 'ножки')
     whoCan = ''
     event_type = ""
+
     def __init__(self, bot: Bot):
         self.bot: Bot = bot
 

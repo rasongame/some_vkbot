@@ -1,8 +1,8 @@
-from vk_api import VkUpload
 from PIL.ImageDraw import ImageDraw
+from vk_api import VkUpload
 
 
-def load_class(full_class_string):
+def load_class(full_class_string: str):
     """
     dynamically load a class from a string
     """
@@ -35,7 +35,6 @@ def downloadImg(url):
     img_r = requests.get(url, stream=True)
     img_r.raw.decode_content = True
     img: Image = Image.open(img_r.raw)
-    from PIL.Image import Image
     path = f"/tmp/avatar{randint(0, 100)}"
     img.save(path, "PNG")
     return path
@@ -66,14 +65,14 @@ def rounded_rectangle(self: ImageDraw, xy, corner_radius, fill=None, outline=Non
         270,
         fill=fill,
         outline=outline
-        )
+    )
     self.pieslice(
         [(bottom_right_point[0] - corner_radius * 2, bottom_right_point[1] - corner_radius * 2), bottom_right_point],
         0,
         90,
         fill=fill,
         outline=outline
-        )
+    )
     self.pieslice([(upper_left_point[0], bottom_right_point[1] - corner_radius * 2),
                    (upper_left_point[0] + corner_radius * 2, bottom_right_point[1])],
                   90,
