@@ -9,17 +9,18 @@ plugins = [
     "Bot.Plugins.CorePlug",
     "Bot.Plugins.PluginController",
     "Bot.Plugins.KillerPlug",
-    "Bot.Plugins.KonachanPlug",
     "Bot.Plugins.PidorPlug",
-    "Bot.Plugins.QuoteGen",
-    "Bot.Plugins.JoinPlug",
-    "Bot.Plugins.ImagesFromAlbumPlug",
     "Bot.Plugins.EvalPlug",
-    "Bot.Plugins.CompressPlug",
+    "Bot.Plugins.KonachanPlug",
+    "Bot.Plugins.PrefixPlug",
     "Bot.Plugins.ImagesFromAlbumPlug",
+    "Bot.Plugins.QuoteGen",
+    "Bot.Plugins.CompressPlug",
+    "Bot.Plugins.JoinPlug",
     "Bot.Plugins.ValutePlug",
     "Bot.Plugins.AnimePlug",
-    "Bot.Plugins.GoogleBabaPlug"
+    "Bot.Plugins.GoogleBabaPlug",
+    "Bot.Plugins.Rule34Plug"
 ]
 [database]
 # Бот использует PostgresSQL в плагине

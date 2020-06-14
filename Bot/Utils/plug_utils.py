@@ -18,6 +18,15 @@ def photo_getWallPhoto(self, group_id, albid="wall", count=1):
     return photos
 
 
+def downloadfile(url, expansion="png"):
+    import time
+    name = f"photo{time.time_ns()}.{expansion}"
+    with open(name, "wb") as files:
+        response = requests.get(url).content
+        files.write(response)
+    return {"name": name, "expansion": url[-3:]}
+
+
 class OtherMethod:
     def args(self, text):
         args = argparse.ArgumentParser(description="пикчи")
