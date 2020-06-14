@@ -20,7 +20,7 @@ def photo_getWallPhoto(self, group_id, albid="wall", count=1):
 
 
 def downloadfile(url, expansion="png"):
-    name = f"photo{time.time_ns()}.{expansion}"
+    name = f"photo{time.time()}.{expansion}"
     with open(name, "wb") as files:
         response = requests.get(url).content
         files.write(response)
