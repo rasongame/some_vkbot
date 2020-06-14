@@ -1,5 +1,6 @@
 import argparse
 import random
+import time
 
 import requests
 
@@ -19,7 +20,6 @@ def photo_getWallPhoto(self, group_id, albid="wall", count=1):
 
 
 def downloadfile(url, expansion="png"):
-    import time
     name = f"photo{time.time_ns()}.{expansion}"
     with open(name, "wb") as files:
         response = requests.get(url).content
