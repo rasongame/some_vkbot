@@ -38,11 +38,10 @@ class Bot:
         self.vk: vk_api.VkApi = vk_api.VkApi(token=self.token, api_version="5.110")
         self.vk_client = vk_api.VkApi(token=config["bot"]["client_token"]).get_api()
         self.longpoll: VkBotLongPoll = VkBotLongPoll(self.vk, self.group_id)
-
         logging.basicConfig(level=logging.INFO, format=" [ %(filename)s # %(levelname)-2s %(asctime)s ]  %(message)-2s")
 
     def run(self) -> None:
-        # self._connect_to_bd()
+        _connect_to_bd(self)
         # for event in self.longpoll.listen():
         # self.event_handler(event)
         [self.event_handler(self, event) for event in self.longpoll.listen()]

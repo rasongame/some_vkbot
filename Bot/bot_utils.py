@@ -32,11 +32,12 @@ def _connect_to_bd(self):
             user=self.db["user"],
             password=self.db["password"],
             host=self.db["server"])
-
-        self.db["wrapper"].connect()
-        self.Users = db_wrapper.User(self.db["wrapper"])
-
-        logging.info(f"Successfully connected to DB")
+        # self.db["wrapper"].connect()
+        # self.db["Users"] = assign(self.db["wrapper"])
+        db_wrapper.database.initialize(self.db["wrapper"])
+        self.db["Users"] = db_wrapper.Users
+        self.db["Example"] = db_wrapper.Example
+        logging.info(f"Successfully connected to DB with IP: {self.db['server']}")
     except Exception as e:
         logging.error(e)
 
