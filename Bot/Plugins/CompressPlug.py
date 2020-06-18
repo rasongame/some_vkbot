@@ -14,7 +14,7 @@ class CompressPlug:
     name = "ЖмыхPlug"
     description = "Жмыхалка"
     version = "rolling"
-    keywords = ("/жмых",)
+    keywords = ("жмых",)
     event_type = ""
 
     def __init__(self, bot: object):
