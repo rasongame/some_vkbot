@@ -60,7 +60,7 @@ class CorePlug(BasePlug):
     def __help(self, peer_id: int):
         plug_slice_cmds = ""
         for plug in self.bot.plugins:
-            plug_slice_cmds += (f"{plug.name} -> {', '.join(plug.keywords)} \n {plug.description} \n")
+            plug_slice_cmds += f"{plug.name} -> {', '.join(plug.keywords)} \n {plug.description} \n"
         # [ for plug in self.bot.plugins]
         prepared_msg = f"Список команд:\n" \
                        f"{plug_slice_cmds}"
@@ -85,10 +85,7 @@ class CorePlug(BasePlug):
         elif cmd in self.keywords[6:8]:
             text = f"Репорт из чата {peer_id}: {event.obj.from_id} репортнул: {msg}"
             for admin_id in self.bot.admins:
-                try:
-                    self.__sendMessage(admin_id, text)
-                except:
-                    pass
+                self.__sendMessage(admin_id, text)
         elif cmd in self.keywords[8:11]:
             self.__sendMessage(peer_id, "жив, цел, орёл!")
         else:

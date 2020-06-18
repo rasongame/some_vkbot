@@ -51,6 +51,13 @@ prefixs = (
 
 
 def event_handler(self, event: VkBotMessageEvent):
+    """
+    Здесь выполняется обработка эвентов. Nuff said
+    :param self:
+    :param event:
+    :return:
+
+    """
     if event.type == VkBotEventType.MESSAGE_NEW:
         user = {}
         try:
@@ -67,7 +74,7 @@ def event_handler(self, event: VkBotMessageEvent):
                         # logging.info("successfull work plugins")
                         logging.info("Поток открылся")
                         if self.config['bot']["debug_mode"]:
-                            plug.work(event.obj.peer_id, str(event.obj.text[1:]), event)
+                            plug.work(event.obj.peer_id, )
                         else:
                             self.futures.append(
                                 self.pool.submit(plug.work, event.obj.peer_id, str(event.obj.text[1:]), event))

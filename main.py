@@ -8,6 +8,13 @@ from Bot.bot import Bot
 
 
 def loadPlugins(plug_pkg, plugins, bot):
+    """
+    Подгрузка всяких плагинов. Nuff said
+    :param plug_pkg:
+    :param plugins:
+    :param bot:
+    :return:
+    """
     plug_name: str = plug_pkg.split(".")[2]
     cls = load_class(f"{plug_pkg}.{plug_name}")
     plugins.append(cls(bot))

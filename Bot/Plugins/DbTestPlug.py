@@ -44,17 +44,17 @@ class DbTestPlug(BasePlug):
                 self.__sendMessage(peer_id, "вставил")
             elif splt[1] == "list":
                 msg = "Твои записи в БД"
-                range = 1
+                limit = 1
                 try:
-                    range = int(splt[2])
+                    limit = int(splt[2])
                 except ValueError:
-                    range = 5
+                    limit = 5
 
                 length = len(self.__get_list(event.obj.from_id))
-                for i in enumerate(self.__get_list(event.obj.from_id)[length - range:length]):
+                for i in enumerate(self.__get_list(event.obj.from_id)[length - limit:length]):
                     msg += f"\n {i[0]}. {i[1].message}"
 
-                msg += f"\nПоказаны последние {range} позиций"
+                msg += f"\nПоказаны последние {limit} позиций"
                 self.__sendMessage(peer_id, msg)
             return
         elif splt[0] in self.keywords[1:3]:

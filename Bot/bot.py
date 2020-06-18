@@ -22,6 +22,14 @@ def timeit(func):
 
 class Bot:
     def __init__(self, group_id: int, token: str, config: dict) -> object:
+        """
+
+        :param group_id: ID группы
+        :param token: Токен группы
+        :param config: Словарь - конфиг
+        Здесь выполняется инициализация всякой херни
+
+        """
         self.plugins: List[BasePlug] = []
         self.disabledPlugins: List[BasePlug] = []
         self.admins: List[int] = []
@@ -41,6 +49,11 @@ class Bot:
         logging.basicConfig(level=logging.INFO, format=" [ %(filename)s # %(levelname)-2s %(asctime)s ]  %(message)-2s")
 
     def run(self) -> None:
+        """
+        Запускает бота
+        :return:
+
+        """
         _connect_to_bd(self)
         # for event in self.longpoll.listen():
         # self.event_handler(event)

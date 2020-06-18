@@ -18,10 +18,21 @@ class AnimePlug(BasePlug):
     event_type = ""
 
     def __init__(self, bot: object):
+        """
+
+        :param bot: Обьект бота
+
+        """
         self.bot: object = bot
         self.onStart()
 
     def hasKeyword(self, keyword: str) -> bool:
+        """
+        Возращает True, если кейворд есть в списке кейвордов
+        :param keyword:
+        :return:
+
+        """
         return keyword in self.keywords
 
     def __sendMessage(self, peer_id, msg):

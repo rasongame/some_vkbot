@@ -26,10 +26,13 @@ class QuoteGen(BasePlug):
 
         self.onStart()
 
+    @staticmethod
     def drawImage(self, author: str, text: str, avatar_url: str) -> str:
         """
+        :param self: self
         :param author: автор цитаты
         :param text: текст цитаты
+        :param avatar_url: ссылка на аватар
         :return: путь к файлу.
         """
         w = textwrap.TextWrapper(width=60)
