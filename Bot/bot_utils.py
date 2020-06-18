@@ -44,7 +44,10 @@ def _connect_to_bd(self):
         logging.error(e)
 
 
-prefix = "!"
+prefixs = (
+    '/',
+    '!',
+)
 
 
 def event_handler(self, event: VkBotMessageEvent):
@@ -55,11 +58,11 @@ def event_handler(self, event: VkBotMessageEvent):
         except vk_api.exceptions.ApiError:
             user["first_name"] = "bot"
             user["last_name"] = "bot"
-        if event.obj.text.startswith(prefix) or event.obj.text.startswith("/"):
+        if event.obj.text.startswith(prefixs) or event.obj.text.startswith("/"):
             for plug in self.plugins:
                 try:
                     cmd = event.obj.text.lower()
-                    cmd_without_slash = str(cmd[len(prefix):]).split()[0]
+                    cmd_without_slash = str(cmd[1   :]).split()[0]
                     if plug.hasKeyword(cmd_without_slash):
                         # logging.info("successfull work plugins")
                         logging.info("Поток открылся")
