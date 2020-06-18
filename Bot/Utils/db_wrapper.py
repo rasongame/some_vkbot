@@ -31,6 +31,13 @@ class User(BaseModel):
         table_name = 'user'
 
 
+class Chats(BaseModel):
+    chat_id = IntegerField()
+
+    class Meta:
+        table_name = "chats"
+
+
 class Users(BaseModel):
     banned = BooleanField(constraints=[SQL("DEFAULT false")], null=True)
     has_admin = BooleanField(constraints=[SQL("DEFAULT false")])

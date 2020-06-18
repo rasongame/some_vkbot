@@ -21,7 +21,7 @@ def timeit(func):
 
 
 class Bot:
-    def __init__(self, group_id: int, token: str, config: dict):
+    def __init__(self, group_id: int, token: str, config: dict) -> object:
         self.plugins: List[BasePlug] = []
         self.disabledPlugins: List[BasePlug] = []
         self.admins: List[int] = []

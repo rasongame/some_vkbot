@@ -35,8 +35,10 @@ def _connect_to_bd(self):
         # self.db["wrapper"].connect()
         # self.db["Users"] = assign(self.db["wrapper"])
         db_wrapper.database.initialize(self.db["wrapper"])
+        db_wrapper.Chats.create_table()
         self.db["Users"] = db_wrapper.Users
         self.db["Example"] = db_wrapper.Example
+        self.db["Chats"] = db_wrapper.Chats
         logging.info(f"Successfully connected to DB with IP: {self.db['server']}")
     except Exception as e:
         logging.error(e)
