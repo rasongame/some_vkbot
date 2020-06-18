@@ -41,11 +41,9 @@ class CorePlug(BasePlug):
     def __info(self, peer_id: int):
         stats = gc.get_stats()
         prepared_msg = f"""
-                Mettaton version :: {self.bot.version}
-                Памяти сожрано: {convert_size(psutil.Process(os.getpid()).memory_info().rss)}
-                Сборщик мусора: 
-                ....Включен: {gc.isenabled()}
-                ....Стат: Собрано: {stats[0]["collected"]}
+                Привет, я Меттатон версии {self.bot.version}
+                Памяти сьела: {convert_size(psutil.Process(os.getpid()).memory_info().rss)}
+                Чтобы узнать что я умею - введи /help или !хелп (можешь вводить с ! или / команды)
                 Загруженные плагины ::
                 """
         plug: BasePlug
@@ -69,6 +67,7 @@ class CorePlug(BasePlug):
         return
 
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent):
+        print("wtf?/")
         cmd = msg.split()[0].lower()
         if cmd in self.keywords[:2]:  # говно ебучее, ищет команду в 1 и 2 элементе тупла
             self.__help(peer_id)

@@ -65,7 +65,7 @@ def event_handler(self, event: VkBotMessageEvent):
         except vk_api.exceptions.ApiError:
             user["first_name"] = "bot"
             user["last_name"] = "bot"
-        if event.obj.text.startswith(prefixs) or event.obj.text.startswith("/"):
+        if event.obj.text.startswith(prefixs):
             for plug in self.plugins:
                 try:
                     cmd = event.obj.text.lower()
@@ -74,10 +74,10 @@ def event_handler(self, event: VkBotMessageEvent):
                         # logging.info("successfull work plugins")
                         logging.info("Поток открылся")
                         if self.config['bot']["debug_mode"]:
-                            plug.work(event.obj.peer_id, )
+                            plug.work(peer_id=event.obj.peer_id, event=event, msg=event.obj.text[1:])
                         else:
                             self.futures.append(
-                                self.pool.submit(plug.work, event.obj.peer_id, str(event.obj.text[1:]), event))
+                                self.pool.submit(plug.work, peer_id=event.obj.peer_id, event=event, msg=event.obj.text[1:]))
                             self.pool.submit(self.checkThread)
                 except IndexError:
                     pass
