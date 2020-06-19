@@ -1,10 +1,9 @@
-
-import vk_api
 from vk_api import bot_longpoll
 from vk_api.utils import get_random_id
-from .CorePlug_utils.debug import *
-from .CorePlug_utils.common import *
+
 from .BasePlug import BasePlug
+from .CorePlug_utils.common import *
+from .CorePlug_utils.debug import *
 
 
 class CorePlug(BasePlug):
@@ -44,7 +43,11 @@ class CorePlug(BasePlug):
         elif cmd in self.keywords[8:11]:
             self.__sendMessage(peer_id, "жив, цел, орёл!")
         elif cmd in self.keywords[11:13]:
-            args = msg.lower().split()[1]
+            try:
+                args = msg.lower().split()[1]
+            except IndexError:
+                self.__sendMessage(peer_id, "Ты пропустил аргумент. Юзай /debug plugins or /debug raw")
+                return
             if args == "plugins" or "плагины":
                 print_plugins(self, peer_id)
             elif args == "raw" or "raw":
