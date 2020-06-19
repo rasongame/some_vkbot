@@ -1,0 +1,14 @@
+[Unit]
+Description=MyVkBot
+After=multi-user.target
+
+[Service]
+type=idle
+Environment="PATH=/mnt/sdb4/rason/some_vkbot/venv/bin:/usr/bin"
+WorkingDirectory=/mnt/sdb4/rason/some_vkbot/
+ExecStart=/mnt/sdb4/rason/some_vkbot/venv/bin/python3 /mnt/sdb4/rason/some_vkbot/main.py
+Restart=always
+InaccessibleDirectories=/root /home /sys /srv -/opt /media -/lost+found /backups
+ReadWriteDirectories=/mnt/sdb4/rason/some_vkbot/
+[Install]
+WantedBy=default.target

@@ -35,6 +35,13 @@ $ cd some_vkbot
 $ python -m venv venv
 $ source venv/bin/activate
 (venv) $ pip install -r requirements.txt
+
 ```
-###
+
+### Запуск?
+```shell script
+$ source venv/bin/activate
+$ python main.py
+```
+#### Есть поддержка systemd
 ### 
