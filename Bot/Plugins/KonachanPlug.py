@@ -35,8 +35,12 @@ class KonachanPlug(BasePlug):
 
     def work(self, peer_id: int, msg: str, event: bot_longpoll.VkBotEvent):
         limit = msg.split(maxsplit=1)[1]
-        if limit is None or int(limit) <= 1:
-            limit = 1
+        try:
+            if limit is None or int(limit) <= 1:
+                limit = 1
+        except ValueError:
+            self.__sendMessage(peer_id, "Самый умный?")
+            return
 
         if event.object["from_id"] not in self.bot.admins and int(limit) >= 3:
             limit = 5
