@@ -35,7 +35,7 @@ def downloadImg(url):
     img_r = requests.get(url, stream=True)
     img_r.raw.decode_content = True
     img: Image = Image.open(img_r.raw)
-    path = f"/tmp/avatar{randint(0, 100)}"
+    path = f"avatar{randint(0, 100)}"
     img.save(path, "PNG")
     return path
 

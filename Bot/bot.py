@@ -7,7 +7,8 @@ import vk_api
 from vk_api.bot_longpoll import VkBotLongPoll
 
 from .Plugins.BasePlug import BasePlug
-from .bot_utils import _connect_to_bd, checkThread, event_handler
+from .bot_utils import _connect_to_bd, checkThread
+from .event_handler import event_handler
 
 
 def timeit(func):

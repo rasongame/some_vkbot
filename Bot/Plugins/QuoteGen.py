@@ -52,8 +52,8 @@ class QuoteGen(BasePlug):
         waterdraw = ImageDraw.ImageDraw(watermark, "RGBA")
 
         watermark_font = ImageFont.truetype("font.ttf", size=120)
-        time = datetime.datetime.today().strftime("Время: %H:%M:%S")
-        date = datetime.datetime.today().strftime("Дата: %Y-%m-%d")
+        time = f'Время: {datetime.datetime.today().strftime("%H:%M:%S")}'
+        date = f'Дата: {datetime.datetime.today().strftime("%Y-%m-%d")}'
 
         draw.text((400, 400), f"{author} сказал: ", fill=theme[1], font=font)
         avatar = Image.open(downloadImg(avatar_url), 'r')
@@ -71,7 +71,7 @@ class QuoteGen(BasePlug):
         watermark.putalpha(watermask)
         img.paste(avatar, (int(img.size[0] / 13), int(img.size[1] / 2) - 150))
         img.paste(watermark, None, watermark)
-        path: str = "/tmp/cit.png"
+        path: str = "cit.png"
         img.save(path)
         return path
 
@@ -106,9 +106,9 @@ class QuoteGen(BasePlug):
 
         # logging.info(author_name)
         self.__sendMessage_with_img(peer_id, None, uploadImg(self,
-                                                             self.drawImage(f"{first_name} {last_name}",
-                                                                            text,
-                                                                            avatar_url)))
+                                                             self.drawImage(self=self, author=f"{first_name} {last_name}",
+                                                                            text=text,
+                                                                            avatar_url=avatar_url)))
 
     def onStart(self) -> None:
         logging.info(f"{self.name} is loaded")
