@@ -1,5 +1,6 @@
 
 # Безымянный бот
+## README ON ENGLISH HERE! [LINK](README_EN.md)
 ## АЛЯРМ! WIP
 ### Требования к установке
 * Python 3.6 (а может и ниже, я не проверял)

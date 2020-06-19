@@ -1,5 +1,6 @@
 
 # Untitled bot
+## README ON RUSSIAN HERE [LINK](README.md)
 ## АЛЯРМ! WIP
 ### Requirements to install
 * Python 3.6 (I'm not sure)
