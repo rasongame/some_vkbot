@@ -11,7 +11,6 @@ class BasePlug:
     version = "rolling"
     keywords = ('',)
     whoCan = ''
-    event_type = ""
 
     def __init__(self, bot: object):
         """

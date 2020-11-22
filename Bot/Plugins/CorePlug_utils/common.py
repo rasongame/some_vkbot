@@ -3,7 +3,6 @@ import math
 import os
 
 import psutil
-
 def convert_size(size_bytes):
     if size_bytes == 0:
         return "0B"
@@ -28,11 +27,10 @@ def print_info(self, peer_id: int):
     return
 
 
-def print_help(self, peer_id: int):
+def print_help(self, peer_id: int, msg: str):
     plug_slice_cmds = ""
     for plug in self.bot.plugins:
         plug_slice_cmds += f"{plug.name} -> {', '.join(plug.keywords)} \n {plug.description} \n"
-    # [ for plug in self.bot.plugins]
     prepared_msg = f"Список команд:\n" \
                    f"{plug_slice_cmds}"
     self.bot.vk.method("messages.send", {"peer_id": peer_id, "message": prepared_msg, "random_id": 0})

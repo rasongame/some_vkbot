@@ -26,19 +26,30 @@ def event_handler(self, event: VkBotMessageEvent):
         except vk_api.exceptions.ApiError:
             user["first_name"] = "bot"
             user["last_name"] = "bot"
-        if event.obj.text.startswith(prefixs):
+        if event.from_user or event.obj.text.startswith(prefixs):
+
             for plug in self.plugins:
                 try:
-                    cmd = event.obj.text.lower()
-                    cmd_without_slash = str(cmd[1:]).split()[0]
+                    cmd: str = event.obj.text.lower()
+                    cmd_without_slash: str
+                    if not event.from_user:
+                        cmd_without_slash = str(cmd[1:]).split()[0]
+                        event.obj.text = event.obj.text[1:]
+                    else:
+                        if cmd.startswith(prefixs):
+                            cmd_without_slash = str(cmd[1:]).split()[0]
+                            event.obj.text = event.obj.text[1:]
+                        else:
+                            cmd_without_slash = cmd.split()[0]
+
                     if plug.hasKeyword(cmd_without_slash):
                         # logging.info("successful work plugins")
                         logging.info("Поток открылся")
                         if self.config['bot']["debug_mode"]:
-                            plug.work(peer_id=event.obj.peer_id, event=event, msg=event.obj.text[1:])
+                            plug.work(peer_id=event.obj.peer_id, event=event, msg=event.obj.text)
                         else:
                             self.futures.append(
-                                self.pool.submit(plug.work, peer_id=event.obj.peer_id, event=event, msg=event.obj.text[1:]))
+                                self.pool.submit(plug.work, peer_id=event.obj.peer_id, event=event, msg=event.obj.text))
                             self.pool.submit(self.checkThread)
                 except IndexError:
                     pass

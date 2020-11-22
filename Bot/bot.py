@@ -38,7 +38,7 @@ class Bot:
         self.futures = []
         self.version = "Rolling Version"
         self.event_handler = event_handler
-        self._connect_to_bd = _connect_to_bd
+        # self._connect_to_bd = _connect_to_bd
         self.checkThread = checkThread
         self.db: dict = {}
         self.group_id = group_id
@@ -55,7 +55,7 @@ class Bot:
         :return:
 
         """
-        _connect_to_bd(self)
+        # _connect_to_bd(self)
         # for event in self.longpoll.listen():
         # self.event_handler(event)
         [self.event_handler(self, event) for event in self.longpoll.listen()]
