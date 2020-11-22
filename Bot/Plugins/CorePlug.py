@@ -13,7 +13,7 @@ class CorePlug(BasePlug):
     description = "Корневой плагин бота"
     keywords = ('хелп', 'help',
                 'инфо', 'info',
-                ' ', ' ',
+                'Начать', 'Start',
                 'report', 'репорт',
                 "жив?", "пинг", "ping",
                 "debug", "дебаг")
@@ -38,6 +38,10 @@ class CorePlug(BasePlug):
         elif cmd in self.keywords[2:4]:
             print_info(self,peer_id)
             return
+        elif cmd in self.keywords[4:6]:
+            print_start_info(self, peer_id)
+            return
+
         elif cmd in self.keywords[6:8]:
             text = f"Репорт из чата {peer_id}: {event.obj.from_id} репортнул: {msg}"
             for admin_id in self.bot.admins:
