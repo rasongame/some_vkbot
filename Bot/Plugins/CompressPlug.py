@@ -37,16 +37,18 @@ class CompressPlug:
                 можно передавать степень жмыхнутости, пример:
                     /жмых 55 55
                     /жмых 59 80
+                    /жмых 50
+                    
                     чем ниже значения, тем сильнее жмыханет
                     максимум для одного из знчений - 100
                     а дефолт - 40 40
                 """
         url = ""
-        try:
+        if event.obj["attachments"][0]:
             url = event.obj["attachments"][0]["photo"]["sizes"][-1]["url"]
-        except IndexError:
-            self.__sendMessage(peer_id, msg=helps)
-            return
+        elif event.obj["reply_message"]["attachments"][0]["photo"]["sizes"][-1]["url"]:
+            url = event.obj["reply_message"]["attachments"][0]["photo"]["sizes"][-1]["url"]
+
         img_r = requests.get(url, stream=True)
         img_r.raw.decode_content = True
         img: Image = Image.open(img_r.raw)
@@ -60,6 +62,12 @@ class CompressPlug:
             try:
                 x = int(args[1])
                 y = int(args[2])
+            except ValueError:
+                self.sendmsg(helps)
+        elif len(args) == 1:
+            try:
+                x = int(args[1])
+                y = int(args[1])
             except ValueError:
                 self.sendmsg(helps)
 

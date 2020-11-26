@@ -29,7 +29,6 @@ class CorePlug(BasePlug):
 
 
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent):
-        print("wtf?/")
         cmd = msg.split()[0].lower()
 
         if cmd in self.keywords[:2]:  # говно ебучее, ищет команду в 1 и 2 элементе тупла
