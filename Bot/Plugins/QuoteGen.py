@@ -75,8 +75,7 @@ class QuoteGen(BasePlug):
         img.save(path)
         return path
 
-    def hasKeyword(self, keyword: str) -> bool:
-        return keyword in self.keywords
+
 
     def __sendMessage(self, peer_id: int, msg: str):
         self.bot.vk.method("messages.send", {"peer_id": peer_id, "message": msg, "random_id": get_random_id()})

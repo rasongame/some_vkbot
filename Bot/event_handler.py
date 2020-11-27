@@ -42,7 +42,7 @@ def event_handler(self, event: VkBotMessageEvent):
                         else:
                             cmd_without_slash = cmd.split()[0]
 
-                    if plug.hasKeyword(cmd_without_slash):
+                    if plug.has_keyword(cmd_without_slash):
                         # logging.info("successful work plugins")
                         logging.info("Поток открылся")
                         if self.config['bot']["debug_mode"]:

@@ -23,8 +23,7 @@ class Rule34Plug(BasePlug):
         self.bot: object = bot
         self.onStart()
 
-    def hasKeyword(self, keyword: str) -> bool:
-        return keyword in self.keywords
+
 
     def __sendMessage(self, peer_id, msg, attachment=""):
         self.bot.vk.method(

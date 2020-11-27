@@ -26,14 +26,6 @@ class AnimePlug(BasePlug):
         self.bot: object = bot
         self.onStart()
 
-    def hasKeyword(self, keyword: str) -> bool:
-        """
-        Возращает True, если кейворд есть в списке кейвордов
-        :param keyword:
-        :return:
-
-        """
-        return keyword in self.keywords
 
     def __sendMessage(self, peer_id, msg):
         self.bot.vk.method("messages.send", {"peer_id": peer_id, "message": msg, "random_id": get_random_id()})

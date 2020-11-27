@@ -20,7 +20,7 @@ class BasePlug:
         self.bot: object = bot
         self.onStart()
 
-    def hasKeyword(self, keyword: str) -> bool:
+    def has_keyword(self, keyword: str) -> bool:
         """
         Возращает True, если кейворд есть в списке кейвордов
         :param keyword:

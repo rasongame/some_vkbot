@@ -8,9 +8,10 @@ import vk_api
 from PIL import Image
 from vk_api import VkUpload
 from vk_api.utils import get_random_id
+from .BasePlug import BasePlug
 
 
-class CompressPlug:
+class CompressPlug(BasePlug):
     name = "ЖмыхPlug"
     description = "Жмыхалка"
     version = "rolling"
@@ -19,9 +20,6 @@ class CompressPlug:
 
     def __init__(self, bot: object):
         self.bot: object = bot
-
-    def hasKeyword(self, keyword: str) -> bool:
-        return keyword in self.keywords
 
     def __sendMessage(self, peer_id, msg, attachment=None):
         self.bot.vk.method("messages.send", {
@@ -43,12 +41,14 @@ class CompressPlug:
                     максимум для одного из знчений - 100
                     а дефолт - 40 40
                 """
-        url = ""
+        url = "пися"
         if event.obj["attachments"][0]:
             url = event.obj["attachments"][0]["photo"]["sizes"][-1]["url"]
+
         elif event.obj["reply_message"]["attachments"][0]["photo"]["sizes"][-1]["url"]:
             url = event.obj["reply_message"]["attachments"][0]["photo"]["sizes"][-1]["url"]
 
+        print(url)
         img_r = requests.get(url, stream=True)
         img_r.raw.decode_content = True
         img: Image = Image.open(img_r.raw)

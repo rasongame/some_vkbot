@@ -3,9 +3,10 @@ from vk_api.utils import get_random_id
 
 from ..Utils.plug_utils import photo_getWallPhoto
 from ..bot import Bot
+from .BasePlug import BasePlug
 
 
-class ImagesFromAlbumPlug:
+class ImagesFromAlbumPlug(BasePlug):
     name = "ImagesFromAlbum"
     description = "Присылает пикчи из разных альбомов"
     version = "rolling"
@@ -52,8 +53,7 @@ class ImagesFromAlbumPlug:
     def onStart(self):
         pass
 
-    def hasKeyword(self, keyword: str) -> bool:
-        return keyword in self.keywords
+
 
     def work(self, peer_id: int, msg: str, event: bot_longpoll.VkBotEvent) -> None:
         count = 1
