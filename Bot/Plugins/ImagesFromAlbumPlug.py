@@ -12,6 +12,8 @@ class ImagesFromAlbumPlug:
     keywords = ('каты', "юри", "яой", 'трапы', 'лоли', 'ноги', 'ножки')
     whoCan = ''
     event_type = ""
+    def __sendMessage(self, peer_id: int, msg: object):
+        self.bot.vk.method("messages.send", {"peer_id": peer_id, "message": msg, "random_id": get_random_id()})
 
     def __init__(self, bot: Bot):
         self.bot: Bot = bot
@@ -55,6 +57,10 @@ class ImagesFromAlbumPlug:
 
     def work(self, peer_id: int, msg: str, event: bot_longpoll.VkBotEvent) -> None:
         count = 1
+        if self.bot.config["bot"]["client_token"] == "":
+            self.__sendMessage(peer_id, "Эта функция по каким-то причинам не доступна.")
+            return
+
         if len(msg.lower().split()) > 1 and int(msg.lower().split()[1]) <= 10:
             count = msg.lower().split()[1]
 

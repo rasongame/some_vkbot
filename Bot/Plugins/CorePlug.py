@@ -10,12 +10,12 @@ class CorePlug(BasePlug):
     name = "Core Plug"
     version = "rolling"
     description = "Корневой плагин бота"
-    keywords = ('хелп', 'help',
+    keywords = ['хелп', 'help',
                 'инфо', 'info',
-                'Начать', 'Start',
+                'начать', 'start',
                 'report', 'репорт',
                 "жив?", "пинг", "ping",
-                "debug", "дебаг")
+                "debug", "дебаг"]
     event_type = ""
     def __init__(self, bot):
         self.bot: object = bot
@@ -29,7 +29,7 @@ class CorePlug(BasePlug):
 
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent):
         cmd = msg.split()[0].lower()
-
+        print("pidro")
         if cmd in self.keywords[:2]:  # говно ебучее, ищет команду в 1 и 2 элементе тупла
             print_help(self, peer_id, msg)
             return

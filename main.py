@@ -24,10 +24,10 @@ def main():
     started = datetime.now()
     config = toml.load(open("config/config.toml"))
     plugins = []
+
     group_id, token = config["bot"]["group_id"], config["bot"]["token"]
     bot = Bot(group_id, token, config)
     plugins_packages = config["bot"]["plugins"]
-    # for plug_pkg in plugins_packages:
     [loadPlugins(plug_pkg, plugins, bot) for plug_pkg in plugins_packages]
     bot.admins += config["bot"]["admins"]
     bot.plugins += plugins

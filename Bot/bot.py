@@ -34,7 +34,7 @@ class Bot:
         self.plugins: List[BasePlug] = []
         self.disabledPlugins: List[BasePlug] = []
         self.admins: List[int] = []
-        self.pool = ThreadPoolExecutor(8)
+        self.pool = ThreadPoolExecutor(int(config["bot"]["threads"]))
         self.futures = []
         self.version = "Rolling Version"
         self.event_handler = event_handler
@@ -47,6 +47,7 @@ class Bot:
         self.vk: vk_api.VkApi = vk_api.VkApi(token=self.token, api_version="5.110")
         self.vk_client = vk_api.VkApi(token=config["bot"]["client_token"]).get_api()
         self.longpoll: VkBotLongPoll = VkBotLongPoll(self.vk, self.group_id)
+
         logging.basicConfig(level=logging.INFO, format=" [ %(filename)s # %(levelname)-2s %(asctime)s ]  %(message)-2s")
 
     def run(self) -> None:

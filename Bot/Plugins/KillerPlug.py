@@ -8,7 +8,7 @@ from .BasePlug import BasePlug
 
 class KillerPlug(BasePlug):
     name = "Killer"
-    description = "Just killer. Not working btw"
+    description = "Just killer. Not working btw if running with debug mode"
     version = "rolling"
     keywords = ('destroy',)
     whoCan = ''

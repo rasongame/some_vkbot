@@ -52,19 +52,20 @@ class CompressPlug:
         img_r = requests.get(url, stream=True)
         img_r.raw.decode_content = True
         img: Image = Image.open(img_r.raw)
-        img.save(f"tmp/жмых.png", "PNG")
+        img.save(f"/tmp/жмых.png", "PNG")
         # Скачали фоточку...
         # ------------------------
         #
         x, y = 50, 50
         args = msg.split(" ")
-        if len(args) >= 2:
+        print(len(args))
+        if len(args) >= 3:
             try:
                 x = int(args[1])
                 y = int(args[2])
             except ValueError:
                 self.sendmsg(helps)
-        elif len(args) == 1:
+        elif len(args) == 2:
             try:
                 x = int(args[1])
                 y = int(args[1])
@@ -73,12 +74,12 @@ class CompressPlug:
 
         if x > 100 or y > 100:
             self.sendmsg(helps)
-        os.system(f"convert tmp/жмых.png -liquid-rescale {y}x{x}%\! tmp/жмых_бахнутый.png")
-        os.remove("tmp/жмых.png")
+        os.system(f"convert /tmp/жмых.png -liquid-rescale {y}x{x}%\! /tmp/жмых_бахнутый.png")
+        os.remove("/tmp/жмых.png")
         #
         # Загружаем фоточку в вк...
         # ------------------------
         upload = VkUpload(self.bot.vk)
-        photo = upload.photo_messages(f"tmp/жмых_бахнутый.png")[0]
+        photo = upload.photo_messages(f"/tmp/жмых_бахнутый.png")[0]
         self.__sendMessage(peer_id, " Ж М Ы Х ", f"photo{photo['owner_id']}_{photo['id']}")
         logging.info(url)
