@@ -42,11 +42,16 @@ class CompressPlug(BasePlug):
                     а дефолт - 40 40
                 """
         url = "пися"
-        if event.obj["attachments"][0]:
+        if len(event.obj["attachments"]) >= 1 \
+                and event.obj["attachments"][0]["type"] == "photo":
             url = event.obj["attachments"][0]["photo"]["sizes"][-1]["url"]
 
-        elif event.obj["reply_message"]["attachments"][0]["photo"]["sizes"][-1]["url"]:
+        elif len(event.obj.reply_message["attachments"]) >= 1 \
+            and event.obj.reply_message["attachments"][0]["type"] == "photo":
             url = event.obj["reply_message"]["attachments"][0]["photo"]["sizes"][-1]["url"]
+        else:
+            self.__sendMessage(peer_id, helps)
+            return
 
         print(url)
         img_r = requests.get(url, stream=True)
