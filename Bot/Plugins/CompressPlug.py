@@ -30,24 +30,24 @@ class CompressPlug(BasePlug):
 
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent) -> None:
         helps = """
-                Жмыхалка фоток, хорошо ломает психику неподготовленным личностям.
-                Жмыхает вашу прикрепленную фотку, так же
-                можно передавать степень жмыхнутости, пример:
-                    /жмых 55 55
-                    /жмых 59 80
-                    /жмых 50
-                    
-                    чем ниже значения, тем сильнее жмыханет
-                    максимум для одного из знчений - 100
-                    а дефолт - 40 40
-                """
+                    Жмыхалка фоток, хорошо ломает психику неподготовленным личностям.
+                    Жмыхает вашу прикрепленную фотку, так же
+                    можно передавать степень жмыхнутости, пример:
+                        /жмых 55 55
+                        /жмых 59 80
+                        /жмых 50
+                        
+                        чем ниже значения, тем сильнее жмыханет
+                        максимум для одного из знчений - 100
+                        а дефолт - 40 40
+                    """
         url = "пися"
         if len(event.obj["attachments"]) >= 1 \
                 and event.obj["attachments"][0]["type"] == "photo":
             url = event.obj["attachments"][0]["photo"]["sizes"][-1]["url"]
 
-        elif len(event.obj.reply_message["attachments"]) >= 1 \
-            and event.obj.reply_message["attachments"][0]["type"] == "photo":
+        elif event.obj.reply_message and len(event.obj.reply_message["attachments"]) >= 1 \
+                  and event.obj.reply_message["attachments"][0]["type"] == "photo":
             url = event.obj["reply_message"]["attachments"][0]["photo"]["sizes"][-1]["url"]
         else:
             self.__sendMessage(peer_id, helps)

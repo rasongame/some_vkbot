@@ -26,21 +26,23 @@ def event_handler(self, event: VkBotMessageEvent):
         except vk_api.exceptions.ApiError:
             user["first_name"] = "bot"
             user["last_name"] = "bot"
+
         if event.from_user or event.obj.text.startswith(prefixs):
+            cmd: str = event.obj.text.lower()
+            cmd_without_slash: str
+            if not event.from_user:
+                cmd_without_slash = str(cmd[1:]).split()[0]
+                event.obj.text = event.obj.text[1:]
+            else:
+                if cmd.startswith(prefixs):
+                    cmd_without_slash = str(cmd[1:]).split()[0]
+                    event.obj.text = event.obj.text[1:]
+                else:
+                    cmd_without_slash = cmd.split()[0]
 
             for plug in self.plugins:
                 try:
-                    cmd: str = event.obj.text.lower()
-                    cmd_without_slash: str
-                    if not event.from_user:
-                        cmd_without_slash = str(cmd[1:]).split()[0]
-                        event.obj.text = event.obj.text[1:]
-                    else:
-                        if cmd.startswith(prefixs):
-                            cmd_without_slash = str(cmd[1:]).split()[0]
-                            event.obj.text = event.obj.text[1:]
-                        else:
-                            cmd_without_slash = cmd.split()[0]
+
 
                     if plug.has_keyword(cmd_without_slash):
                         # logging.info("successful work plugins")
