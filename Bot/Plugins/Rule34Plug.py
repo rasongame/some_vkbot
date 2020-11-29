@@ -35,6 +35,10 @@ class Rule34Plug(BasePlug):
 
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent) -> None:
         url = "https://r34-json-api.herokuapp.com/posts"
+        if len(msg.split()) <= 1:
+            self.__sendMessage(peer_id, "Ашыпка. Вы забыли теги")
+            return
+
         params = {
             "tags": "+".join(msg.split()[1:]),
             "limit": 200

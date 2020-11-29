@@ -20,6 +20,9 @@ class CompressPlug(BasePlug):
 
     def __init__(self, bot: object):
         self.bot: object = bot
+        if os.path.exists(os.path.join(os.getcwd(), 'CompressPlug')) is False:
+            os.mkdir(os.path.join(os.getcwd(), 'CompressPlug'))
+        self.path = os.path.join(os.getcwd(), 'CompressPlug')
 
     def __sendMessage(self, peer_id, msg, attachment=None):
         self.bot.vk.method("messages.send", {
@@ -29,6 +32,9 @@ class CompressPlug(BasePlug):
             "attachment": attachment})
 
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent) -> None:
+
+        # TODO: RETURN ERROR IF NOT FOUND IMAGEMAGICK
+
         helps = """
                     Жмыхалка фоток, хорошо ломает психику неподготовленным личностям.
                     Жмыхает вашу прикрепленную фотку, так же
@@ -53,11 +59,10 @@ class CompressPlug(BasePlug):
             self.__sendMessage(peer_id, helps)
             return
 
-        print(url)
         img_r = requests.get(url, stream=True)
         img_r.raw.decode_content = True
         img: Image = Image.open(img_r.raw)
-        img.save(f"/tmp/жмых.png", "PNG")
+        img.save(f"{self.path}/жмых.png", "PNG")
         # Скачали фоточку...
         # ------------------------
         #
@@ -79,12 +84,13 @@ class CompressPlug(BasePlug):
 
         if x > 100 or y > 100:
             self.sendmsg(helps)
-        os.system(f"convert /tmp/жмых.png -liquid-rescale {y}x{x}%\! /tmp/жмых_бахнутый.png")
-        os.remove("/tmp/жмых.png")
+
+        os.system(f"convert {self.path}/жмых.png -liquid-rescale {y}x{x}%\!{self.path}/жмых_бахнутый.png")
+        os.remove("{self.path}/жмых.png")
         #
         # Загружаем фоточку в вк...
         # ------------------------
         upload = VkUpload(self.bot.vk)
-        photo = upload.photo_messages(f"/tmp/жмых_бахнутый.png")[0]
+        photo = upload.photo_messages(f"{self.path}/жмых_бахнутый.png")[0]
         self.__sendMessage(peer_id, " Ж М Ы Х ", f"photo{photo['owner_id']}_{photo['id']}")
         logging.info(url)

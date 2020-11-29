@@ -1,6 +1,6 @@
 import logging
 import os
-from datetime import datetime
+from time import time
 
 import vk_api
 from gtts import gTTS
@@ -37,7 +37,7 @@ class GoogleBabaPlug(BasePlug):
             "random_id": get_random_id()})
 
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent) -> None:
-        name = datetime.now()
+        name = f"tts-{peer_id}-{time()}"
         text = msg.split(maxsplit=1)[1]
         tts = gTTS(text, lang="ru")
         tts.save(f"{name}.mp3")

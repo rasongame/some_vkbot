@@ -42,4 +42,4 @@ class PluginController(BasePlug):
                     self.__sendMessage(peer_id, "You tryed to enable of NULL plugin? You baka")
                     self.__sendMessage(peer_id=peer_id, msg=self.bot.plugins)
         else:
-            self.__sendMessage(peer_id, "Твою мать ебут в канаве, чертов хакер. Fuck you!")
+            self.__sendMessage(peer_id, "Братка... Ты зачем пукнул в трусы?")

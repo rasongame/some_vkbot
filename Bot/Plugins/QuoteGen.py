@@ -59,10 +59,19 @@ class QuoteGen(BasePlug):
         avatar = Image.open(downloadImg(avatar_url), 'r')
         h = 400 + font.size
         lines = w.wrap(text)
-        for line in lines:
+
+        for line in text.split("\n"):
+
+            if len(line) > 60:
+                line = w.fill(line)
+            print(line)
+
             width, height = font.getsize(line)
             draw.text((400, h), line, fill=theme[1], font=font)
-            h += height
+            if len(line) > 60:
+                h += height*2
+            else:
+                h += height
 
         draw.text((img.size[0] / 10, img.size[1] - font.size * 2), date, fill=theme[1], font=font)
         draw.text((img.size[0] / 10, img.size[1] - font.size * 3), time, fill=theme[1], font=font)
@@ -92,7 +101,8 @@ class QuoteGen(BasePlug):
         if len(event.obj["fwd_messages"]) > 0:
             author_id = event.obj["fwd_messages"][0]["from_id"]
             for message in event.object.fwd_messages:
-                text += f'{message["text"]}\n'
+                if message["from_id"] == author_id:
+                    text += f'{message["text"]}\n'
 
         else:
             author_id = event.obj["reply_message"]["from_id"]
