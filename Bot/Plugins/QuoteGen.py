@@ -55,9 +55,9 @@ class QuoteGen(BasePlug):
         time = f'Время: {datetime.datetime.today().strftime("%H:%M:%S")}'
         date = f'Дата: {datetime.datetime.today().strftime("%Y-%m-%d")}'
 
-        draw.text((400, 400), f"{author} сказал: ", fill=theme[1], font=font)
+        draw.text((400, 200), f"{author} сказал: ", fill=theme[1], font=font)
         avatar = Image.open(downloadImg(avatar_url), 'r')
-        h = 400 + font.size
+        h = 250
         lines = w.wrap(text)
 
         for line in text.split("\n"):
@@ -67,7 +67,7 @@ class QuoteGen(BasePlug):
             print(line)
 
             width, height = font.getsize(line)
-            draw.text((300, h), line, fill=theme[1], font=font)
+            draw.text((400, h), line, fill=theme[1], font=font)
             if len(line) > 60:
                 h += height*2
             else:
