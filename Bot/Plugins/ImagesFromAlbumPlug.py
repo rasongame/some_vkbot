@@ -6,6 +6,7 @@ from ..bot import Bot
 from .BasePlug import BasePlug
 
 
+
 class ImagesFromAlbumPlug(BasePlug):
     name = "ImagesFromAlbum"
     description = "Присылает пикчи из разных альбомов"
@@ -34,7 +35,6 @@ class ImagesFromAlbumPlug(BasePlug):
         self.bot: Bot = bot
 
         self.onStart()
-
 
     def __sendMessage_with_img(self, peer_id: int, msg: str, attachment: str = "") -> None:
         return self.bot.vk.method("messages.send",

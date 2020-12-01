@@ -10,6 +10,9 @@ from vk_api.utils import get_random_id
 from Bot.Plugins.BasePlug import BasePlug
 from ..Utils.utils import uploadImg, downloadImg
 from ..bot import Bot
+from .QuotePlug_utils import models as utils
+from os import path
+
 
 class QuoteGen(BasePlug):
     name = "QuoteGen"
@@ -20,13 +23,32 @@ class QuoteGen(BasePlug):
     whoCan = ''
     event_type = ""
 
-    def __init__(self, bot: object):
-        self.bot: Bot  = bot
+    def set_wallpaper(self, user_id, path):
+        user: utils.User = utils.User.get(utils.User.id == user_id)
+        user.bg_file_name = path
+        user.save()
+    def get_wallpaper(self, user_id):
+        try:
+            with self.db_handler.db.atomic():
+                utils.User.create(id=user_id,
+                                  bg_file_name=path.join(self.bot.get_resource_folder(), self.name, "background.jpg"))
+        except:
+            pass
+
+        user: utils.User = utils.User.get(utils.User.id == user_id)
+        return user.bg_file_name
+
+    def __init__(self, bot: Bot):
+        self.bot: Bot = bot
+        self.db_handler = utils.db_handler(path.join(bot.get_resource_folder(), self.name, "database.db"))
+        self.db_handler.db.connect()
+        utils.User.create_table()
         self.res_dir = os.path.join(self.bot.get_resource_folder(), self.name)
         if not os.path.exists(self.res_dir):
             os.mkdir(self.res_dir)
 
         self.onStart()
+
     @staticmethod
     def crop_to_circle(im):
         bigsize = (im.size[0] * 4, im.size[1] * 4)
@@ -53,19 +75,20 @@ class QuoteGen(BasePlug):
         light_scheme = (
             (255, 255, 255, 255), 'rgb(128,128,128)'
         )
-        background: Image = None
         use_bg_img: bool = False
-        if os.path.exists(os.path.join(self.res_dir, 'background.jpg')):
-            background = Image.open(os.path.join(self.res_dir, 'background.jpg'), 'r')
-            use_bg_img = True
+        # if os.path.exists(os.path.join(self.res_dir, 'background.jpg')):
+        #     background = Image.open(os.path.join(self.res_dir, 'background.jpg'), 'r')
+        #     use_bg_img = True
+        background = Image.open(self.get_wallpaper(author_id))
 
         img = Image.new("RGBA", (1920, 1080), dark_scheme[0])
         draw = ImageDraw.Draw(img)
         theme = dark_scheme
         if theme is not light_scheme and not use_bg_img:
             draw.rectangle((0, 0, img.size), fill='rgb(0,0,0)')
-        elif use_bg_img:
             img.paste(background)
+        elif use_bg_img:
+            pass
 
         font = ImageFont.truetype("font.ttf", size=45)
         watermark = Image.new("RGBA", img.size)
@@ -102,15 +125,11 @@ class QuoteGen(BasePlug):
         draw.text((img.size[0] / 10, img.size[1] - font.size * 3), time, fill=theme[1], font=font)
         #
 
-
         # Draw matermark
         waterdraw.text((img.size[0] / 10, img.size[1] / round(7)), "https://vk.com/club184995795", font=watermark_font)
         watermask = watermark.convert("L").point(lambda x: min(x, 4))
         watermark.putalpha(watermask)
         #
-
-
-
 
         img.paste(avatar, (int(img.size[0] / 13), 200), avatar)
         img.paste(watermark, None, watermark)
@@ -129,6 +148,24 @@ class QuoteGen(BasePlug):
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent) -> None:
         text = ""
         author_id = 0
+        if len(msg.split()) >= 2 and \
+                len(event.obj["attachments"]) > 0 and \
+                event.obj["attachments"][0]["type"] == "photo":
+
+            path_file = path.join(self.bot.get_resource_folder(), self.name, f"background{event.obj.from_id}.png")
+            downloadImg(event.obj["attachments"][0]["photo"]["sizes"][-1]["url"], path_file)
+            file = open(path_file, "r+")
+            shit = Image.open(path_file)
+            w, h = shit.size
+            new_height = 1080
+            new_width = 1920
+            shit: Image.Image = shit.resize((new_width, new_height), Image.ANTIALIAS)
+            shit.save(path_file)
+
+            self.set_wallpaper(event.obj.from_id, path_file)
+
+            return
+
         logging.info(event.obj)
         if len(event.obj["fwd_messages"]) > 0:
             author_id = event.obj["fwd_messages"][0]["from_id"]
