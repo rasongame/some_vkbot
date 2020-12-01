@@ -2,7 +2,8 @@ import logging
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from typing import List
-
+from os import path
+import os
 import vk_api
 from vk_api.bot_longpoll import VkBotLongPoll
 
@@ -22,6 +23,7 @@ def timeit(func):
 
 
 class Bot:
+
     def __init__(self, group_id: int, token: str, config: dict) -> object:
         """
 
@@ -31,10 +33,12 @@ class Bot:
         Здесь выполняется инициализация всякой херни
 
         """
+
+        self.resource_folder = config["bot"].get("resource_folder") or path.join(path.curdir, "resources")
         self.plugins: List[BasePlug] = []
         self.disabledPlugins: List[BasePlug] = []
         self.admins: List[int] = []
-        self.pool = ThreadPoolExecutor(int(config["bot"]["threads"]))
+        self.pool = ThreadPoolExecutor(int(config["bot"].get("threads")) or 2)
         self.futures = []
         self.version = "Rolling Version"
         self.event_handler = event_handler
@@ -42,12 +46,11 @@ class Bot:
         self.checkThread = checkThread
         self.db: dict = {}
         self.group_id = group_id
-        self.token = token
-        self.config = config
-        self.vk: vk_api.VkApi = vk_api.VkApi(token=self.token, api_version="5.110")
-        self.vk_client = vk_api.VkApi(token=config["bot"]["client_token"]).get_api()
+        self.__token = token
+        self.__config = config
+        self.vk: vk_api.VkApi = vk_api.VkApi(token=self.__token, api_version="5.110")
+        self.__vk_client = vk_api.VkApi(token=config["bot"]["client_token"]).get_api()
         self.longpoll: VkBotLongPoll = VkBotLongPoll(self.vk, self.group_id)
-
         logging.basicConfig(level=logging.INFO, format=" [ %(filename)s # %(levelname)-2s %(asctime)s ]  %(message)-2s")
 
     def run(self) -> None:
@@ -63,3 +66,20 @@ class Bot:
 
         # Эта страшная хероборина в теории должна быть быстрей
         # Но я как-то не уверен
+    def get_resource_folder(self) -> str:
+        if not path.exists(path.join(path.curdir, self.resource_folder)):
+            os.mkdir(path.join(path.curdir, self.resource_folder))
+
+        return self.resource_folder
+
+    def get_vk_client(self):
+        logging.warning(f"requested access to VkClientToken")
+        return self.__vk_client
+
+    def get_config(self):
+        logging.warning(f"requested access to config dict")
+        return self.__config
+
+    def get_token(self):
+        logging.warning(f"requested access to token")
+        return self.__token

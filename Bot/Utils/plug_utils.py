@@ -6,13 +6,13 @@ import requests
 
 
 def photo_getWallPhoto(self, group_id, albid="wall", count=1):
-    max_num = self.vk_client.photos.get(
+    max_num = self.get_vk_client().photos.get(
         owner_id=group_id, album_id=albid, count=0)['count']
     num = random.randint(0, max_num)
     photos = []
     for _ in range(count):
         num = random.randint(0, max_num)
-        photo = self.vk_client.photos.get(owner_id=group_id, album_id=albid,
+        photo = self.get_vk_client().photos.get(owner_id=group_id, album_id=albid,
                                           count=1, offset=num)['items'][0]['id']
         photos.append(f"photo{group_id}_{photo}")
     photos = ",".join(photos)
@@ -49,10 +49,10 @@ class OtherMethod:
         try:
             for _ in range(a.count):
                 group_id = random.choice(groups)
-                max_num = self.vk_client.photos.get(
+                max_num = self.get_vk_client().photos.get(
                     owner_id=group_id, album_id=albid, count=0)['count']
                 num = random.randint(0, max_num)
-                photo = self.vk_client.photos.get(owner_id=group_id, album_id=albid,
+                photo = self.get_vk_client().photos.get(owner_id=group_id, album_id=albid,
                                                   count=1, offset=num)['items'][0]['id']
 
                 photo2.append(f"photo{group_id}_{photo}")
@@ -65,7 +65,7 @@ class OtherMethod:
     def nametoid(self, names):
         uid = []
         for convert in names:
-            r = self.vk_client.utils.resolveScreenName(screen_name=convert)
+            r = self.get_vk_client(self).utils.resolveScreenName(screen_name=convert)
             if r:
                 if r["type"] == "group":
                     uid.append(f"-{r['object_id']}")
@@ -84,7 +84,7 @@ class OtherMethod:
         return f"@id{whoidstr} ({whofirstname} {wholastname})"
 
     def groupsearch(self, count, name):
-        result = self.vk_client.groups.search(
+        result = self.get_vk_client(self).groups.search(
             q=name, count=count)["items"]
         return ("-" + str(x['id']) for x in result)
 

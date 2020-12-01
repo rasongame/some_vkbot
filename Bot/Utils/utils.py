@@ -1,6 +1,6 @@
 from PIL.ImageDraw import ImageDraw
 from vk_api import VkUpload
-
+import toml
 
 def load_class(full_class_string: str):
     """
@@ -28,16 +28,15 @@ def uploadImg(self, path):
     return f"photo{photo['owner_id']}_{photo['id']},"
 
 
-def downloadImg(url):
+def downloadImg(url, save_to):
     import requests
     from PIL import Image
     from random import randint
     img_r = requests.get(url, stream=True)
     img_r.raw.decode_content = True
     img: Image = Image.open(img_r.raw)
-    path = f"avatar{randint(0, 100)}"
-    img.save(path, "PNG")
-    return path
+    img.save(save_to, "PNG")
+    return save_to
 
 
 def rounded_rectangle(self: ImageDraw, xy, corner_radius, fill=None, outline=None):

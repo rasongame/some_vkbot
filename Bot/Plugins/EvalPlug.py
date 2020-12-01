@@ -19,7 +19,7 @@ class EvalPlug(BasePlug):
 
     def __init__(self, bot: object):
         self.bot: object = bot
-        self.whoCan = self.bot.admins
+        self.whoCan = bot.admins
         self.onStart()
 
     def __sendmessage(self, peer_id, msg):

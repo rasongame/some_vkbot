@@ -9,6 +9,7 @@ from PIL import Image
 from vk_api import VkUpload
 from vk_api.utils import get_random_id
 from .BasePlug import BasePlug
+from ..bot import Bot
 
 
 class CompressPlug(BasePlug):
@@ -18,11 +19,13 @@ class CompressPlug(BasePlug):
     keywords = ("жмых",)
     event_type = ""
 
-    def __init__(self, bot: object):
-        self.bot: object = bot
-        if os.path.exists(os.path.join(os.getcwd(), 'CompressPlug')) is False:
-            os.mkdir(os.path.join(os.getcwd(), 'CompressPlug'))
-        self.path = os.path.join(os.getcwd(), 'CompressPlug')
+    def __init__(self, bot: Bot):
+        self.bot: Bot = bot
+        res_dir = self.bot.get_resource_folder()
+        if not os.path.exists(os.path.join(res_dir, 'CompressPlug')):
+            os.mkdir(os.path.join(res_dir, 'CompressPlug'))
+
+        self.path = os.path.join(res_dir, 'CompressPlug')
 
     def __sendMessage(self, peer_id, msg, attachment=None):
         self.bot.vk.method("messages.send", {
