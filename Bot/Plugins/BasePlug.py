@@ -23,7 +23,6 @@ class BasePlug:
 
         self.on_start()
 
-
     def has_keyword(self, keyword: str) -> bool:
         """
         Возращает True, если кейворд есть в списке кейвордов

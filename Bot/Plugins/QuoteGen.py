@@ -154,8 +154,8 @@ class QuoteGen(BasePlug):
             file = open(path_file, "r+")
             shit = Image.open(path_file)
             w, h = shit.size
-            new_height = 1280
-            new_width = 720
+            new_height = 720
+            new_width = 1280
             shit: Image.Image = shit.resize((new_width, new_height), Image.ANTIALIAS)
             shit.save(path_file)
 

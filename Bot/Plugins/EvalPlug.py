@@ -17,7 +17,7 @@ class EvalPlug(BasePlug):
     keywords = ('eval',)
     event_type = ""
 
-    def __init__(self, bot: object):
+    def __init__(self, bot):
         super(EvalPlug, self).__init__(bot)
         self.whoCan = bot.admins
 
