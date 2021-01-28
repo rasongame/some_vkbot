@@ -8,7 +8,7 @@ from .BasePlug import BasePlug
 
 class KillerPlug(BasePlug):
     name = "Killer"
-    description = "Just killer. Not working btw if running with debug mode"
+    description = "Just killer. Not working btw if running with(out?) debug mode"
     version = "rolling"
     keywords = ('destroy',)
     whoCan = ''
@@ -16,7 +16,6 @@ class KillerPlug(BasePlug):
 
     def __init__(self, bot):
         super(KillerPlug, self).__init__(bot)
-
 
     def _sendMessage(self, peer_id: int, msg: str) -> None:
         self.bot.vk.method("messages.send", {"peer_id": peer_id, "message": msg, "random_id": get_random_id()})

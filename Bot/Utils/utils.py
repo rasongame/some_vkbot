@@ -2,20 +2,6 @@ from PIL.ImageDraw import ImageDraw
 from vk_api import VkUpload
 
 
-def load_class(full_class_string: str):
-    """
-    dynamically load a class from a string
-    """
-    from importlib import import_module
-    class_data = full_class_string.split(".")
-    module_path = ".".join(class_data[:-1])
-    class_str = class_data[-1]
-
-    module = import_module(module_path)
-    # Finally, we retrieve the Class
-    return getattr(module, class_str)
-
-
 def uploadImg(self, path):
     """
     :param self: класс бота или че там я хз
@@ -31,7 +17,6 @@ def uploadImg(self, path):
 def downloadImg(url, save_to):
     import requests
     from PIL import Image
-    from random import randint
     img_r = requests.get(url, stream=True)
     img_r.raw.decode_content = True
     img: Image = Image.open(img_r.raw)

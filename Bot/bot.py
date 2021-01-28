@@ -8,7 +8,7 @@ import vk_api
 from vk_api.bot_longpoll import VkBotLongPoll
 import inspect
 from .Plugins.BasePlug import BasePlug
-from .bot_utils import _connect_to_bd, checkThread
+from .bot_utils import checkThread
 from .event_handler import event_handler
 
 
@@ -59,9 +59,6 @@ class Bot:
         :return:
 
         """
-        # _connect_to_bd(self)
-        # for event in self.longpoll.listen():
-        # self.event_handler(event)
         [self.event_handler(self, event) for event in self.longpoll.listen()]
 
         # Эта страшная хероборина в теории должна быть быстрей

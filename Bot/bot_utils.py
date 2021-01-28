@@ -30,8 +30,6 @@ def _connect_to_bd(self):
             user=self.db["user"],
             password=self.db["password"],
             host=self.db["server"])
-        # self.db["wrapper"].connect()
-        # self.db["Users"] = assign(self.db["wrapper"])
         db_wrapper.database.initialize(self.db["wrapper"])
         db_wrapper.Chats.create_table()
         self.db["Users"] = db_wrapper.Users
