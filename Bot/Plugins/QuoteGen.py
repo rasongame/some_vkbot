@@ -4,7 +4,7 @@ import os
 import textwrap
 
 import vk_api
-from PIL import Image, ImageDraw, ImageFilter, ImageOps, ImageFont, ImageChops
+from PIL import Image, ImageDraw, ImageFont, ImageChops
 from vk_api.utils import get_random_id
 
 from Bot.Plugins.BasePlug import BasePlug
@@ -14,7 +14,6 @@ from os import path
 
 
 class QuoteGen(BasePlug):
-    name = "QuoteGen"
     description = "Делает цитаты. Отвечаете на сообщение словом командой," \
                   " или пересылаете множество сообщений и опять также отвечаете"
     version = "rolling"
@@ -26,6 +25,7 @@ class QuoteGen(BasePlug):
         user: utils.User = utils.User.get(utils.User.id == user_id)
         user.bg_file_name = path
         user.save()
+
     def get_wallpaper(self, user_id):
         try:
             with self.db_handler.db.atomic():
@@ -46,7 +46,6 @@ class QuoteGen(BasePlug):
         if not os.path.exists(self.res_dir):
             os.mkdir(self.res_dir)
 
-
     @staticmethod
     def crop_to_circle(im):
         bigsize = (im.size[0] * 4, im.size[1] * 4)
@@ -58,6 +57,7 @@ class QuoteGen(BasePlug):
 
     @staticmethod
     def drawImage(self, author_id: int, author: str, text: str, avatar_url: str) -> str:
+        from os import path
         # TODO: Добавить поддержку кастомных задних фонов. Заюзать Peewee, иначе зачем я его добавил?
         """
         :param self: self
@@ -79,7 +79,7 @@ class QuoteGen(BasePlug):
         #     use_bg_img = True
         background = Image.open(self.get_wallpaper(author_id))
 
-        img = Image.new("RGBA", (1920, 1080), dark_scheme[0])
+        img = Image.new("RGBA", (1280, 720), dark_scheme[0])
         draw = ImageDraw.Draw(img)
         theme = dark_scheme
         if theme is not light_scheme and not use_bg_img:
@@ -88,15 +88,15 @@ class QuoteGen(BasePlug):
         elif use_bg_img:
             pass
 
-        font = ImageFont.truetype("font.ttf", size=45)
+        font = ImageFont.truetype(path.join(self.bot.get_resource_folder(), self.name, "font.ttf"), size=30)
         watermark = Image.new("RGBA", img.size)
         waterdraw = ImageDraw.ImageDraw(watermark, "RGBA")
 
-        watermark_font = ImageFont.truetype("font.ttf", size=120)
+        watermark_font = ImageFont.truetype(path.join(self.bot.get_resource_folder(), self.name, "font.ttf"), size=70)
         time = f'Время: {datetime.datetime.today().strftime("%H:%M:%S")}'
         date = f'Дата: {datetime.datetime.today().strftime("%Y-%m-%d")}'
 
-        draw.text((400, 200), f"© {author}", fill=theme[1], font=font)
+        draw.text((300, 200), f"© {author}", fill=theme[1], font=font)
         save_to = os.path.join(self.res_dir, f'avatar_{author_id}.png')
         avatar = Image.open(downloadImg(avatar_url, save_to), 'r').convert("RGBA")
         self.crop_to_circle(avatar)
@@ -112,7 +112,7 @@ class QuoteGen(BasePlug):
             print(line)
 
             width, height = font.getsize(line)
-            draw.text((400, h), line, fill=theme[1], font=font)
+            draw.text((300, h), line, fill=theme[1], font=font)
             if len(line) > 60:
                 h += height * 2
             else:
@@ -124,12 +124,12 @@ class QuoteGen(BasePlug):
         #
 
         # Draw matermark
-        waterdraw.text((img.size[0] / 10, img.size[1] / round(7)), "https://vk.com/club184995795", font=watermark_font)
+        waterdraw.text((img.size[0] / 10, img.size[1] / round(7)), "big mitya is watching you", font=watermark_font)
         watermask = watermark.convert("L").point(lambda x: min(x, 4))
         watermark.putalpha(watermask)
         #
 
-        img.paste(avatar, (int(img.size[0] / 13), 200), avatar)
+        img.paste(avatar, (int(img.size[0] / 25), 200), avatar)
         img.paste(watermark, None, watermark)
         path: str = "cit.png"
         img.save(path)
@@ -149,14 +149,13 @@ class QuoteGen(BasePlug):
         if len(msg.split()) >= 2 and \
                 len(event.obj["attachments"]) > 0 and \
                 event.obj["attachments"][0]["type"] == "photo":
-
             path_file = path.join(self.bot.get_resource_folder(), self.name, f"background{event.obj.from_id}.png")
             downloadImg(event.obj["attachments"][0]["photo"]["sizes"][-1]["url"], path_file)
             file = open(path_file, "r+")
             shit = Image.open(path_file)
             w, h = shit.size
-            new_height = 1080
-            new_width = 1920
+            new_height = 1280
+            new_width = 720
             shit: Image.Image = shit.resize((new_width, new_height), Image.ANTIALIAS)
             shit.save(path_file)
 
