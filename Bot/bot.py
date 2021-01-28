@@ -6,7 +6,7 @@ from os import path
 import os
 import vk_api
 from vk_api.bot_longpoll import VkBotLongPoll
-
+import inspect
 from .Plugins.BasePlug import BasePlug
 from .bot_utils import _connect_to_bd, checkThread
 from .event_handler import event_handler
@@ -73,13 +73,21 @@ class Bot:
         return self.resource_folder
 
     def get_vk_client(self):
-        logging.warning(f"requested access to VkClientToken")
+        called_from = inspect.stack()[1][3]
+        if called_from != "event_handler":
+            logging.warning(f"requested access to VkClientToken from {called_from}")
         return self.__vk_client
 
     def get_config(self):
-        logging.warning(f"requested access to config dict")
+        called_from = inspect.stack()[1][3]
+        if called_from != "event_handler":
+            logging.warning(f"requested access to config dict from {called_from}")
         return self.__config
 
     def get_token(self):
-        logging.warning(f"requested access to token")
+        called_from = inspect.stack()[1][3]
+        if called_from != "event_handler":
+            logging.warning(f"requested access to token from {called_from}")
+
         return self.__token
+

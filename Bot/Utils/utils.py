@@ -1,6 +1,6 @@
 from PIL.ImageDraw import ImageDraw
 from vk_api import VkUpload
-import toml
+
 
 def load_class(full_class_string: str):
     """

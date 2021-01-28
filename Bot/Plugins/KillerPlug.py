@@ -15,13 +15,13 @@ class KillerPlug(BasePlug):
     event_type = ""
 
     def __init__(self, bot):
-        self.bot: object = bot
-        self.onStart()
+        super(KillerPlug, self).__init__(bot)
+
 
     def _sendMessage(self, peer_id: int, msg: str) -> None:
         self.bot.vk.method("messages.send", {"peer_id": peer_id, "message": msg, "random_id": get_random_id()})
 
-    def onStart(self):
+    def on_start(self):
         pass
 
     def work(self, peer_id: int, msg: str, event: bot_longpoll.VkBotEvent) -> None:

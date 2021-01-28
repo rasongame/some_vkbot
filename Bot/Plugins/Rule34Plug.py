@@ -20,12 +20,11 @@ class Rule34Plug(BasePlug):
     event_type = ""
 
     def __init__(self, bot: object):
-        self.bot: object = bot
-        self.onStart()
+        super(self.__class__, self).__init__(bot)
 
 
 
-    def __sendMessage(self, peer_id, msg, attachment=""):
+    def __send_message(self, peer_id, msg, attachment=""):
         self.bot.vk.method(
             "messages.send",
             {
@@ -36,7 +35,7 @@ class Rule34Plug(BasePlug):
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent) -> None:
         url = "https://r34-json-api.herokuapp.com/posts"
         if len(msg.split()) <= 1:
-            self.__sendMessage(peer_id, "Ашыпка. Вы забыли теги")
+            self.__send_message(peer_id, "Ашыпка. Вы забыли теги")
             return
 
         params = {
@@ -51,12 +50,12 @@ class Rule34Plug(BasePlug):
             file_name = downloadfile(file_url)
             upload = VkUpload(self.bot.vk)
             photo = upload.photo_messages(f"{file_name['name']}")[0]
-            self.__sendMessage(peer_id, "вотъ", attachment=f"photo{photo['owner_id']}_{photo['id']},")
+            self.__send_message(peer_id, "вотъ", attachment=f"photo{photo['owner_id']}_{photo['id']},")
         except Exception as e:
-            self.__sendMessage(peer_id, f"Ашыпка. {e}")
+            self.__send_message(peer_id, f"Ашыпка. {e}")
 
-    def onStart(self) -> None:
+    def on_start(self) -> None:
         logging.info(f"{self.name} is loaded")
 
-    def onStop(self) -> None:
+    def on_stop(self) -> None:
         logging.info(f"{self.name} is disabling")

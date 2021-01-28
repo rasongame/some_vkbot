@@ -9,7 +9,6 @@ from vk_api.utils import get_random_id
 
 from Bot.Plugins.BasePlug import BasePlug
 from ..Utils.utils import uploadImg, downloadImg
-from ..bot import Bot
 from .QuotePlug_utils import models as utils
 from os import path
 
@@ -38,8 +37,8 @@ class QuoteGen(BasePlug):
         user: utils.User = utils.User.get(utils.User.id == user_id)
         return user.bg_file_name
 
-    def __init__(self, bot: Bot):
-        self.bot: Bot = bot
+    def __init__(self, bot):
+        super(self.__class__, self).__init__(bot)
         self.db_handler = utils.db_handler(path.join(bot.get_resource_folder(), self.name, "database.db"))
         self.db_handler.db.connect()
         utils.User.create_table()
@@ -47,7 +46,6 @@ class QuoteGen(BasePlug):
         if not os.path.exists(self.res_dir):
             os.mkdir(self.res_dir)
 
-        self.onStart()
 
     @staticmethod
     def crop_to_circle(im):
@@ -137,7 +135,7 @@ class QuoteGen(BasePlug):
         img.save(path)
         return path
 
-    def __sendMessage(self, peer_id: int, msg: str):
+    def __send_message(self, peer_id: int, msg: str):
         self.bot.vk.method("messages.send", {"peer_id": peer_id, "message": msg, "random_id": get_random_id()})
 
     def __sendMessage_with_img(self, peer_id: int, msg: str, attachment: str) -> None:
@@ -189,8 +187,8 @@ class QuoteGen(BasePlug):
                                                                             text=text,
                                                                             avatar_url=avatar_url)))
 
-    def onStart(self) -> None:
+    def on_start(self) -> None:
         logging.info(f"{self.name} is loaded")
 
-    def onStop(self) -> None:
+    def on_stop(self) -> None:
         logging.info(f"{self.name} is disabling")

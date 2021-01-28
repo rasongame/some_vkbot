@@ -3,6 +3,8 @@ import math
 import os
 
 import psutil
+
+
 def convert_size(size_bytes):
     if size_bytes == 0:
         return "0B"
@@ -37,10 +39,11 @@ def print_help(self, peer_id: int, msg: str):
     del prepared_msg
     return
 
+
 def print_start_info(self, peer_id):
     msg = \
-    """
+        """
     Привет, я Меттатон, введи "помощь", чтобы узнать информацию.
     """
-    self.bot.vk.method("messages.send", { "peer_id": peer_id, "message": msg, "random_id": 0})
+    self.bot.vk.method("messages.send", {"peer_id": peer_id, "message": msg, "random_id": 0})
     del msg

@@ -6,7 +6,6 @@ from vk_api import bot_longpoll, VkUpload
 from vk_api.utils import get_random_id
 
 from .BasePlug import BasePlug
-from ..bot import Bot
 
 
 class KonachanPlug(BasePlug):
@@ -18,10 +17,10 @@ class KonachanPlug(BasePlug):
     event_type = ""
 
     def __init__(self, bot):
-        self.bot: Bot = bot
-        self.onStart()
+        super(KonachanPlug, self).__init__(bot)
 
-    def __sendMessage(self, peer_id: int, msg: str):
+
+    def __send_message(self, peer_id: int, msg: str):
         return self.bot.vk.method("messages.send",
                                   {"peer_id": peer_id, "message": msg, "random_id": get_random_id()})
 
@@ -30,7 +29,7 @@ class KonachanPlug(BasePlug):
                                   {"peer_id": peer_id, "message": msg, "random_id": get_random_id(),
                                    'attachment': attachment})
 
-    def onStart(self):
+    def on_start(self):
         pass
 
     def work(self, peer_id: int, msg: str, event: bot_longpoll.VkBotEvent):
@@ -39,7 +38,7 @@ class KonachanPlug(BasePlug):
             if limit is None or int(limit) <= 1:
                 limit = 1
         except ValueError:
-            self.__sendMessage(peer_id, "Самый умный?")
+            self.__send_message(peer_id, "Самый умный?")
             return
 
         if event.object["from_id"] not in self.bot.admins and int(limit) >= 3:
@@ -48,7 +47,7 @@ class KonachanPlug(BasePlug):
         r = requests.get(f"https://konachan.net/post.json?limit={limit}&tags=order%3Arandom")
         json_parsed = json.loads(r.text)
         attachments = []
-        self.__sendMessage(peer_id, "Начинаю выкачку...")
+        self.__send_message(peer_id, "Начинаю выкачку...")
         for i, jsonx in enumerate(json_parsed):
             img_r = requests.get(jsonx["file_url"], stream=True)
             img_r.raw.decode_content = True

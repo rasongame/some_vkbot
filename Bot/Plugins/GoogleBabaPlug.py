@@ -20,11 +20,10 @@ class GoogleBabaPlug(BasePlug):
     event_type = ""
 
     def __init__(self, bot: object):
-        self.bot: object = bot
-        self.onStart()
+        super(GoogleBabaPlug, self).__init__(bot)
 
 
-    def __sendMessage(self, peer_id, msg, file=""):
+    def __send_message(self, peer_id, msg, file=""):
         try:
             upload = VkUpload(self.bot.vk)
             audio = upload.audio_message(file, peer_id=peer_id, group_id=self.bot.group_id)['audio_message']
@@ -41,10 +40,10 @@ class GoogleBabaPlug(BasePlug):
         text = msg.split(maxsplit=1)[1]
         tts = gTTS(text, lang="ru")
         tts.save(f"{name}.mp3")
-        self.__sendMessage(peer_id, "", f"{name}.mp3")
+        self.__send_message(peer_id, "", f"{name}.mp3")
 
-    def onStart(self) -> None:
+    def on_start(self) -> None:
         logging.info(f"{self.name} is loaded")
 
-    def onStop(self) -> None:
+    def on_stop(self) -> None:
         logging.info(f"{self.name} is disabling")

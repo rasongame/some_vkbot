@@ -2,22 +2,32 @@ import logging
 from datetime import datetime
 
 import toml
+from inspect import ismodule
 
+from Bot.Plugins import BasePlug
 from Bot.Utils.utils import load_class
 from Bot.bot import Bot
+import Bot.Plugins as Plugins
 
 
-def loadPlugins(plug_pkg, plugins, bot):
+def load_plugins(plugins, bot):
     """
     Подгрузка всяких плагинов. Nuff said
-    :param plug_pkg:
     :param plugins:
     :param bot:
     :return:
     """
-    plug_name: str = plug_pkg.split(".")[2]
-    cls = load_class(f"{plug_pkg}.{plug_name}")
-    plugins.append(cls(bot))
+    for cls in dir(Plugins):
+        attribute = getattr(Plugins, cls)
+        if attribute is None or not hasattr(attribute, cls): continue
+        print("as getattr")
+        plugins.append(getattr(attribute, cls)(bot))
+
+    #
+    # plug_name: str = plug_pkg.split(".")[2]
+    # cls = load_class(f"{plug_pkg}.{plug_name}")
+    #
+    # plugins.append(cls(bot))
 
 
 def main():
@@ -27,8 +37,7 @@ def main():
 
     group_id, token = config["bot"]["group_id"], config["bot"]["token"]
     bot = Bot(group_id, token, config)
-    plugins_packages = config["bot"]["plugins"]
-    [loadPlugins(plug_pkg, plugins, bot) for plug_pkg in plugins_packages]
+    load_plugins(plugins, bot)
     bot.admins += config["bot"]["admins"]
     bot.plugins += plugins
     # Уиииии, я потом сам не пойму что это за хуйня))))))))

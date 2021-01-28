@@ -9,7 +9,6 @@ from PIL import Image
 from vk_api import VkUpload
 from vk_api.utils import get_random_id
 from .BasePlug import BasePlug
-from ..bot import Bot
 
 
 class CompressPlug(BasePlug):
@@ -19,15 +18,15 @@ class CompressPlug(BasePlug):
     keywords = ("жмых",)
     event_type = ""
 
-    def __init__(self, bot: Bot):
-        self.bot: Bot = bot
+    def __init__(self, bot):
+        super(CompressPlug, self).__init__(bot)
         res_dir = self.bot.get_resource_folder()
         if not os.path.exists(os.path.join(res_dir, 'CompressPlug')):
             os.mkdir(os.path.join(res_dir, 'CompressPlug'))
 
         self.path = os.path.join(res_dir, 'CompressPlug')
 
-    def __sendMessage(self, peer_id, msg, attachment=None):
+    def __send_message(self, peer_id, msg, attachment=None):
         self.bot.vk.method("messages.send", {
             "peer_id": peer_id,
             "message": msg,
@@ -59,7 +58,7 @@ class CompressPlug(BasePlug):
                   and event.obj.reply_message["attachments"][0]["type"] == "photo":
             url = event.obj["reply_message"]["attachments"][0]["photo"]["sizes"][-1]["url"]
         else:
-            self.__sendMessage(peer_id, helps)
+            self.__send_message(peer_id, helps)
             return
 
         img_r = requests.get(url, stream=True)
@@ -95,5 +94,5 @@ class CompressPlug(BasePlug):
         # ------------------------
         upload = VkUpload(self.bot.vk)
         photo = upload.photo_messages(f"{self.path}/жмых_бахнутый.png")[0]
-        self.__sendMessage(peer_id, " Ж М Ы Х ", f"photo{photo['owner_id']}_{photo['id']}")
+        self.__send_message(peer_id, " Ж М Ы Х ", f"photo{photo['owner_id']}_{photo['id']}")
         logging.info(url)

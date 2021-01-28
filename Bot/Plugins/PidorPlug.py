@@ -4,7 +4,6 @@ from vk_api import bot_longpoll
 from vk_api import exceptions
 from vk_api.utils import get_random_id
 
-from Bot.bot import Bot
 from .BasePlug import BasePlug
 
 
@@ -16,11 +15,10 @@ class PidorPlug(BasePlug):
     event_type = ""
 
     def __init__(self, bot):
-        self.bot: Bot = bot
+        super(self.__class__, self).__init__(bot)
 
-        self.onStart()
 
-    def __sendMessage(self, peer_id: int, msg: str) -> None:
+    def __send_message(self, peer_id: int, msg: str) -> None:
         self.bot.vk.method("messages.send",
                            {"disable_mentions": 1, "peer_id": peer_id, "message": msg, "random_id": get_random_id()})
 
@@ -29,7 +27,7 @@ class PidorPlug(BasePlug):
 
             who = msg.split(maxsplit=1)[1]
         else:
-            self.__sendMessage(peer_id, "Ты что-то упустил...")
+            self.__send_message(peer_id, "Ты что-то упустил...")
             return
 
         try:
@@ -41,17 +39,17 @@ class PidorPlug(BasePlug):
                 user = self.bot.vk.get_api().groups.getById(group_ids=chosen["member_id"])[0]
                 first_name = user["name"]
                 last_name = ""
-                self.__sendMessage(peer_id, f'Пидор - [{user["screen_name"]}|{first_name} {last_name}]')
+                self.__send_message(peer_id, f'Пидор - [{user["screen_name"]}|{first_name} {last_name}]')
             else:
 
                 user = self.bot.vk.get_api().users.get(user_ids=chosen["member_id"])[0]
 
                 first_name = user["first_name"]
                 last_name = user["last_name"]
-                self.__sendMessage(peer_id, f'Кто - {who}? Я думаю это [id{user["id"]}|{first_name} {last_name}]')
+                self.__send_message(peer_id, f'Кто - {who}? Я думаю это [id{user["id"]}|{first_name} {last_name}]')
 
         except exceptions.ApiError as e:
-            self.__sendMessage(peer_id,
+            self.__send_message(peer_id,
                                f"""
                             Команда не доступна для этого чата. Код ошибки {e.code}
                             Вероятно, у бота нет привилегий в чате.

@@ -9,8 +9,7 @@ from vk_api.utils import get_random_id
 from Bot.Plugins.BasePlug import BasePlug
 
 
-class AnimePlug(BasePlug):
-    name = "AnimeFinder"
+class AnimeDetector(BasePlug):
     description = "Находит аниме по фото"
     version = "rolling"
     keywords = ('анименафото',)
@@ -23,11 +22,10 @@ class AnimePlug(BasePlug):
         :param bot: Обьект бота
 
         """
-        self.bot: object = bot
-        self.onStart()
+        super(AnimeDetector, self).__init__(bot)
 
 
-    def __sendMessage(self, peer_id, msg):
+    def __send_message(self, peer_id, msg):
         self.bot.vk.method("messages.send", {"peer_id": peer_id, "message": msg, "random_id": get_random_id()})
 
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent) -> None:
@@ -44,17 +42,10 @@ class AnimePlug(BasePlug):
             chance = round(encode['docs'][0]["similarity"] * 100)
             sec = round(encode["docs"][0]["from"])
             time = timedelta(seconds=sec)
-            self.__sendMessage(peer_id, f"""Я думаю это: {name}
+            self.__send_message(peer_id, f"""Я думаю это: {name}
                        Серия: {episode}
                        Точность: {chance}%
                        Тайминг: {time}""")
         except IndexError:
-            self.__sendMessage(peer_id, "Я хочу фото!")
+            self.__send_message(peer_id, "Я хочу фото!")
 
-
-def onStart(self) -> None:
-    logging.info(f"{self.name} is loaded")
-
-
-def onStop(self) -> None:
-    logging.info(f"{self.name} is disabling")

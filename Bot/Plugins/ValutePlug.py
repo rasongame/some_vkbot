@@ -17,13 +17,13 @@ class ValutePlug(BasePlug):
     event_type = ""
 
     def __init__(self, bot: object):
-        self.bot: object = bot
-        self.onStart()
+        super(self.__class__, self).__init__(bot)
 
 
 
 
-    def __sendMessage(self, peer_id, msg):
+
+    def __send_message(self, peer_id, msg):
         self.bot.vk.method("messages.send", {"peer_id": peer_id, "message": msg, "random_id": get_random_id()})
 
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent) -> None:
@@ -32,10 +32,10 @@ class ValutePlug(BasePlug):
         encode = r.json()
         usd = encode["Valute"]["USD"]["Value"]
         eur = encode["Valute"]["EUR"]["Value"]
-        self.__sendMessage(peer_id, "Доллар: {}₽\nЕвро: {}₽".format(usd, eur))
+        self.__send_message(peer_id, "Доллар: {}₽\nЕвро: {}₽".format(usd, eur))
 
-    def onStart(self) -> None:
+    def on_start(self) -> None:
         logging.info(f"{self.name} is loaded")
 
-    def onStop(self) -> None:
+    def on_stop(self) -> None:
         logging.info(f"{self.name} is disabling")

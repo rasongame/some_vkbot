@@ -6,19 +6,23 @@ from vk_api.utils import get_random_id
 
 
 class BasePlug:
-    name = "some name"
-    description = "some description"
     version = "rolling"
     keywords = ('',)
     whoCan = ''
 
-    def __init__(self, bot: object):
+    def __init__(self, bot):
         """
 
         :param bot:
         """
-        self.bot: object = bot
-        self.onStart()
+        self.bot = bot
+        if not hasattr(self, "name"):
+            self.name = self.__class__.__name__
+        if not hasattr(self, "description"):
+            self.description = f"A {self.__class__.__name__} plugin"
+
+        self.on_start()
+
 
     def has_keyword(self, keyword: str) -> bool:
         """
@@ -29,7 +33,7 @@ class BasePlug:
         """
         return keyword in self.keywords
 
-    def __sendMessage(self, peer_id, msg):
+    def __send_message(self, peer_id, msg):
         """
 
         :param peer_id:
@@ -42,8 +46,8 @@ class BasePlug:
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent) -> None:
         pass
 
-    def onStart(self) -> None:
+    def on_start(self) -> None:
         logging.info(f"{self.name} is loaded")
 
-    def onStop(self) -> None:
+    def on_stop(self) -> None:
         logging.info(f"{self.name} is disabling")
