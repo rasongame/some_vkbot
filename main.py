@@ -20,7 +20,6 @@ def load_plugins(plugins, bot):
     for cls in dir(Plugins):
         attribute = getattr(Plugins, cls)
         if attribute is None or not hasattr(attribute, cls): continue
-        print("as getattr")
         plugins.append(getattr(attribute, cls)(bot))
 
     #
