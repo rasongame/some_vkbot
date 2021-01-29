@@ -13,9 +13,7 @@ from Bot.Plugins.BasePlug import BasePlug
 class EvalPlug(BasePlug):
     name = "PythonShell"
     description = "Eval your python expressions"
-    version = "rolling"
     keywords = ('eval',)
-    event_type = ""
 
     def __init__(self, bot):
         super(EvalPlug, self).__init__(bot)

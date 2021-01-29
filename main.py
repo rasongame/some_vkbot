@@ -5,7 +5,6 @@ import toml
 from inspect import ismodule
 
 from Bot.Plugins import BasePlug
-from Bot.Utils.utils import load_class
 from Bot.bot import Bot
 import Bot.Plugins as Plugins
 

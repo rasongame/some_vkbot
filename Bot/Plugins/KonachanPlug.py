@@ -11,10 +11,7 @@ from .BasePlug import BasePlug
 class KonachanPlug(BasePlug):
     name = "Konachan"
     description = "Присылает арты с konachan.net"
-    version = "rolling"
     keywords = ('konachan', 'коначан')
-    whoCan = ''
-    event_type = ""
 
     def __init__(self, bot):
         super(KonachanPlug, self).__init__(bot)

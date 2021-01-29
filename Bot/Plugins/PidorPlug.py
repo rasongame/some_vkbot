@@ -9,10 +9,8 @@ from .BasePlug import BasePlug
 
 class PidorPlug(BasePlug):
     name = "Pidor"
-    version = "rolling"
     description = "Выбирает рандомного участника беседы под вашим предлогом"
     keywords = ('who', 'кто')
-    event_type = ""
 
     def __init__(self, bot):
         super(self.__class__, self).__init__(bot)

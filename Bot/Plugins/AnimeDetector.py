@@ -11,10 +11,7 @@ from Bot.Plugins.BasePlug import BasePlug
 
 class AnimeDetector(BasePlug):
     description = "Находит аниме по фото"
-    version = "rolling"
     keywords = ('анименафото',)
-    whoCan = ''
-    event_type = ""
 
     def __init__(self, bot: object):
         """

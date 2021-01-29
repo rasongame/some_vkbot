@@ -7,8 +7,6 @@ from .CorePlug_utils.debug import *
 
 
 class CorePlug(BasePlug):
-    name = "Core Plug"
-    version = "rolling"
     description = "Корневой плагин бота"
     keywords = ['хелп', 'help',
                 'инфо', 'info',
@@ -16,7 +14,6 @@ class CorePlug(BasePlug):
                 'report', 'репорт',
                 "жив?", "пинг", "ping",
                 "debug", "дебаг"]
-    event_type = ""
 
     def __init__(self, bot):
         super().__init__(bot)

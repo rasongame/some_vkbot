@@ -12,11 +12,9 @@ from .BasePlug import BasePlug
 
 
 class CompressPlug(BasePlug):
-    name = "ЖмыхPlug"
+    name = "Жмых"
     description = "Жмыхалка"
-    version = "rolling"
     keywords = ("жмых",)
-    event_type = ""
 
     def __init__(self, bot):
         super(CompressPlug, self).__init__(bot)

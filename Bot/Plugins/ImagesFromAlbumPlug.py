@@ -8,10 +8,7 @@ from .BasePlug import BasePlug
 class ImagesFromAlbumPlug(BasePlug):
     name = "ImagesFromAlbum"
     description = "Присылает пикчи из разных альбомов"
-    version = "rolling"
     keywords = ('каты', "юри", "яой", 'трапы', 'лоли', 'ноги', 'ножки')
-    whoCan = ''
-    event_type = ""
     service = {
         "каты": ["-43228812", "каты ебать"],
         "юри": ["-63092480", "Дефки лезбиянки!1!"],

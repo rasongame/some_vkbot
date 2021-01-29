@@ -11,10 +11,7 @@ from Bot.Plugins.BasePlug import BasePlug
 class ValutePlug(BasePlug):
     name = "ValutePlug"
     description = "Рубль - доллар емае"
-    version = "rolling"
     keywords = ('курс',)
-    whoCan = ''
-    event_type = ""
 
     def __init__(self, bot: object):
         super(self.__class__, self).__init__(bot)

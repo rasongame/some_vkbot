@@ -16,10 +16,7 @@ from os import path
 class QuoteGen(BasePlug):
     description = "Делает цитаты. Отвечаете на сообщение словом командой," \
                   " или пересылаете множество сообщений и опять также отвечаете"
-    version = "rolling"
     keywords = ('cit', "цитген", 'цит')
-    whoCan = ''
-    event_type = ""
 
     def set_wallpaper(self, user_id, path):
         user: utils.User = utils.User.get(utils.User.id == user_id)

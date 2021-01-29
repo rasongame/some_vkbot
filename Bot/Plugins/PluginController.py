@@ -6,10 +6,8 @@ from .BasePlug import BasePlug
 
 class PluginController(BasePlug):
     name = "Plugin Controller"
-    version = "rolling"
     description = "Plugin controller"
     keywords = ('disable', 'enable')
-    event_type = ""
 
     def __init__(self, bot: object) -> object:
         super(self.__class__, self).__init__(bot)

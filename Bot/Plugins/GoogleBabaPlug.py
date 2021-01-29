@@ -13,11 +13,9 @@ from Bot.Plugins.BasePlug import BasePlug
 
 class GoogleBabaPlug(BasePlug):
     name = "Google Baba"
-    description = "some description"
-    version = "rolling"
+    description = "Озвучка от Google TTS"
     keywords = ('озвучь', 'скажи', 'say')
-    whoCan = ''
-    event_type = ""
+
 
     def __init__(self, bot: object):
         super(GoogleBabaPlug, self).__init__(bot)

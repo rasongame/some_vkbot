@@ -11,10 +11,7 @@ from Bot.Plugins.BasePlug import BasePlug
 class ValuteConverter(BasePlug):
     name = "ValuteConverter"
     description = "Конвертирует валюты"
-    version = "rolling"
     keywords = ('конвертер', 'converter')
-    whoCan = ''
-    event_type = ""
 
     def __init__(self, bot: object):
         super(self.__class__, self).__init__(bot)

@@ -9,10 +9,7 @@ from .BasePlug import BasePlug
 class KillerPlug(BasePlug):
     name = "Killer"
     description = "Just killer. Not working btw if running with(out?) debug mode"
-    version = "rolling"
     keywords = ('destroy',)
-    whoCan = ''
-    event_type = ""
 
     def __init__(self, bot):
         super(KillerPlug, self).__init__(bot)

@@ -20,6 +20,8 @@ class BasePlug:
             self.name = self.__class__.__name__
         if not hasattr(self, "description"):
             self.description = f"A {self.__class__.__name__} plugin"
+        if not hasattr(self, "version"):
+            self.version = "rolling"
 
         self.on_start()
 

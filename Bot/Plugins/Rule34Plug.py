@@ -14,10 +14,7 @@ from Bot.Utils.plug_utils import downloadfile
 class Rule34Plug(BasePlug):
     name = "Rule 34"
     description = "Rule 34"
-    version = "rolling"
     keywords = ('rule34', 'руле34')
-    whoCan = ''
-    event_type = ""
 
     def __init__(self, bot: object):
         super(self.__class__, self).__init__(bot)
