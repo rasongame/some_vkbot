@@ -27,11 +27,7 @@ class GoogleBabaPlug(BasePlug):
             audio = upload.audio_message(file, peer_id=peer_id, group_id=self.bot.group_id)['audio_message']
         finally:
             os.remove(file)
-        self.bot.vk.method("messages.send", {
-            "peer_id": peer_id,
-            "message": msg,
-            "attachment": f"audio_message{audio['owner_id']}_{audio['id']}",
-            "random_id": get_random_id()})
+        self.bot.send_message(peer_id, msg, attachment=f"audio_message{audio['owner_id']}_{audio['id']}")
 
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent) -> None:
         name = f"tts-{peer_id}-{time()}"

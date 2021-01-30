@@ -132,14 +132,6 @@ class QuoteGen(BasePlug):
         img.save(path)
         return path
 
-    def __send_message(self, peer_id: int, msg: str):
-        self.bot.vk.method("messages.send", {"peer_id": peer_id, "message": msg, "random_id": get_random_id()})
-
-    def __sendMessage_with_img(self, peer_id: int, msg: str, attachment: str) -> None:
-        return self.bot.vk.method("messages.send",
-                                  {"peer_id": peer_id, "message": msg, "random_id": get_random_id(),
-                                   'attachment': attachment})
-
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent) -> None:
         text = ""
         author_id = 0
@@ -177,8 +169,7 @@ class QuoteGen(BasePlug):
         avatar_url = author_info[0]["photo_max"]
 
         # logging.info(author_name)
-        self.__sendMessage_with_img(peer_id, None, uploadImg(self,
-                                                             self.drawImage(self=self, author_id=author_id,
+        self.bot.send_message(peer_id, None, uploadImg(self, self.drawImage(self=self, author_id=author_id,
                                                                             author=f"{first_name} {last_name}",
                                                                             text=text,
                                                                             avatar_url=avatar_url)))

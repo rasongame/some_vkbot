@@ -18,9 +18,6 @@ class CorePlug(BasePlug):
     def __init__(self, bot):
         super().__init__(bot)
 
-    def __send_message(self, peer_id: int, msg: object):
-        self.bot.vk.method("messages.send", {"peer_id": peer_id, "message": msg, "random_id": get_random_id()})
-
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent):
         cmd = msg.split()[0].lower()
         if cmd in self.keywords[:2]:  # говно ебучее, ищет команду в 1 и 2 элементе тупла
@@ -36,14 +33,14 @@ class CorePlug(BasePlug):
         elif cmd in self.keywords[6:8]:
             text = f"Репорт из чата {peer_id}: {event.obj.from_id} репортнул: {msg}"
             for admin_id in self.bot.admins:
-                self.__send_message(admin_id, text)
+                self.bot.send_message(admin_id, text)
         elif cmd in self.keywords[8:11]:
-            self.__send_message(peer_id, "жив, цел, орёл!")
+            self.bot.send_message(peer_id, "жив, цел, орёл!")
         elif cmd in self.keywords[11:13]:
             try:
                 args = msg.lower().split()[1]
             except IndexError:
-                self.__send_message(peer_id, "Ты пропустил аргумент. Юзай /debug plugins or /debug raw")
+                self.bot.send_message(peer_id, "Ты пропустил аргумент. Юзай /debug plugins or /debug raw")
                 return
             if args == "plugins" or "плагины":
                 print_plugins(self, peer_id)

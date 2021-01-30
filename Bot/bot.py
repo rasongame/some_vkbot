@@ -53,6 +53,14 @@ class Bot:
         self.longpoll: VkBotLongPoll = VkBotLongPoll(self.vk, self.group_id)
         logging.basicConfig(level=logging.INFO, format=" [ %(filename)s # %(levelname)-2s %(asctime)s ]  %(message)-2s")
 
+    def send_message(self, peer_id: int, msg: str, attachment=None) -> None:
+        self.vk.method("messages.send",
+                           {"disable_mentions": 1,
+                            "peer_id": peer_id,
+                            "message": msg,
+                            "random_id": 0,
+                            "attachment": attachment})
+
     def run(self) -> None:
         """
         Запускает бота

@@ -38,5 +38,3 @@ def _connect_to_bd(self):
         logging.info(f"Successfully connected to DB with IP: {self.db['server']}")
     except Exception as e:
         logging.error(e)
-
-

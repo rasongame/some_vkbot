@@ -24,7 +24,7 @@ def print_info(self, peer_id: int):
 
             """
 
-    self.bot.vk.method("messages.send", {"peer_id": peer_id, "message": prepared_msg, "random_id": 0})
+    self.bot.send_message(peer_id, prepared_msg)
     del prepared_msg
     return
 
@@ -35,7 +35,7 @@ def print_help(self, peer_id: int, msg: str):
         plug_slice_cmds += f"{plug.name} -> {', '.join(plug.keywords)} \n {plug.description} \n"
     prepared_msg = f"Список команд:\n" \
                    f"{plug_slice_cmds}"
-    self.bot.vk.method("messages.send", {"peer_id": peer_id, "message": prepared_msg, "random_id": 0})
+    self.bot.send_message(peer_id, prepared_msg)
     del prepared_msg
     return
 
@@ -45,5 +45,5 @@ def print_start_info(self, peer_id):
         """
     Привет, я Меттатон, введи "помощь", чтобы узнать информацию.
     """
-    self.bot.vk.method("messages.send", {"peer_id": peer_id, "message": msg, "random_id": 0})
+    self.bot.send_message(peer_id, msg)
     del msg

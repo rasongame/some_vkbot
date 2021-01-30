@@ -22,19 +22,10 @@ class ImagesFromAlbumPlug(BasePlug):
 
     def what_needed(self, peer_id, name, count=1):
         attachment = photo_getWallPhoto(self.bot, self.service[name][0], count=count)
-        self.__sendMessage_with_img(peer_id, self.service[name][1], attachment=attachment)
-
-    def __send_message(self, peer_id: int, msg: object):
-        self.bot.vk.method("messages.send", {"peer_id": peer_id, "message": msg, "random_id": get_random_id()})
+        self.bot.send_message(peer_id, self.service[name][1], attachment=attachment)
 
     def __init__(self, bot):
         super(ImagesFromAlbumPlug, self).__init__(bot)
-
-
-    def __sendMessage_with_img(self, peer_id: int, msg: str, attachment: str = "") -> None:
-        return self.bot.vk.method("messages.send",
-                                  {"peer_id": peer_id, "message": msg, "random_id": get_random_id(),
-                                   'attachment': attachment})
 
     def on_start(self):
         pass
@@ -42,7 +33,7 @@ class ImagesFromAlbumPlug(BasePlug):
     def work(self, peer_id: int, msg: str, event: bot_longpoll.VkBotEvent) -> None:
         count = 1
         if self.bot.get_vk_client() == "":
-            self.__send_message(peer_id, "Эта функция по каким-то причинам не доступна.")
+            self.bot.send_message(peer_id, "Эта функция по каким-то причинам не доступна.")
             return
 
         if len(msg.lower().split()) > 1 and int(msg.lower().split()[1]) <= 10:

@@ -34,16 +34,6 @@ class BasePlug:
         """
         return keyword in self.keywords
 
-    def __send_message(self, peer_id, msg):
-        """
-
-        :param peer_id:
-        :param msg:
-        :return:
-
-        """
-        self.bot.vk.method("messages.send", {"peer_id": peer_id, "message": msg, "random_id": get_random_id()})
-
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent) -> None:
         pass
 

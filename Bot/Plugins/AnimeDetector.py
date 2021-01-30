@@ -21,10 +21,6 @@ class AnimeDetector(BasePlug):
         """
         super(AnimeDetector, self).__init__(bot)
 
-
-    def __send_message(self, peer_id, msg):
-        self.bot.vk.method("messages.send", {"peer_id": peer_id, "message": msg, "random_id": get_random_id()})
-
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent) -> None:
         try:
             image_url = event.object['attachments'][0]['photo']['sizes'][-1]['url']
@@ -39,7 +35,7 @@ class AnimeDetector(BasePlug):
             chance = round(encode['docs'][0]["similarity"] * 100)
             sec = round(encode["docs"][0]["from"])
             time = timedelta(seconds=sec)
-            self.__send_message(peer_id, f"""Я думаю это: {name}
+            self.bot.send_message(peer_id, f"""Я думаю это: {name}
                        Серия: {episode}
                        Точность: {chance}%
                        Тайминг: {time}""")
