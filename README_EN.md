@@ -1,11 +1,9 @@
 
 # Untitled bot
-## README ON RUSSIAN HERE [LINK](README.md)
-## АЛЯРМ! WIP
+## README IN RUSSIAN HERE [LINK](README.md)
+## ALARM! WIP
 ### Requirements to install
-* Python 3.6 (I'm not sure)
-* PostgreSQL, if needed work with DB, hardcoded
-* ???
+* Python >=3.6
 ### How to fill a config?
 #### Config uses toml format
 Basic config with a couple of plugins
