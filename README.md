@@ -7,7 +7,7 @@
 * Python >=3.6
 ### Как заполнить конфиг?
 #### Конфиг использует формат TOML
-Базовый конфиг с парой плагинов
+Базовый конфиг
 
 ```toml
 [bot]
@@ -16,17 +16,7 @@ group_id = ""
 client_token = "" # Необходимо для плагина ImagesFromAlbumPlug
 debug_mode = false
 admins = [] # 000000000
-plugins = [
-    "Bot.Plugins.CorePlug",
-    "Bot.Plugins.PluginController"
-]
-[database]
-# Бот использует PostgresSQL в плагине
-server = "server.com"
-db_name = "db"
-port = 5432
-user = "postgres"
-password = "password"
+
 ```
 
 ### Установка
