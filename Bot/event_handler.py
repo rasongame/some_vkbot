@@ -3,7 +3,6 @@ import logging
 import vk_api
 from vk_api.bot_longpoll import VkBotMessageEvent, VkBotEventType
 
-
 prefixs = (
     '/',
     '!',
@@ -27,7 +26,7 @@ def event_handler(self, event: VkBotMessageEvent):
         except vk_api.exceptions.ApiError:
             user["first_name"] = "bot"
             user["last_name"] = "bot"
-
+        # cmds
         if event.from_user or event.obj.text.startswith(prefixs):
             cmd: str = event.obj.text.lower()
             cmd_without_slash: str
@@ -54,6 +53,8 @@ def event_handler(self, event: VkBotMessageEvent):
                             self.pool.submit(self.checkThread)
                 except IndexError:
                     pass
-
+        # daemon
+        daemons = filter(lambda x: x.listen_all is True, self.plugins)
+        [plug.work(peer_id=event.obj.peer_id, event=event, msg=event.obj.text) for plug in daemons]
         logging.info(
             f'{user["first_name"]} {user["last_name"]}({event.obj.from_id}) in {event.obj.peer_id} sent: {event.obj.text}')

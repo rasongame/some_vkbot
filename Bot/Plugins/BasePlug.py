@@ -2,17 +2,16 @@ import logging
 
 import vk_api
 from vk_api.bot_longpoll import VkBotEventType
-from vk_api.utils import get_random_id
 
 
 class BasePlug:
     version = "rolling"
     keywords = ('',)
     whoCan = ''
+    listen_all = False
 
     def __init__(self, bot):
         """
-
         :param bot:
         """
         self.bot = bot
