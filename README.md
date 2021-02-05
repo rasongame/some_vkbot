@@ -1,14 +1,13 @@
 
-# Безымянный бот
-## README ON ENGLISH HERE! [LINK](README_EN.md)
+# Безымянный бот aka исходники vk.com/mtt_resort с июня 2020 
+## README IN ENGLISH HERE! [LINK](README_EN.md)
 ## АЛЯРМ! WIP
-### Требования к установке
-* Python 3.6 (а может и ниже, я не проверял)
-* PostgreSQL, если необходима работа с БД, пока это еще захардкожено в коде
-* 
+
+### Требования
+* Python >=3.6
 ### Как заполнить конфиг?
 #### Конфиг использует формат TOML
-Базовый конфиг с парой плагинов
+Базовый конфиг
 
 ```toml
 [bot]
@@ -17,17 +16,7 @@ group_id = ""
 client_token = "" # Необходимо для плагина ImagesFromAlbumPlug
 debug_mode = false
 admins = [] # 000000000
-plugins = [
-    "Bot.Plugins.CorePlug",
-    "Bot.Plugins.PluginController"
-]
-[database]
-# Бот использует PostgresSQL в плагине
-server = "server.com"
-db_name = "db"
-port = 5432
-user = "postgres"
-password = "password"
+
 ```
 
 ### Установка
