@@ -15,7 +15,7 @@ def convert_size(size_bytes):
     return "%s %s" % (s, size_name[i])
 
 
-def print_info(self, peer_id: int):
+def print_info(self, peer_id: int, **kwargs):
     stats = gc.get_stats()
     prepared_msg = f"""
             Привет, я Меттатон версии {self.bot.version}
@@ -29,7 +29,18 @@ def print_info(self, peer_id: int):
     return
 
 
-def print_help(self, peer_id: int, msg: str):
+def print_live(self, peer_id, msg, **kwargs): self.bot.send_message(peer_id, "жив, цел, орёл!")
+
+
+def send_report(self, peer_id, msg, **kwargs):
+    text = f"Репорт из чата {peer_id}: {kwargs['event'].obj.from_id} репортнул: {msg}"
+    for admin_id in self.bot.admins:
+        self.bot.send_message(admin_id, text)
+
+    self.bot.send_message(peer_id, "Ваш репорт отослан!")
+
+
+def print_help(self, peer_id: int, msg: str, **kwargs):
     plug_slice_cmds = ""
     for plug in self.bot.plugins:
         plug_slice_cmds += f"{plug.name} -> {', '.join(plug.keywords)} \n {plug.description} \n"
@@ -40,7 +51,7 @@ def print_help(self, peer_id: int, msg: str):
     return
 
 
-def print_start_info(self, peer_id):
+def print_start_info(self, peer_id, **kwargs):
     msg = \
         """
     Привет, я Меттатон, введи "помощь", чтобы узнать информацию.

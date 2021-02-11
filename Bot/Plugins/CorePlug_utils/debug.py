@@ -1,11 +1,23 @@
 import vk_api
 from ..BasePlug import BasePlug
 
-def print_raw(self, peer_id: int, e: vk_api.bot_longpoll.VkBotEvent):
 
+def print_raw(self, peer_id: int, e: vk_api.bot_longpoll.VkBotEvent):
     self.bot.vk.method("messages.send",
                        {"peer_id": peer_id, "message": e, "random_id": 0})
     return
+
+
+def print_debug(self, peer_id, msg, **kwargs):
+    try:
+        args = msg.lower().split()[1]
+    except IndexError:
+        self.bot.send_message(peer_id, "Ты пропустил аргумент. Юзай /debug plugins or /debug raw")
+        return
+    if args == "plugins" or "плагины":
+        print_plugins(self, peer_id)
+    elif args == "raw" or "raw":
+        print_raw(self, peer_id, kwargs["event"])
 
 
 def print_plugins(self, peer_id: int):

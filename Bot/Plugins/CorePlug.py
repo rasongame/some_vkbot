@@ -8,43 +8,18 @@ from .CorePlug_utils.debug import *
 
 class CorePlug(BasePlug):
     description = "Корневой плагин бота"
-    keywords = ['хелп', 'help',
-                'инфо', 'info',
-                'начать', 'start',
-                'report', 'репорт',
-                "жив?", "пинг", "ping",
-                "debug", "дебаг"]
 
     def __init__(self, bot):
         super().__init__(bot)
+        self.register_message_handler(print_help, ['хелп', 'help'])
+        self.register_message_handler(print_info, ['info', 'инфо'])
+        self.register_message_handler(print_start_info, ['начать', 'start'])
+        self.register_message_handler(send_report, ['репорт', 'репорт'])
+        self.register_message_handler(print_live, ['ping', 'пинг', "жив?"])
+        self.register_message_handler(print_debug, ['debug', 'дебаг'])
 
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent):
-        cmd = msg.split()[0].lower()
-        if cmd in self.keywords[:2]:  # говно ебучее, ищет команду в 1 и 2 элементе тупла
-            print_help(self, peer_id, msg)
-            return
-        elif cmd in self.keywords[2:4]:
-            print_info(self, peer_id)
-            return
-        elif cmd in self.keywords[4:6]:
-            print_start_info(self, peer_id)
-            return
-
-        elif cmd in self.keywords[6:8]:
-            text = f"Репорт из чата {peer_id}: {event.obj.from_id} репортнул: {msg}"
-            for admin_id in self.bot.admins:
-                self.bot.send_message(admin_id, text)
-        elif cmd in self.keywords[8:11]:
-            self.bot.send_message(peer_id, "жив, цел, орёл!")
-        elif cmd in self.keywords[11:13]:
-            try:
-                args = msg.lower().split()[1]
-            except IndexError:
-                self.bot.send_message(peer_id, "Ты пропустил аргумент. Юзай /debug plugins or /debug raw")
-                return
-            if args == "plugins" or "плагины":
-                print_plugins(self, peer_id)
-            elif args == "raw" or "raw":
-                print_raw(self, peer_id, event)
-
+        cmd = self.get_cmd_from_msg(msg)
+        if cmd in self.new_keywords:
+            self.new_keywords[cmd](self, peer_id=peer_id, msg=msg, event=event)
         return

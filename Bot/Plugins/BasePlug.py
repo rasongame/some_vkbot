@@ -4,6 +4,8 @@ from typing import Iterable, List
 import vk_api
 from vk_api.bot_longpoll import VkBotEventType
 
+from Bot.event_handler import prefixs
+
 
 class BasePlug:
     version = "rolling"
@@ -44,6 +46,16 @@ class BasePlug:
 
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent) -> None:
         pass
+
+    @staticmethod
+    def get_cmd_from_msg(msg):
+        cmd: str = ""
+        has_prefix = msg.split()[0][0] in prefixs
+        if has_prefix:
+            cmd = msg.split()[0][1:]
+        else:
+            cmd = msg.split()[0]
+        return cmd.lower()
     def on_start(self) -> None:
         logging.info(f"{self.name} is loaded")
 

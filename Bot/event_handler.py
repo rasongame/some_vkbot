@@ -33,7 +33,6 @@ def event_handler(self, event: VkBotMessageEvent):
             cmd_without_slash: str
             if not event.from_user:
                 cmd_without_slash = str(cmd[1:]).split()[0]
-                event.obj.text = event.obj.text[1:]
             else:
                 if cmd.startswith(prefixs):
                     cmd_without_slash = str(cmd[1:]).split()[0]
