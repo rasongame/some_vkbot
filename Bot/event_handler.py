@@ -27,7 +27,8 @@ def event_handler(self, event: VkBotMessageEvent):
             user["first_name"] = "bot"
             user["last_name"] = "bot"
         # cmds
-        if event.from_user or event.obj.text.startswith(prefixs):
+
+        if len(event.obj.text) >= 1 and event.from_user or event.obj.text.startswith(prefixs):
             cmd: str = event.obj.text.lower()
             cmd_without_slash: str
             if not event.from_user:

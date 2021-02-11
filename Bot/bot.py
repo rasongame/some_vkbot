@@ -46,9 +46,9 @@ class Bot:
         self.checkThread = checkThread
         self.db: dict = {}
         self.group_id = group_id
-        self.__token = token
-        self.__config = config
-        self.vk: vk_api.VkApi = vk_api.VkApi(token=self.__token, api_version="5.110")
+        self.__token__ = token
+        self.__config__ = config
+        self.vk: vk_api.VkApi = vk_api.VkApi(token=self.__token__, api_version="5.110")
         self.__vk_client = vk_api.VkApi(token=config["bot"]["client_token"]).get_api()
         self.longpoll: VkBotLongPoll = VkBotLongPoll(self.vk, self.group_id)
         logging.basicConfig(level=logging.INFO, format=" [ %(filename)s # %(levelname)-2s %(asctime)s ]  %(message)-2s")
@@ -87,12 +87,11 @@ class Bot:
         called_from = inspect.stack()[1][3]
         if called_from != "event_handler":
             logging.warning(f"requested access to config dict from {called_from}")
-        return self.__config
-
+        return self.__config__
     def get_token(self):
         called_from = inspect.stack()[1][3]
         if called_from != "event_handler":
             logging.warning(f"requested access to token from {called_from}")
 
-        return self.__token
+        return self.__token__
 

@@ -1,4 +1,5 @@
 import logging
+from typing import Iterable, List
 
 import vk_api
 from vk_api.bot_longpoll import VkBotEventType
@@ -6,7 +7,8 @@ from vk_api.bot_longpoll import VkBotEventType
 
 class BasePlug:
     version = "rolling"
-    keywords = ('',)
+    keywords: List = []
+    new_keywords = {}
     whoCan = ''
     listen_all = False
 
@@ -33,9 +35,15 @@ class BasePlug:
         """
         return keyword in self.keywords
 
+    def register_message_handler(self, func, keywords: [Iterable, str]):
+        if isinstance(keywords, str):
+            keywords = (keywords,)
+        for keyword in keywords:
+            self.new_keywords[keyword] = func
+            self.keywords.append(keyword)
+
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent) -> None:
         pass
-
     def on_start(self) -> None:
         logging.info(f"{self.name} is loaded")
 

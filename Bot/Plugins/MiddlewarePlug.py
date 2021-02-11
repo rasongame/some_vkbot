@@ -1,3 +1,4 @@
+import logging
 
 from vk_api import bot_longpoll
 from os import path, mkdir
@@ -24,4 +25,8 @@ class MiddlewarePlug(BasePlug):
                 self.bot.send_message(peer_id, line.format(user['first_name']))
 
         if event.obj.action is not None:
-            send(event.obj.action['type'])
+            logging.info(f"{event.obj.action}")
+            try:
+                send(event.obj.action['type'])
+            except:
+                pass
