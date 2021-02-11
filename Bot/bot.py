@@ -38,7 +38,7 @@ class Bot:
         self.plugins: List[BasePlug] = []
         self.disabledPlugins: List[BasePlug] = []
         self.admins: List[int] = []
-        self.pool = ThreadPoolExecutor(int(config["bot"].get("threads")) or 2)
+        self.pool = ThreadPoolExecutor(int(config["bot"].get("threads") if config['bot'].get('threads') is not None else 2))
         self.futures = []
         self.version = "Rolling Version"
         self.event_handler = event_handler

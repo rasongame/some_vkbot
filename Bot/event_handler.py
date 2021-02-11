@@ -3,13 +3,13 @@ import logging
 import vk_api
 from vk_api.bot_longpoll import VkBotMessageEvent, VkBotEventType
 
+
 prefixs = (
     '/',
     '!',
     '.',
     '\\'
 )
-
 
 def event_handler(self, event: VkBotMessageEvent):
     """

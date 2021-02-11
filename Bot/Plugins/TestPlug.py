@@ -1,7 +1,7 @@
 import logging
 
 from .BasePlug import BasePlug
-
+from ..event_handler import prefixs
 
 class TestPlug(BasePlug):
     keywords = ['b', ]
@@ -14,10 +14,17 @@ class TestPlug(BasePlug):
 
     def __init__(self, bot):
         super().__init__(bot)
-        self.register_message_handler(self.c, ("a"))
+        self.register_message_handler(self.c, ("a",))
         self.register_message_handler(self.b, ("c", 'b'))
-        self.register_message_handler(self.b, )
+        self.register_message_handler(self.b, "b")
 
     def work(self, peer_id, msg: str, event) -> None:
-        if msg.split()[0].removeprefix('/') in self.new_keywords:
-            self.new_keywords[msg.split()[0].removeprefix('/')]()
+        cmd = ""
+        has_prefix = msg.split()[0][0] in prefixs
+        if has_prefix:
+            cmd = msg.split()[0][1:]
+        else:
+            cmd = msg.split()[0]
+
+        if cmd in self.new_keywords:
+            self.new_keywords[cmd](event)
