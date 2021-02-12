@@ -51,6 +51,8 @@ def event_handler(self, event: VkBotMessageEvent):
                             self.futures.append(
                                 self.pool.submit(plug.work, peer_id=event.obj.peer_id, event=event, msg=event.obj.text))
                             self.pool.submit(self.checkThread)
+
+                        break
                 except IndexError:
                     pass
         # daemon

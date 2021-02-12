@@ -9,8 +9,7 @@ from Bot.event_handler import prefixs
 
 class BasePlug:
     version = "rolling"
-    keywords: List = []
-    new_keywords = {}
+    keywords = {}
     whoCan = ''
     listen_all = False
 
@@ -37,15 +36,23 @@ class BasePlug:
         """
         return keyword in self.keywords
 
+    def message_handler(self, keywords=None):
+        def wrapper(callback):
+            self.register_message_handler(callback, keywords=keywords)
+
+        return wrapper
+
     def register_message_handler(self, func, keywords: [Iterable, str]):
         if isinstance(keywords, str):
             keywords = (keywords,)
         for keyword in keywords:
-            self.new_keywords[keyword] = func
-            self.keywords.append(keyword)
+            self.keywords.update({keyword:  func})
 
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent) -> None:
-        pass
+        cmd = self.get_cmd_from_msg(msg)
+        if cmd in self.keywords.keys():
+            self.keywords[cmd](self, peer_id=peer_id, msg=msg, event=event)
+        return
 
     @staticmethod
     def get_cmd_from_msg(msg):
@@ -56,6 +63,7 @@ class BasePlug:
         else:
             cmd = msg.split()[0]
         return cmd.lower()
+
     def on_start(self) -> None:
         logging.info(f"{self.name} is loaded")
 

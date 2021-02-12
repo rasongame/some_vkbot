@@ -4,15 +4,11 @@ from datetime import timedelta
 import requests
 import vk_api
 from vk_api.bot_longpoll import VkBotEventType
-from vk_api.utils import get_random_id
-
 from Bot.Plugins.BasePlug import BasePlug
 
 
 class AnimeDetector(BasePlug):
     description = "Находит аниме по фото"
-    keywords = ('анименафото',)
-
     def __init__(self, bot: object):
         """
 
@@ -21,9 +17,15 @@ class AnimeDetector(BasePlug):
         """
         super(AnimeDetector, self).__init__(bot)
 
-    def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent) -> None:
-        try:
-            image_url = event.object['attachments'][0]['photo']['sizes'][-1]['url']
+        @self.message_handler(keywords='анименафото')
+        def find(this, peer_id, msg: str, event):
+
+            try:
+                image_url = event.object['attachments'][0]['photo']['sizes'][-1]['url']
+            except IndexError:
+                self.bot.send_message(peer_id, "Я хочу фото!")
+                return
+            
             api = f'https://trace.moe/api/search'
             params = {
                 'url': image_url
@@ -39,6 +41,3 @@ class AnimeDetector(BasePlug):
                        Серия: {episode}
                        Точность: {chance}%
                        Тайминг: {time}""")
-        except IndexError:
-            self.__send_message(peer_id, "Я хочу фото!")
-
