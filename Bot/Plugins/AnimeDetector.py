@@ -9,6 +9,7 @@ from Bot.Plugins.BasePlug import BasePlug
 
 class AnimeDetector(BasePlug):
     description = "Находит аниме по фото"
+
     def __init__(self, bot: object):
         """
 
@@ -25,7 +26,7 @@ class AnimeDetector(BasePlug):
             except IndexError:
                 self.bot.send_message(peer_id, "Я хочу фото!")
                 return
-            
+
             api = f'https://trace.moe/api/search'
             params = {
                 'url': image_url

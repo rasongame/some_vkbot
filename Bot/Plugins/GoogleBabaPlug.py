@@ -16,10 +16,8 @@ class GoogleBabaPlug(BasePlug):
     description = "Озвучка от Google TTS"
     keywords = ('озвучь', 'скажи', 'say')
 
-
     def __init__(self, bot: object):
         super(GoogleBabaPlug, self).__init__(bot)
-
 
     def __send_message(self, peer_id, msg, file=""):
         try:
