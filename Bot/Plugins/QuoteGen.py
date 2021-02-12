@@ -16,7 +16,6 @@ from os import path
 class QuoteGen(BasePlug):
     description = "Делает цитаты. Отвечаете на сообщение словом командой," \
                   " или пересылаете множество сообщений и опять также отвечаете"
-    keywords = ('cit', "цитген", 'цит')
 
     def set_wallpaper(self, user_id, path):
         user: utils.User = utils.User.get(utils.User.id == user_id)
@@ -42,6 +41,52 @@ class QuoteGen(BasePlug):
         self.res_dir = os.path.join(self.bot.get_resource_folder(), self.name)
         if not os.path.exists(self.res_dir):
             os.mkdir(self.res_dir)
+        @self.message_handler(keywords=['cit', 'цит', 'цитген', 'цитата'])
+        def cit(_, peer_id, msg, event):
+            text = ""
+            author_id = 0
+            if len(msg.split()) >= 2 and \
+                    len(event.obj["attachments"]) > 0 and \
+                    event.obj["attachments"][0]["type"] == "photo":
+                path_file = path.join(self.bot.get_resource_folder(), self.name, f"background{event.obj.from_id}.png")
+                downloadImg(event.obj["attachments"][0]["photo"]["sizes"][-1]["url"], path_file)
+                file = open(path_file, "r+")
+                shit = Image.open(path_file)
+                w, h = shit.size
+                new_height = 720
+                new_width = 1280
+                shit: Image.Image = shit.resize((new_width, new_height), Image.ANTIALIAS)
+                shit.save(path_file)
+
+                self.set_wallpaper(event.obj.from_id, path_file)
+
+                return
+
+            logging.info(event.obj)
+            if len(event.obj["fwd_messages"]) > 0:
+                author_id = event.obj["fwd_messages"][0]["from_id"]
+                for message in event.object.fwd_messages:
+                    if message["from_id"] == author_id:
+                        text += f'{message["text"]}\n'
+
+            else:
+                author_id = event.obj["reply_message"]["from_id"]
+                text = event.object.reply_message["text"]
+
+            try:
+                author_info = self.bot.vk.get_api().users.get(user_ids=author_id,
+                                                          fields='photo_max')
+            except vk_api.exceptions.ApiError:
+                self.bot.send_message(peer_id, "Нельзя цитировать сообщество.")
+                return
+            first_name, last_name = author_info[0]["first_name"], author_info[0]["last_name"]
+            avatar_url = author_info[0]["photo_max"]
+
+            # logging.info(author_name)
+            self.bot.send_message(peer_id, None, uploadImg(self, self.drawImage(self=self, author_id=author_id,
+                                                                            author=f"{first_name} {last_name}",
+                                                                            text=text,
+                                                                            avatar_url=avatar_url)))
 
     @staticmethod
     def crop_to_circle(im):
@@ -55,7 +100,6 @@ class QuoteGen(BasePlug):
     @staticmethod
     def drawImage(self, author_id: int, author: str, text: str, avatar_url: str) -> str:
         from os import path
-        # TODO: Добавить поддержку кастомных задних фонов. Заюзать Peewee, иначе зачем я его добавил?
         """
         :param self: self
         :param author: автор цитаты
@@ -71,9 +115,6 @@ class QuoteGen(BasePlug):
             (255, 255, 255, 255), 'rgb(128,128,128)'
         )
         use_bg_img: bool = False
-        # if os.path.exists(os.path.join(self.res_dir, 'background.jpg')):
-        #     background = Image.open(os.path.join(self.res_dir, 'background.jpg'), 'r')
-        #     use_bg_img = True
         background = Image.open(self.get_wallpaper(author_id))
 
         img = Image.new("RGBA", (1280, 720), dark_scheme[0])
@@ -82,8 +123,6 @@ class QuoteGen(BasePlug):
         if theme is not light_scheme and not use_bg_img:
             draw.rectangle((0, 0, img.size), fill='rgb(0,0,0)')
             img.paste(background)
-        elif use_bg_img:
-            pass
 
         font = ImageFont.truetype(path.join(self.bot.get_resource_folder(), self.name, "font.ttf"), size=30)
         watermark = Image.new("RGBA", img.size)
@@ -131,48 +170,6 @@ class QuoteGen(BasePlug):
         path: str = "cit.png"
         img.save(path)
         return path
-
-    def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent) -> None:
-        text = ""
-        author_id = 0
-        if len(msg.split()) >= 2 and \
-                len(event.obj["attachments"]) > 0 and \
-                event.obj["attachments"][0]["type"] == "photo":
-            path_file = path.join(self.bot.get_resource_folder(), self.name, f"background{event.obj.from_id}.png")
-            downloadImg(event.obj["attachments"][0]["photo"]["sizes"][-1]["url"], path_file)
-            file = open(path_file, "r+")
-            shit = Image.open(path_file)
-            w, h = shit.size
-            new_height = 720
-            new_width = 1280
-            shit: Image.Image = shit.resize((new_width, new_height), Image.ANTIALIAS)
-            shit.save(path_file)
-
-            self.set_wallpaper(event.obj.from_id, path_file)
-
-            return
-
-        logging.info(event.obj)
-        if len(event.obj["fwd_messages"]) > 0:
-            author_id = event.obj["fwd_messages"][0]["from_id"]
-            for message in event.object.fwd_messages:
-                if message["from_id"] == author_id:
-                    text += f'{message["text"]}\n'
-
-        else:
-            author_id = event.obj["reply_message"]["from_id"]
-            text = event.object.reply_message["text"]
-
-        author_info = self.bot.vk.get_api().users.get(user_ids=author_id,
-                                                      fields='photo_max')
-        first_name, last_name = author_info[0]["first_name"], author_info[0]["last_name"]
-        avatar_url = author_info[0]["photo_max"]
-
-        # logging.info(author_name)
-        self.bot.send_message(peer_id, None, uploadImg(self, self.drawImage(self=self, author_id=author_id,
-                                                                            author=f"{first_name} {last_name}",
-                                                                            text=text,
-                                                                            avatar_url=avatar_url)))
 
     def on_start(self) -> None:
         logging.info(f"{self.name} is loaded")
