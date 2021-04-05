@@ -1,5 +1,4 @@
 import vk_api
-from ..BasePlug import BasePlug
 
 
 def print_raw(self, peer_id: int, e: vk_api.bot_longpoll.VkBotEvent):

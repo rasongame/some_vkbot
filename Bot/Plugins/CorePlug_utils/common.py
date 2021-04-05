@@ -2,8 +2,6 @@ import gc
 import math
 import os
 
-import psutil
-
 
 def convert_size(size_bytes):
     if size_bytes == 0:
@@ -16,10 +14,17 @@ def convert_size(size_bytes):
 
 
 def print_info(self, peer_id: int, **kwargs):
+    mem = ""
+    try:
+        import psutil
+        mem = f"Памяти съела: {convert_size(psutil.Process(os.getpid()).memory_info().rss)}"
+    except ModuleNotFoundError:
+        mem = "Памяти съела: хрен его знает"
+
     stats = gc.get_stats()
     prepared_msg = f"""
             Привет, я Меттатон версии {self.bot.version}
-            Памяти сьела: {convert_size(psutil.Process(os.getpid()).memory_info().rss)}
+            {mem} 
             Чтобы узнать что я умею - введи /help или !хелп (можешь вводить с ! или / команды)
 
             """
@@ -41,11 +46,7 @@ def send_report(self, peer_id, msg, **kwargs):
 
 
 def print_help(self, peer_id: int, msg: str, **kwargs):
-    plug_slice_cmds = ""
-    for plug in self.bot.plugins:
-        plug_slice_cmds += f"{plug.name} -> {', '.join(plug.keywords)} \n {plug.description} \n"
-    prepared_msg = f"Список команд:\n" \
-                   f"{plug_slice_cmds}"
+    prepared_msg = "https://vk.com/@mtt_resort-komandy-bota"
     self.bot.send_message(peer_id, prepared_msg)
     del prepared_msg
     return

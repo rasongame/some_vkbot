@@ -35,12 +35,13 @@ class QuoteGen(BasePlug):
 
     def __init__(self, bot):
         super(self.__class__, self).__init__(bot)
-        self.db_handler = utils.db_handler(path.join(bot.get_resource_folder(), self.name, "database.db"))
-        self.db_handler.db.connect()
-        utils.User.create_table()
         self.res_dir = os.path.join(self.bot.get_resource_folder(), self.name)
         if not os.path.exists(self.res_dir):
             os.mkdir(self.res_dir)
+        self.db_handler = utils.db_handler(os.path.join(self.res_dir, "database.db"))
+        self.db_handler.db.connect()
+        utils.User.create_table()
+
         @self.message_handler(keywords=['cit', 'цит', 'цитген', 'цитата'])
         def cit(_, peer_id, msg, event):
             text = ""

@@ -42,7 +42,6 @@ class Bot:
         self.futures = []
         self.version = "Rolling Version"
         self.event_handler = event_handler
-        # self._connect_to_bd = _connect_to_bd
         self.checkThread = checkThread
         self.db: dict = {}
         self.group_id = group_id

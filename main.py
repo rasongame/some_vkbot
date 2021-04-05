@@ -2,11 +2,9 @@ import logging
 from datetime import datetime
 
 import toml
-from inspect import ismodule
 
-from Bot.Plugins import BasePlug
-from Bot.bot import Bot
 import Bot.Plugins as Plugins
+from Bot.bot import Bot
 
 
 def load_plugins(plugins, bot):
@@ -20,12 +18,6 @@ def load_plugins(plugins, bot):
         attribute = getattr(Plugins, cls)
         if attribute is None or not hasattr(attribute, cls): continue
         plugins.append(getattr(attribute, cls)(bot))
-
-    #
-    # plug_name: str = plug_pkg.split(".")[2]
-    # cls = load_class(f"{plug_pkg}.{plug_name}")
-    #
-    # plugins.append(cls(bot))
 
 
 def main():
