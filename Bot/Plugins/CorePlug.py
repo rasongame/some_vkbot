@@ -11,7 +11,7 @@ class CorePlug(BasePlug):
 
     def __init__(self, bot):
         super().__init__(bot)
-        self.register_message_handler(print_help, ['хелп', 'help'])
+        self.register_message_handler(print_help, ['хелп', 'help', 'помощь'])
         self.register_message_handler(print_info, ['info', 'инфо'])
         self.register_message_handler(print_start_info, ['начать', 'start'])
         self.register_message_handler(send_report, ['репорт', 'репорт'])
