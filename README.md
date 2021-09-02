@@ -1,7 +1,6 @@
 
 # Безымянный бот aka исходники vk.com/mtt_resort с июня 2020 
-## README IN ENGLISH HERE! [LINK](README_EN.md)
-## АЛЯРМ! WIP
+## WIP.. На дороге к релизу, крч.
 
 ### Требования
 * Python >=3.6
