@@ -1,7 +1,7 @@
 import logging
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
-from typing import List
+from typing import List, Any, Optional
 from os import path
 import os
 import vk_api
@@ -24,7 +24,7 @@ def timeit(func):
 
 class Bot:
 
-    def __init__(self, group_id: int, token: str, config: dict) -> object:
+    def __init__(self, group_id: int, token: str, config: dict):
         """
 
         :param group_id: ID группы
@@ -52,8 +52,14 @@ class Bot:
         self.longpoll: VkBotLongPoll = VkBotLongPoll(self.vk, self.group_id)
         logging.basicConfig(level=logging.INFO, format=" [ %(filename)s # %(levelname)-2s %(asctime)s ]  %(message)-2s")
 
-    def send_message(self, peer_id: int, msg: str, attachment=None) -> None:
-        self.vk.method("messages.send",
+    def send_message(self, peer_id: int, msg: str, attachment=None) -> Optional[Any]:
+        """
+        :param peer_id:
+        :param msg:
+        :param attachment:
+        :return:
+        """
+        return self.vk.method("messages.send",
                            {"disable_mentions": 1,
                             "peer_id": peer_id,
                             "message": msg,
