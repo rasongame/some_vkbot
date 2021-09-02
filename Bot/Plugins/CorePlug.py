@@ -8,6 +8,7 @@ from .CorePlug_utils.debug import *
 
 class CorePlug(BasePlug):
     description = "Корневой плагин бота"
+    is_basic = True
 
     def __init__(self, bot):
         super().__init__(bot)

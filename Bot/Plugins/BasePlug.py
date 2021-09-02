@@ -12,6 +12,7 @@ class BasePlug:
     keywords = {}
     whoCan = ''
     listen_all = False
+    is_basic = False
 
     def __init__(self, bot):
         """
@@ -24,7 +25,6 @@ class BasePlug:
             self.description = f"A {self.__class__.__name__} plugin"
         if not hasattr(self, "version"):
             self.version = "rolling"
-
         self.on_start()
 
     def has_keyword(self, keyword: str) -> bool:
@@ -46,7 +46,7 @@ class BasePlug:
         if isinstance(keywords, str):
             keywords = (keywords,)
         for keyword in keywords:
-            self.keywords.update({keyword:  func})
+            self.keywords.update({keyword: func})
 
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent) -> None:
         cmd = self.get_cmd_from_msg(msg)

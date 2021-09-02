@@ -4,6 +4,7 @@ token = ""
 group_id =
 client_token = "" # Необходимо для плагина ImagesFromAlbumPlug
 debug_mode = false
+load_only_basic_plugins = False
 admins = [] # 000000000
 
 [database]

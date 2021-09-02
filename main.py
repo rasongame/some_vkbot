@@ -6,6 +6,8 @@ import toml
 import Bot.Plugins as Plugins
 from Bot.bot import Bot
 import os.path
+
+
 def generate_config(filename: str) -> dict:
     token = input("group token: ")
     group_id = int(input("group id: "))
@@ -20,17 +22,26 @@ def generate_config(filename: str) -> dict:
 
     return cfg
 
-def load_plugins(plugins, bot):
+
+def load_plugins(plugins, bot, only_basic):
     """
     Подгрузка всяких плагинов. Nuff said
+    :param only_basic: Загрузить только CorePlug/другие плагины с is_basic=True атрибутом
     :param plugins:
     :param bot:
     :return:
     """
-    for cls in dir(Plugins):
+    x = dir(Plugins)
+    for cls in x:
         attribute = getattr(Plugins, cls)
-        if attribute is None or not hasattr(attribute, cls): continue
-        plugins.append(getattr(attribute, cls)(bot))
+        if attribute is None or not hasattr(attribute, cls):
+            continue
+        raw = getattr(attribute, cls)
+        if only_basic and not raw.is_basic:
+            continue
+
+        plugin: Plugins.BasePlug = raw(bot)
+        plugins.append(plugin)
 
 
 def main():
@@ -38,14 +49,14 @@ def main():
     if not os.path.exists("config/config.toml"):
         cfg = generate_config("config/config.toml")
         with open("config/config.toml", 'w') as f:
-            new = toml.dump(cfg,f)
+            new = toml.dump(cfg, f)
             print(new)
     config = toml.load(open("config/config.toml"))
     plugins = []
 
     group_id, token = config["bot"]["group_id"], config["bot"]["token"]
     bot = Bot(group_id, token, config)
-    load_plugins(plugins, bot)
+    load_plugins(plugins, bot, config['bot']['load_only_basic_plugins'])
     bot.admins += config["bot"]["admins"]
     bot.plugins += plugins
     # Уиииии, я потом сам не пойму что это за хуйня))))))))
