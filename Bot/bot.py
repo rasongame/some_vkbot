@@ -47,6 +47,7 @@ class Bot:
         self.group_id = group_id
         self.__token__ = token
         self.__config__ = config
+        self.is_debug = config['bot']['debug_mode']
         self.vk: vk_api.VkApi = vk_api.VkApi(token=self.__token__, api_version="5.110")
         self.__vk_client = vk_api.VkApi(token=config["bot"]["client_token"]).get_api()
         self.longpoll: VkBotLongPoll = VkBotLongPoll(self.vk, self.group_id)
@@ -84,18 +85,18 @@ class Bot:
 
     def get_vk_client(self):
         called_from = inspect.stack()[1][3]
-        if called_from != "event_handler":
+        if called_from not in ("group_event_handler", "message_new_event_handler"):
             logging.warning(f"requested access to VkClientToken from {called_from}")
         return self.__vk_client
 
     def get_config(self):
         called_from = inspect.stack()[1][3]
-        if called_from != "event_handler":
+        if called_from not in ("group_event_handler", "message_new_event_handler"):
             logging.warning(f"requested access to config dict from {called_from}")
         return self.__config__
     def get_token(self):
         called_from = inspect.stack()[1][3]
-        if called_from != "event_handler":
+        if called_from not in ("group_event_handler", "message_new_event_handler"):
             logging.warning(f"requested access to token from {called_from}")
 
         return self.__token__

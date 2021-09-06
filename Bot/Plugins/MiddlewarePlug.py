@@ -19,6 +19,8 @@ class MiddlewarePlug(BasePlug):
 
     def work(self, peer_id, msg: str, event: bot_longpoll.VkBotEvent):
         def send(name: str):
+            if not path.exists(path.join(self.res_dir, f"{name}_quotes.txt")):
+                return
             with open(path.join(self.res_dir, f"{name}_quotes.txt")) as f:
                 user = self.bot.vk.get_api().users.get(user_ids=event.obj.from_id)[0]
                 line = choice(f.readlines())
@@ -26,7 +28,4 @@ class MiddlewarePlug(BasePlug):
 
         if event.obj.action is not None:
             logging.info(f"{event.obj.action}")
-            try:
-                send(event.obj.action['type'])
-            except:
-                pass
+            send(event.obj.action['type'])
