@@ -27,7 +27,7 @@ class KonachanPlug(BasePlug):
             self.bot.send_message(peer_id, "Самый умный?")
             return
 
-        if event.object["from_id"] not in self.bot.admins and int(limit) >= 3:
+        if event.message["from_id"] not in self.bot.admins and int(limit) >= 3:
             limit = 5
 
         r = requests.get(f"https://konachan.net/post.json?limit={limit}&tags=order%3Arandom")
