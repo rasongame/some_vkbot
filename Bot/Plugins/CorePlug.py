@@ -18,6 +18,8 @@ class CorePlug(BasePlug):
         self.register_message_handler(send_report, ['репорт', 'репорт'])
         self.register_message_handler(print_live, ['ping', 'пинг', "жив?"])
         self.register_message_handler(print_debug, ['debug', 'дебаг'])
+        self.register_message_handler(print_json, ['json'])
+
 
     def work(self, peer_id, msg: str, event: vk_api.bot_longpoll.VkBotEvent):
         cmd = self.get_cmd_from_msg(msg)

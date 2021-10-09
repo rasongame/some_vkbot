@@ -34,13 +34,13 @@ class CompressPlug(BasePlug):
                             а дефолт - 40 40
                         """
 
-            if len(event.obj["attachments"]) >= 1 \
-                    and event.obj["attachments"][0]["type"] == "photo":
-                url = event.obj["attachments"][0]["photo"]["sizes"][-1]["url"]
+            if len(event.message["attachments"]) >= 1 \
+                    and event.message["attachments"][0]["type"] == "photo":
+                url = event.message["attachments"][0]["photo"]["sizes"][-1]["url"]
 
-            elif event.obj.reply_message and len(event.obj.reply_message["attachments"]) >= 1 \
-                    and event.obj.reply_message["attachments"][0]["type"] == "photo":
-                url = event.obj["reply_message"]["attachments"][0]["photo"]["sizes"][-1]["url"]
+            elif event.message.reply_message and len(event.message.reply_message["attachments"]) >= 1 \
+                    and event.message.reply_message["attachments"][0]["type"] == "photo":
+                url = event.message["reply_message"]["attachments"][0]["photo"]["sizes"][-1]["url"]
             else:
                 self.bot.send_message(peer_id, helps)
                 return

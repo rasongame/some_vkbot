@@ -12,12 +12,14 @@ def generate_config(filename: str) -> dict:
     token = input("group token: ")
     group_id = int(input("group id: "))
     client_token = input("user access token: ")
-    debug_mode = bool(input())
+    debug_mode = bool(input("debug_mode: "))
+    load_only_basic_plugins = bool(input("load only basic plugins? :"))
     cfg = {"bot": {
         "token": token,
         "group_id": group_id,
         "client_token": client_token,
         "debug_mode": debug_mode,
+        "load_only_basic_plugins": load_only_basic_plugins,
         "admins": []}}
 
     return cfg
