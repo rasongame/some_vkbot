@@ -38,7 +38,8 @@ class Bot:
         self.plugins: List[BasePlug] = []
         self.disabledPlugins: List[BasePlug] = []
         self.admins: List[int] = []
-        self.pool = ThreadPoolExecutor(int(config["bot"].get("threads") if config['bot'].get('threads') is not None else 2))
+        self.pool = ThreadPoolExecutor(
+            int(config["bot"].get("threads") if config['bot'].get('threads') is not None else 2))
         self.futures = []
         self.version = "Rolling Version"
         self.event_handler = event_handler
@@ -61,11 +62,11 @@ class Bot:
         :return:
         """
         return self.vk.method("messages.send",
-                           {"disable_mentions": 1,
-                            "peer_id": peer_id,
-                            "message": msg,
-                            "random_id": 0,
-                            "attachment": attachment})
+                              {"disable_mentions": 1,
+                               "peer_id": peer_id,
+                               "message": msg,
+                               "random_id": 0,
+                               "attachment": attachment})
 
     def run(self) -> None:
         """
@@ -77,6 +78,7 @@ class Bot:
 
         # Эта страшная хероборина в теории должна быть быстрей
         # Но я как-то не уверен
+
     def get_resource_folder(self) -> str:
         if not path.exists(path.join(path.curdir, self.resource_folder)):
             os.mkdir(path.join(path.curdir, self.resource_folder))
@@ -94,10 +96,10 @@ class Bot:
         if called_from not in ("group_event_handler", "message_new_event_handler"):
             logging.warning(f"requested access to config dict from {called_from}")
         return self.__config__
+
     def get_token(self):
         called_from = inspect.stack()[1][3]
         if called_from not in ("group_event_handler", "message_new_event_handler"):
             logging.warning(f"requested access to token from {called_from}")
 
         return self.__token__
-

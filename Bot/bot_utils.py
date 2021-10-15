@@ -2,9 +2,12 @@ import logging
 from concurrent.futures import as_completed
 
 import peewee
-
 from .Utils import db_wrapper
 
+def print_info(self):
+    api = self.vk.get_api()
+    res = api.groups.getById(groups_id=self.group_id)[0]
+    print(f"Запущено под сообществом: {res['name']} \t URL: https://vk.com/{res['screen_name']}")
 
 def checkThread(self):
     """
