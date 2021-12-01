@@ -13,7 +13,7 @@ def convert_size(size_bytes):
     return "%s %s" % (s, size_name[i])
 
 
-def print_info(self, peer_id: int, **kwargs):
+def print_info(self, peer_id: int, msg, event):
     mem = ""
     try:
         import psutil
@@ -34,25 +34,25 @@ def print_info(self, peer_id: int, **kwargs):
     return
 
 
-def print_live(self, peer_id, msg, **kwargs): self.bot.send_message(peer_id, "жив, цел, орёл!")
+def print_live(self, peer_id: int, msg, event):
+    self.bot.send_message(peer_id, "жив, цел, орёл!")
 
-
-def send_report(self, peer_id, msg, **kwargs):
-    text = f"Репорт из чата {peer_id}: {kwargs['event'].obj.from_id} репортнул: {msg}"
+def send_report(self, peer_id: int, msg, event):
+    text = f"Репорт из чата {peer_id}: {event.obj.from_id} репортнул: {msg}"
     for admin_id in self.bot.admins:
         self.bot.send_message(admin_id, text)
 
     self.bot.send_message(peer_id, "Ваш репорт отослан!")
 
 
-def print_help(self, peer_id: int, msg: str, **kwargs):
+def print_help(self, peer_id: int, msg, event):
     prepared_msg = "https://vk.com/@mtt_resort-komandy-bota"
     self.bot.send_message(peer_id, prepared_msg)
     del prepared_msg
     return
 
 
-def print_start_info(self, peer_id, **kwargs):
+def print_start_info(self, peer_id: int, msg, event):
     msg = \
         """
     Привет, я Меттатон, введи "помощь", чтобы узнать информацию.

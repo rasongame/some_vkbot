@@ -55,6 +55,7 @@ def load_plugins(plugins, bot, only_basic, exclude_list: set[str]):
         if only_basic and not raw.is_basic:
             continue
         plugin: Plugins.BasePlug = raw(bot)
+
         if plugin.name in exclude_list:
             logging.info(f"{plugin.name} in exclude_list")
             plugin.on_stop()

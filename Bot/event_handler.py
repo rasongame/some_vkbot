@@ -23,20 +23,18 @@ def message_new_event_handler(self, event: VkBotMessageEvent):
                 cmd_without_slash = cmd.split()[0]
 
         for plug in self.plugins:
-            try:
-                if plug.has_keyword(keyword=cmd_without_slash):
-                    # logging.info("successful work plugins")
-                    logging.info("Поток открылся")
-                    if self.is_debug:
-                        plug.work(peer_id=event.message.peer_id, event=event, msg=event.message.text)
-                    else:
-                        self.futures.append(
-                            self.pool.submit(plug.work, peer_id=event.message.peer_id, event=event, msg=event.message.text))
-                        self.pool.submit(self.checkThread)
+            if plug.has_keyword(keyword=cmd_without_slash):
+                # logging.info("successful work plugins")
+                print(plug)
+                logging.info("Поток открылся")
+                if self.is_debug:
+                    plug.work(peer_id=event.message.peer_id, event=event, msg=event.message.text)
+                else:
+                    self.futures.append(
+                        self.pool.submit(plug.work, peer_id=event.message.peer_id, event=event, msg=event.message.text))
+                    self.pool.submit(self.checkThread)
+                break
 
-                    break
-            except IndexError:
-                pass
     # daemon
     daemons = filter(lambda x: x.listen_all is True, self.plugins)
     [plug.work(peer_id=event.message.peer_id, event=event, msg=event.message.text) for plug in daemons]
