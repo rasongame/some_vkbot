@@ -49,7 +49,7 @@ class Bot:
         self.__token__ = token
         self.__config__ = config
         self.is_debug = config['bot']['debug_mode']
-        self.vk: vk_api.VkApi = vk_api.VkApi(token=self.__token__, api_version="5.110")
+        self.vk: vk_api.VkApi = vk_api.VkApi(token=self.__token__, api_version="5.131")
         self.__vk_client = vk_api.VkApi(token=config["bot"]["client_token"]).get_api()
         self.longpoll: VkBotLongPoll = VkBotLongPoll(self.vk, self.group_id)
         logging.basicConfig(level=logging.INFO, format=" [ %(filename)s # %(levelname)-2s %(asctime)s ]  %(message)-2s")

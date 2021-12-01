@@ -47,10 +47,10 @@ class QuoteGen(BasePlug):
             text = ""
             author_id = 0
             if len(msg.split()) >= 2 and \
-                    len(event.obj["attachments"]) > 0 and \
-                    event.obj["attachments"][0]["type"] == "photo":
-                path_file = path.join(self.bot.get_resource_folder(), self.name, f"background{event.obj.from_id}.png")
-                downloadImg(event.obj["attachments"][0]["photo"]["sizes"][-1]["url"], path_file)
+                    len(event.obj.message["attachments"]) > 0 and \
+                    event.obj.message["attachments"][0]["type"] == "photo":
+                path_file = path.join(self.bot.get_resource_folder(), self.name, f"background{event.obj.message['from_id']}.png")
+                downloadImg(event.obj.message["attachments"][0]["photo"]["sizes"][-1]["url"], path_file)
                 file = open(path_file, "r+")
                 shit = Image.open(path_file)
                 w, h = shit.size
@@ -59,20 +59,20 @@ class QuoteGen(BasePlug):
                 shit: Image.Image = shit.resize((new_width, new_height), Image.ANTIALIAS)
                 shit.save(path_file)
 
-                self.set_wallpaper(event.obj.from_id, path_file)
+                self.set_wallpaper(event.obj.message["from_id"], path_file)
 
                 return
 
-            logging.info(event.obj)
-            if len(event.obj["fwd_messages"]) > 0:
-                author_id = event.obj["fwd_messages"][0]["from_id"]
-                for message in event.object.fwd_messages:
+            logging.info(event.obj.message)
+            if len(event.obj.message["fwd_messages"]) > 0:
+                author_id = event.obj.message["fwd_messages"][0]["from_id"]
+                for message in event.obj.message.fwd_messages:
                     if message["from_id"] == author_id:
                         text += f'{message["text"]}\n'
 
             else:
-                author_id = event.obj["reply_message"]["from_id"]
-                text = event.object.reply_message["text"]
+                author_id = event.obj.message["reply_message"]["from_id"]
+                text = event.obj.message["reply_message"]["text"]
 
             try:
                 author_info = self.bot.vk.get_api().users.get(user_ids=author_id,

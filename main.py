@@ -67,13 +67,13 @@ def main():
     started = datetime.now()
     if not os.path.exists("config/config.toml"):
         generate_config("config/config.toml")
-    config = toml.load(open("config/config.toml"))
+    config: dict = toml.load(open("config/config.toml"))
     plugins = []
 
     group_id, token = config["bot"]["group_id"], config["bot"]["token"]
     bot = Bot(group_id, token, config)
-    exclude_list = config['bot']['exclude_list']
-    load_plugins(plugins, bot, config['bot']['load_only_basic_plugins'], exclude_list)
+    exclude_list = config["bot"].get("exclude_list", [])
+    load_plugins(plugins, bot, config['bot'].get("load_only_basic_plugins", False), exclude_list)
     bot.admins += config["bot"]["admins"]
     bot.plugins += plugins
     # Уиииии, я потом сам не пойму что это за хуйня))))))))
