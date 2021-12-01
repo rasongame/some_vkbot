@@ -23,13 +23,10 @@ class QuoteGen(BasePlug):
         user.save()
 
     def get_wallpaper(self, user_id):
-        try:
-            with self.db_handler.db.atomic():
+        with self.db_handler.db.atomic():
+            if utils.User.get_or_none(id=user_id) == None:
                 utils.User.create(id=user_id,
                                   bg_file_name=path.join(self.bot.get_resource_folder(), self.name, "background.jpg"))
-        except:
-            pass
-
         user: utils.User = utils.User.get(utils.User.id == user_id)
         return user.bg_file_name
 
@@ -63,10 +60,9 @@ class QuoteGen(BasePlug):
 
                 return
 
-            logging.info(event.obj.message)
             if len(event.obj.message["fwd_messages"]) > 0:
                 author_id = event.obj.message["fwd_messages"][0]["from_id"]
-                for message in event.obj.message.fwd_messages:
+                for message in event.obj.message["fwd_messages"]:
                     if message["from_id"] == author_id:
                         text += f'{message["text"]}\n'
 
@@ -83,7 +79,6 @@ class QuoteGen(BasePlug):
             first_name, last_name = author_info[0]["first_name"], author_info[0]["last_name"]
             avatar_url = author_info[0]["photo_max"]
 
-            # logging.info(author_name)
             self.bot.send_message(peer_id, None, uploadImg(self, self.drawImage(self=self, author_id=author_id,
                                                                             author=f"{first_name} {last_name}",
                                                                             text=text,
