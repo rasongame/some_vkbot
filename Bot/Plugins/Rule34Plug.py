@@ -1,4 +1,5 @@
 import logging
+import os
 import random
 
 import requests
@@ -38,6 +39,7 @@ class Rule34Plug(BasePlug):
             upload = VkUpload(self.bot.vk)
             photo = upload.photo_messages(f"{file_name['name']}")[0]
             self.bot.send_message(peer_id, "вотъ", attachment=f"photo{photo['owner_id']}_{photo['id']},")
+            os.remove(file_name["name"])
         except Exception as e:
             self.bot.send_message(peer_id, f"Ашыпка. {e}")
 

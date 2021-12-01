@@ -4,7 +4,7 @@ from typing import Iterable, List
 import vk_api
 from vk_api.bot_longpoll import VkBotEventType
 
-from Bot.event_handler import prefixs
+from Bot.event_handler import PREFIXS
 
 
 class BasePlug:
@@ -57,7 +57,7 @@ class BasePlug:
     @staticmethod
     def get_cmd_from_msg(msg):
         cmd: str = ""
-        has_prefix = msg.split()[0][0] in prefixs
+        has_prefix = msg.split()[0][0] in PREFIXS
         if has_prefix:
             cmd = msg.split()[0][1:]
         else:

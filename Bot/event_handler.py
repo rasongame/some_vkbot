@@ -3,7 +3,7 @@ import logging
 import vk_api
 from vk_api.bot_longpoll import VkBotMessageEvent, VkBotEventType, VkBotEvent
 
-prefixs = (
+PREFIXS = (
     '/',
     '!',
     '.',
@@ -13,11 +13,11 @@ prefixs = (
 
 def message_new_event_handler(self, event: VkBotMessageEvent):
     if event.message.text == "/": return # пропуск бесполезных слешей для избежания IndexError
-    if event.from_user or event.message.text.startswith(prefixs):
+    if event.from_user or event.message.text.startswith(PREFIXS):
         cmd: str = event.message.text.lower()
         cmd_without_slash = str(cmd[1:]).split()[0]
         if event.from_user:
-            if cmd.startswith(prefixs):
+            if cmd.startswith(PREFIXS):
                 event.message.text = event.message.text[1:]
             else:
                 cmd_without_slash = cmd.split()[0]
