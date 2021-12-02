@@ -12,6 +12,12 @@ from ..Utils.utils import uploadImg, downloadImg
 from .QuotePlug_utils import models as utils
 from os import path
 
+dark_scheme = (
+    (0, 0, 0, 0), 'rgb(42, 88, 133)', 'rgb(255,255,255)'
+)
+light_scheme = (
+    (255,255,255, 255), 'rgb(128,128,128)', 'rgb(128,128,128'
+)
 
 class QuoteGen(BasePlug):
     description = "Делает цитаты. Отвечаете на сообщение словом командой," \
@@ -104,12 +110,7 @@ class QuoteGen(BasePlug):
         :return: путь к файлу.
         """
         w = textwrap.TextWrapper(width=60)
-        dark_scheme = (
-            (0, 0, 0, 0), 'rgb(255,255,255)'
-        )
-        light_scheme = (
-            (255, 255, 255, 255), 'rgb(128,128,128)'
-        )
+
         use_bg_img: bool = False
         background = Image.open(self.get_wallpaper(author_id))
 
@@ -121,6 +122,7 @@ class QuoteGen(BasePlug):
             img.paste(background)
 
         font = ImageFont.truetype(path.join(self.bot.get_resource_folder(), self.name, "font.ttf"), size=30)
+        fontbold = ImageFont.truetype(path.join(self.bot.get_resource_folder(), self.name, "fontbold.ttf"), size=30)
         watermark = Image.new("RGBA", img.size)
         waterdraw = ImageDraw.ImageDraw(watermark, "RGBA")
 
@@ -128,7 +130,7 @@ class QuoteGen(BasePlug):
         time = f'Время: {datetime.datetime.today().strftime("%H:%M:%S")}'
         date = f'Дата: {datetime.datetime.today().strftime("%Y-%m-%d")}'
 
-        draw.text((300, 200), f"© {author}", fill=theme[1], font=font)
+        draw.text((300, 200), f"© {author}", fill=theme[1], font=fontbold)
         save_to = os.path.join(self.res_dir, f'avatar_{author_id}.png')
         avatar = Image.open(downloadImg(avatar_url, save_to), 'r').convert("RGBA")
         self.crop_to_circle(avatar)
@@ -144,7 +146,7 @@ class QuoteGen(BasePlug):
             print(line)
 
             width, height = font.getsize(line)
-            draw.text((300, h), line, fill=theme[1], font=font)
+            draw.text((300, h), line, fill=theme[2], font=font)
             if len(line) > 60:
                 h += height * 2
             else:
